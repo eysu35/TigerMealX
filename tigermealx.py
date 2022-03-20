@@ -1,16 +1,21 @@
 from flask import Flask, redirect, url_for, request, render_template
-
+from exchanges import Exchange
 app = Flask(__name__)
 
 
 @app.route('/')
+@app.route('/index')
 def base():
     return render_template('index.html')
 
 
 @app.route('/exchanges/')
 def exchanges():
-    return render_template('exchanges.html')
+    curr_exchanges = []
+    curr_exchanges.append(Exchange("Floyd","Ivy","Lunch","Complete","11/04/2000"))
+    past_exchanges = []
+    past_exchanges.append(Exchange("Chloe","Ivy","Lunch","Complete","11/04/2000"))
+    return render_template('exchanges.html', curr_exchanges=curr_exchanges, past_exchanges=past_exchanges)
 
 
 @app.route('/faq/')

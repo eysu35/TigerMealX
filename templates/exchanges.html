@@ -5,12 +5,56 @@
     <title>TigerMealX - Exchanges</title>
 </head>
 <body>
-    <p>You have no current or past exchanges</p>
-<!--    <form action = "http://localhost:5000" method = "get">-->
-<!--        <p><input type = "submit" value = "Home" /></p>-->
-<!--    </form>-->
-    <form action="http://localhost:5000">
-         <button type="submit">Home</button>
-    </form>
+    <!--- CURRENT EXCHANGE TABLE -->
+    {% if curr_exchanges|length == 0 %}
+    <p>You have no current exchanges</p>
+    {% else %}
+        <table>
+        <tr>
+          <th>Name</th>
+          <th>Place</th>
+          <th>Meal</th>
+          <th>Completion date</th>
+          <th>Expiration date</th>
+    
+        </tr>
+         {% for exchange in curr_exchanges: %}
+          <tr>
+            
+            <td align="left">>{{exchange.get_name()}}</td>
+            <td align="right"> {{exchange.get_place()}}</td>
+            <td width="20px"> {{exchange.get_status()}}</td>
+            <td> {{exchange.get_date()}}</td>
+          </tr>
+         {% endfor %}
+        {% endif %}
+      </table>
+
+
+    <!--- PAST EXCHANGE TABLE -->
+      {% if past_exchanges|length == 0 %}
+    <p>You have no past exchanges</p>
+    {% else %}
+        <table>
+        <tr>
+          <th>Name</th>
+          <th>Place</th>
+          <th>Meal</th>
+          <th>Completion date</th>
+          <th>Expiration date</th>
+    
+        </tr>
+         {% for exchange in past_exchanges: %}
+          <tr>
+            
+            <td align="left"><exchange.get_name()</td>
+            <td align="right"> exchange.get_place()</td>
+            <td width="20px"> exchange.get_status()</td>
+            <td> exchange.get_date()</td>
+          </tr>
+         {% endfor %}
+      </table>
+      {% endif %}
+      {% include 'ToStart.html' %}
 </body>
 </html>

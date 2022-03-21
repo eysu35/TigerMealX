@@ -103,7 +103,9 @@
      <form action="" method="get">
        <input type="text" id="studentName" name="studentName" placeholder="Enter Student Name or ID to Swap">
       </form>
-      <p>{{students[0].get_name()}}</p>
+       {% for student in students: %}
+      <p style="background-color:blue;color:white">{{student.get_name()}}</p>
+       {% endfor %}
    </div>
      
     

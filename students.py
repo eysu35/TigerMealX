@@ -160,4 +160,6 @@ class Student:
 if __name__ == '__main__':
     Students.get_friend_names(123456789)
     print(Students.get_puid_from_name('Shayna'))
-    print(Students.search_students_by_name('a'))
+    result = Students.search_students_by_name('a')
+    for item in result:
+        print(item)

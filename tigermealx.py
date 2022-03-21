@@ -13,7 +13,7 @@ def base():
     # search_puid = Students.get_puid_from_name(search_name)
 
     students = Students.search_students_by_name(search_name)
-    return render_template('index.html')
+    return render_template('index.html', students=students)
 
 
 @app.route('/exchanges/')

@@ -1,11 +1,18 @@
 from flask import Flask, redirect, url_for, request, render_template
 from exchanges import Exchange
+from students import Students
+
 app = Flask(__name__)
 
 
 @app.route('/')
 @app.route('/index')
 def base():
+    # assume it's a name for now but need to also check for PUID
+    search_name = request.args.get('studentName')
+    search_puid = Students.get_puid_from_name(search_name)
+
+    friends = Students.get_friend_names(search_puid)
     return render_template('index.html')
 
 

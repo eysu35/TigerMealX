@@ -5,6 +5,7 @@
 # Authors:
 #-----------------------------------------------------------------------
 import psycopg2
+from config import config
 #-----------------------------------------------------------------------
 
 def add_data(table, row_data):
@@ -27,16 +28,12 @@ def add_data(table, row_data):
 
     try:
         # connection establishment
-        conn = psycopg2.connect(
-            database="mealx",
-            user='postgres',
-            password='postpass1234',
-            host='localhost',
-            port='5432')
-
+        params = config()
+        conn = psycopg2.connect(**params)
         conn.autocommit = True
         cur = conn.cursor()
 
+        # add in each row of mock data into the relevant table
         cur.execute(sql, row_data)
         # close communication with the PostgreSQL database server
         cur.close()

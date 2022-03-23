@@ -32,5 +32,3 @@ print("Database has been created successfully !!");
 
 # Closing the connection
 conn.close()
-
-

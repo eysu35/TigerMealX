@@ -5,6 +5,7 @@
 # Authors:
 #-----------------------------------------------------------------------
 import psycopg2
+from config import config
 #-----------------------------------------------------------------------
 
 def create_tables():
@@ -45,15 +46,11 @@ def create_tables():
         )
         """)
 
+    conn = None
     try:
         # connection establishment
-        conn = psycopg2.connect(
-            database="mealx",
-            user='postgres',
-            password='postpass1234',
-            host='localhost',
-            port='5432')
-
+        params = config()
+        conn = psycopg2.connect(**params)
         conn.autocommit = True
         cur = conn.cursor()
         # create table one by one

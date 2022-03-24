@@ -13,12 +13,8 @@ class Students:
 
         try:
             # connection establishment
-            conn = psycopg2.connect(
-                database="mealx",
-                user='postgres',
-                password='HelloPGDB',
-                host='localhost',
-                port='5432')
+            params = config()
+            conn = psycopg2.connect(**params)
 
             conn.autocommit = True
             cur = conn.cursor()
@@ -43,12 +39,8 @@ class Students:
 
         try:
             # connection establishment
-            conn = psycopg2.connect(
-                database="mealx",
-                user='postgres',
-                password='HelloPGDB',
-                host='localhost',
-                port='5432')
+            params = config()
+            conn = psycopg2.connect(**params)
 
             conn.autocommit = True
             cur = conn.cursor()
@@ -79,12 +71,8 @@ class Students:
 
         try:
             # connection establishment
-            conn = psycopg2.connect(
-                database="mealx",
-                user='postgres',
-                password='HelloPGDB',
-                host='localhost',
-                port='5432')
+            params = config()
+            conn = psycopg2.connect(**params)
 
             conn.autocommit = True
             cur = conn.cursor()

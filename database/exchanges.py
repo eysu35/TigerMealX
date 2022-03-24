@@ -1,3 +1,4 @@
+from config import config
 import psycopg2
 
 

@@ -1,6 +1,6 @@
-from flask import Flask, redirect, url_for, request, render_template
-from exchanges import Exchange
-from students import Students
+from flask import Flask, request, render_template
+from database.exchanges import Exchange
+from database.students import Students
 
 app = Flask(__name__)
 
@@ -10,9 +10,12 @@ app = Flask(__name__)
 def base():
     # assume it's a name for now but need to also check for PUID
     search_name = request.args.get('studentName')
+    if search_name is None or search_name == '':
+        students = []
+    else:
+        students = Students.search_students_by_name(search_name)
     # search_puid = Students.get_puid_from_name(search_name)
 
-    students = Students.search_students_by_name(search_name)
     return render_template('index.html', students=students)
 
 

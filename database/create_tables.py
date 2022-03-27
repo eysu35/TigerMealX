@@ -9,42 +9,58 @@ from config import config
 #-----------------------------------------------------------------------
 
 def create_tables():
+
+
+
     """ create tables in the PostgreSQL database"""
+    
     commands = (
+        """ DROP TABLE IF EXISTS students, 
+                student_plans, friends, 
+                locations, exchanges
+        """,
         """
         CREATE TABLE students (
-            PUID SERIAL PRIMARY KEY,
+            PUID VARCHAR(255) PRIMARY KEY,
+            netID VARCHAR(255) NOT NULL,
             student_name VARCHAR(255) NOT NULL,
-            meal_plan VARCHAR(255) NOT NULL,
-            location_ID  SERIAL NOT NULL
+            meal_plan_id VARCHAR(255) NOT NULL,
+            isValidForMealExchange BOOLEAN NOT NULL
         )
         """,
-        """ CREATE TABLE locations (
-                location_id SERIAL PRIMARY KEY,
-                location_name VARCHAR(255) NOT NULL
+        """ CREATE TABLE student_plans (
+                meal_plan_id VARCHAR(255) PRIMARY KEY,
+                location_id VARCHAR(255) NOT NULL
                 )
         """,
         """
         CREATE TABLE friends (
-                PUID SERIAL NOT NULL,
-                friend_PUID SERIAL NOT NULL,
+                PUID VARCHAR(255) NOT NULL,
+                friend_PUID VARCHAR(255) NOT NULL,
                 PRIMARY KEY (PUID, friend_PUID)
         )
         """,
         """
+        CREATE TABLE locations (
+                location_id VARCHAR(255) PRIMARY KEY,
+                location_name VARCHAR(255) NOT NULL
+        )
+        """,
+        """
         CREATE TABLE exchanges (
-                mealx_id SERIAL PRIMARY KEY,
-                stdnt1_PUID SERIAL NOT NULL,
-                stdnt2_PUID SERIAL NOT NULL,
+                meal_exchange_id UUID PRIMARY KEY,
+                student1_PUID VARCHAR(255) NOT NULL,
+                student2_PUID VARCHAR(255) NOT NULL,
                 meal VARCHAR(255) NOT NULL,
-                exchge1_date VARCHAR(255),
-                exchge1_loc VARCHAR(255),
-                exchge2_date VARCHAR(255),
-                exchge2_loc VARCHAR(255),
-                exp_date VARCHAR(255) NOT NULL,
+                exchange1_date DATE,
+                exchange1_location_id VARCHAR(255),
+                exchange2_date DATE,
+                exchge2_location_id VARCHAR(255),
+                expiration_date DATE NOT NULL,
                 status VARCHAR(255) NOT NULL
         )
-        """)
+        """
+        )
 
     conn = None
     try:

@@ -1,17 +1,58 @@
 from config import config
 import psycopg2
+import random
 
 
-class CurrentExchanges:
+# returns the cursor
+def db_execute_fetchone(stmt):
+    try:
+        # connection establishment
+        params = config()
+        conn = psycopg2.connect(**params)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        cur.execute(stmt)
+        return cur.fetchone()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print("success")
+
+
+def db_insert(stmt, data):
+    try:
+        # connection establishment
+        params = config()
+        conn = psycopg2.connect(**params)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        cur.execute(stmt, data)
+        cur.close()
+        # commit the changes
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print("success")
+
+
+class Exchanges:
 
     # returns current exchanges for studentid as a list of Exchange objects
+    # can take string or integer PUID
     @classmethod
-    def get(cls, studentid):
+    def get_current_exchanges(cls, studentid):
         current_exchanges = []
         # access the database here and assemble a list of Exchange objects
         # how is status encoded?
         stmt = f'''SELECT mealx_id, stdnt1_PUID, stdnt2_PUID, meal, exchge1_date, exchge1_loc, exchge2_date,
-         exchge2_loc, exp_date, status FROM exchanges WHERE stdnt1_PUID={studentid} OR stdnt2_PUID={studentid}
+         exchge2_loc, exp_date, status FROM exchanges WHERE stdnt1_PUID=\'{studentid}\' OR stdnt2_PUID=\'{studentid}\'
         AND status=\'Incomplete\''''
 
         try:
@@ -44,20 +85,75 @@ class CurrentExchanges:
                 conn.close()
                 print("success")
 
-
-class PastExchanges:
+        return current_exchanges
 
     # returns past exchanges for studentid as a list of Exchange objects
-    # requires postgres connection as arg
     @classmethod
-    def get(cls, connection, studentid):
-        pass
+    def get_past_exchanges(cls, studentid):
         # access the database here and assemble a list of Exchange objects
+        past_exchanges = []
+        # access the database here and assemble a list of Exchange objects
+        stmt = f'''SELECT mealx_id, stdnt1_PUID, stdnt2_PUID, meal, exchge1_date, exchge1_loc, exchge2_date,
+                 exchge2_loc, exp_date, status FROM exchanges WHERE stdnt1_PUID=\'{studentid}\' OR stdnt2_PUID=\'{studentid}\'
+                AND status=\'Complete\''''
 
+        try:
+            # connection establishment
+            params = config()
+            conn = psycopg2.connect(**params)
+            conn.autocommit = True
+            cur = conn.cursor()
+
+            cur.execute(stmt)
+            for row in cur.fetchall():
+                puid1 = row[1]
+                puid2 = row[2]
+                stmt_std1_name = f'''SELECT student_name FROM students WHERE puid={puid1}'''
+                cur.execute(stmt_std1_name)
+                std1_name = cur.fetchone()[0]
+
+                stmt_std2_name = f'''SELECT student_name FROM students WHERE puid={puid2}'''
+                cur.execute(stmt_std2_name)
+                std2_name = cur.fetchone()[0]
+
+                exch_obj = Exchange(row[0], row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+                                    row[7], row[8], row[9])
+                past_exchanges.append(exch_obj)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
+                print("success")
+
+        return past_exchanges
+
+    @classmethod
+    def add_new_exchange(cls, student1_name, student2_name, meal):
+        # get puids
+        stmt = f'''SELECT puid FROM students WHERE student_name=\'{student1_name}\''''
+        result = db_execute_fetchone(stmt)
+        puid1 = result[0]
+
+        stmt = f'''SELECT puid FROM students WHERE student_name=\'{student2_name}\''''
+        result = db_execute_fetchone(stmt)
+        puid2 = result[0]
+
+        exchange = Exchange(random.randint(50, 1000), puid1, student1_name, puid2, student2_name, meal, None, None, None, None, 'date', 'Incomplete')
+
+        stmt = '''INSERT INTO exchanges(mealx_id, stdnt1_PUID, stdnt2_PUID,
+                meal,exchge1_date, exchge1_loc, exchge2_date, exchge2_loc, 
+                exp_date, status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+
+        db_insert(stmt, exchange.to_ordered_tuple())
 
 # getters and setters unfinished
 # this also breaks exchanges.html
 class Exchange:
+
+    def __str__(self):
+        return f'ID: {self._mealx_id}\n{self._name1} ({self._puid1}) and {self._name2} ({self._puid2}) for {self._meal} ({self._status})'
 
     def __init__(self, mealx_id, puid1, name1, puid2, name2, meal,
                  exch1_date, exch1_loc, exch2_date, exch2_loc, exp, status):
@@ -74,6 +170,11 @@ class Exchange:
         self._exch2_loc = exch2_loc
         self._exp = exp
         self._init_date = None
+
+    # returns tuple of table info in order of table columns for use in insert statement
+    def to_ordered_tuple(self):
+        return self._mealx_id, self._puid1, self._puid2, self._meal, self._exch1_date,\
+               self._exch1_loc, self._exch2_date, self._exch2_loc, self._exp, self._status
 
     def get_mealx_id(self):
         return self._mealx_id
@@ -153,13 +254,14 @@ class Exchange:
 
 # -----------------------------------------------------------------------
 
-def _test():
-    book = Book('Kernighan', 'The Practice of Programming', 40.74)
-    print(book.to_tuple())
-    print()
-    print(book.to_xml())
-    print()
-    print(book.to_dict())
+
+def test():
+    # exh = Exchanges.get_current_exchanges(112345678)
+    # for e in exh:
+    #     print(e)
+
+    Exchanges.add_new_exchange('Shayna Maleson', 'Ellen Su', 'breakfast')
+
 
 if __name__ == '__main__':
-    _test()
+    test()

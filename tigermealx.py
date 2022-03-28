@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-from database.exchanges import Exchange
+from database.exchanges import Exchanges
 from database.students import Students
 
 app = Flask(__name__)
@@ -21,11 +21,11 @@ def base():
 
 @app.route('/exchanges/')
 def exchanges():
-    curr_exchanges = []
-    curr_exchanges.append(Exchange("Floyd","Ivy","Lunch","Complete","11/04/2000"))
-    past_exchanges = []
-    past_exchanges.append(Exchange("Chloe","Ivy","Lunch","Complete","11/04/2000"))
-    return render_template('exchanges.html', curr_exchanges=curr_exchanges, past_exchanges=past_exchanges)
+    studentid = request.args.get('studentid')
+    studentid = "123456789"
+    curr_exchanges = Exchanges.get_current_exchanges('123456789')
+    past_exchanges = Exchanges.get_past_exchanges('920228341')
+    return render_template('exchanges.html', curr_exchanges=curr_exchanges,past_exchanges=past_exchanges)
 
 
 @app.route('/faq/')

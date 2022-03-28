@@ -67,6 +67,10 @@ class Exchanges:
             cur = conn.cursor()
 
             cur.execute(stmt)
+
+            if cur.fetchone() == None:
+                return None
+
             for row in cur.fetchall():
                 puid1 = row[1]
                 puid2 = row[2]
@@ -115,6 +119,10 @@ class Exchanges:
             cur = conn.cursor()
 
             cur.execute(stmt)
+
+            if cur.fetchone() == None:
+                return None
+
             for row in cur.fetchall():
                 puid1 = row[1]
                 puid2 = row[2]

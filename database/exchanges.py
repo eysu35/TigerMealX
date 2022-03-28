@@ -51,8 +51,12 @@ class Exchanges:
         current_exchanges = []
         # access the database here and assemble a list of Exchange objects
         # how is status encoded?
-        stmt = f'''SELECT mealx_id, stdnt1_PUID, stdnt2_PUID, meal, exchge1_date, exchge1_loc, exchge2_date,
-         exchge2_loc, exp_date, status FROM exchanges WHERE stdnt1_PUID=\'{studentid}\' OR stdnt2_PUID=\'{studentid}\'
+        stmt = f'''SELECT meal_exchange_id, student1_puid, 
+        student2_puid, 
+        meal, exchange1_date, exchange1_location_id, exchange2_date,
+         exchange2_location_id, expiration_date, status FROM exchanges 
+         WHERE 
+         student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\'
         AND status=\'Incomplete\''''
 
         try:
@@ -93,8 +97,12 @@ class Exchanges:
         # access the database here and assemble a list of Exchange objects
         past_exchanges = []
         # access the database here and assemble a list of Exchange objects
-        stmt = f'''SELECT mealx_id, stdnt1_PUID, stdnt2_PUID, meal, exchge1_date, exchge1_loc, exchge2_date,
-                 exchge2_loc, exp_date, status FROM exchanges WHERE stdnt1_PUID=\'{studentid}\' OR stdnt2_PUID=\'{studentid}\'
+        stmt = f'''SELECT meal_exchange_id, student1_puid, 
+        student2_puid, 
+        meal, exchange1_date, exchange1_location_id, exchange2_date,
+         exchange2_location_id, expiration_date, status FROM exchanges 
+         WHERE 
+         student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\'
                 AND status=\'Complete\''''
 
         try:
@@ -132,16 +140,20 @@ class Exchanges:
     @classmethod
     def add_new_exchange(cls, student1_name, student2_name, meal):
         # get puids
-        stmt = f'''SELECT puid FROM students WHERE student_name=\'{student1_name}\''''
+        stmt = f'''SELECT puid FROM students WHERE student_name=LOWER(\
+        '{student1_name}\')'''
         result = db_execute_fetchone(stmt)
         puid1 = result[0]
 
-        stmt = f'''SELECT puid FROM students WHERE student_name=\'{student2_name}\''''
+        stmt = f'''SELECT puid FROM students WHERE student_name=LOWER(\
+        '{student2_name}\')'''
         result = db_execute_fetchone(stmt)
         puid2 = result[0]
 
         exchange = Exchange(random.randint(50, 1000), puid1, student1_name, puid2, student2_name, meal, None, None, None, None, 'date', 'Incomplete')
 
+#### OK we dont need to generate this random int because the db will
+        # do this automatically when we insert a row. ####
         stmt = '''INSERT INTO exchanges(mealx_id, stdnt1_PUID, stdnt2_PUID,
                 meal,exchge1_date, exchge1_loc, exchge2_date, exchge2_loc, 
                 exp_date, status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''

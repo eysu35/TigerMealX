@@ -35,8 +35,8 @@ class Students:
     @classmethod
     def search_students_by_name(cls, name):
         str_name = str(name)
-        stmt = f'''SELECT student_name FROM students WHERE student_name 
-        LIKE \'%{str_name}%\''''
+        stmt = f'''SELECT student_name FROM students WHERE 
+        LOWER(student_name) LIKE LOWER(\'%{str_name}%\')'''
         students = []
 
         try:

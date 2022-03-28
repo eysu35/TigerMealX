@@ -8,9 +8,32 @@
 <body>
   <style>
     table, th, td {
-   border: 1px solid;
-}
+        border: 1px solid;
+    }
+    body {
+       margin: 0;
+       padding: 0;
+       background-image: url('../static/background.jpg');
+       background-size: cover;
+     }
+     .exchanges-section {
+            background-color: white;
+            margin-bottom: 15%;
+            
+            width: 70%;
+            position: absolute;
+            top:15%;
+            left: 0;
+            right: 0;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            margin: auto;
+      }
+      p {
+        text-align: center;
+      }
   </style>
+  {% include 'navbar.html' %}
+  <div class="exchanges-section">
     <!--- CURRENT EXCHANGE TABLE -->
     {% if curr_exchanges|length == 0 %}
     <p>You have no current exchanges</p>
@@ -62,7 +85,7 @@
            {% endfor %}
           {% endif %}
         </table>
-      {% include 'ToStart.html' %}
+      </div>
 
 </body>
 </html>

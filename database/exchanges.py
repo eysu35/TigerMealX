@@ -72,11 +72,13 @@ class Exchanges:
             for row in cur.fetchall():
                 puid1 = row[1]
                 puid2 = row[2]
-                stmt_std1_name = f'''SELECT student_name FROM students WHERE puid={puid1}'''
+                stmt_std1_name = f'''SELECT student_name FROM 
+                students WHERE puid=\'{puid1}\''''
                 cur.execute(stmt_std1_name)
                 std1_name = cur.fetchone()[0]
 
-                stmt_std2_name = f'''SELECT student_name FROM students WHERE puid={puid2}'''
+                stmt_std2_name = f'''SELECT student_name FROM 
+                students WHERE puid=\'{puid2}\''''
                 cur.execute(stmt_std2_name)
                 std2_name = cur.fetchone()[0]
 

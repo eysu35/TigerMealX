@@ -48,7 +48,6 @@ class Exchanges:
     # can take string or integer PUID
     @classmethod
     def get_current_exchanges(cls, studentid):
-        studentid = str(studentid)
         print(studentid)
         current_exchanges = []
         # access the database here and assemble a list of Exchange objects
@@ -92,7 +91,6 @@ class Exchanges:
             if conn is not None:
                 conn.close()
                 print("success")
-                print("hello")
 
         return current_exchanges
 
@@ -121,11 +119,13 @@ class Exchanges:
             for row in cur.fetchall():
                 puid1 = row[1]
                 puid2 = row[2]
-                stmt_std1_name = f'''SELECT student_name FROM students WHERE puid={puid1}'''
+                stmt_std1_name = f'''SELECT student_name FROM 
+                students WHERE puid=\'{puid1}\''''
                 cur.execute(stmt_std1_name)
                 std1_name = cur.fetchone()[0]
 
-                stmt_std2_name = f'''SELECT student_name FROM students WHERE puid={puid2}'''
+                stmt_std2_name = f'''SELECT student_name FROM 
+                students WHERE puid=\'{puid2}\''''
                 cur.execute(stmt_std2_name)
                 std2_name = cur.fetchone()[0]
 

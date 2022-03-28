@@ -1,18 +1,25 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>TigerMealX - Exchanges</title>
 </head>
 <body>
+  <style>
+    table, th, td {
+   border: 1px solid;
+}
+  </style>
     <!--- CURRENT EXCHANGE TABLE -->
     {% if curr_exchanges|length == 0 %}
     <p>You have no current exchanges</p>
     {% else %}
         <table>
         <tr>
+
           <th>Name</th>
-          <th>Place</th>
+          <th width="'40px">Place</th>
           <th>Meal</th>
           <th>Completion date</th>
           <th>Expiration date</th>
@@ -21,8 +28,8 @@
          {% for exchange in curr_exchanges: %}
           <tr>
             
-            <td align="left">>{{exchange.get_name()}}</td>
-            <td align="right"> {{exchange.get_place()}}</td>
+            <td align="left">>{{exchange.get_name2()}}</td>
+            <td align="right"> {{exchange.get_exch1_loc()}}</td>
             <td width="20px"> {{exchange.get_status()}}</td>
             <td> {{exchange.get_exp()}}</td>
           </tr>
@@ -31,30 +38,31 @@
       </table>
 
 
-    <!--- PAST EXCHANGE TABLE -->
       {% if past_exchanges|length == 0 %}
-    <p>You have no past exchanges</p>
-    {% else %}
-        <table>
-        <tr>
-          <th>Name</th>
-          <th>Place</th>
-          <th>Meal</th>
-          <th>Completion date</th>
-          <th>Expiration date</th>
-    
-        </tr>
-         {% for exchange in past_exchanges: %}
+      <p>You have no past exchanges</p>
+      {% else %}
+          <table>
           <tr>
-            
-            <td align="left"><exchange.get_name()</td>
-            <td align="right"> exchange.get_place()</td>
-            <td width="20px"> exchange.get_status()</td>
-            <td> exchange.get_exp()</td>
+  
+            <th>Name</th>
+            <th>Place</th>
+            <th>Meal</th>
+            <th>Completion date</th>
+            <th>Expiration date</th>
+      
           </tr>
-         {% endfor %}
-      </table>
-      {% endif %}
+           {% for exchange in past_exchanges: %}
+            <tr>
+              
+              <td align="left">>{{exchange.get_name2()}}</td>
+              <td align="right"> {{exchange.get_exch1_loc()}}</td>
+              <td width="20px"> {{exchange.get_status()}}</td>
+              <td> {{exchange.get_exp()}}</td>
+            </tr>
+           {% endfor %}
+          {% endif %}
+        </table>
       {% include 'ToStart.html' %}
+
 </body>
 </html>

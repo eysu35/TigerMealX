@@ -10,14 +10,14 @@ from config import config
 
 def create_tables():
 
-
-
     """ create tables in the PostgreSQL database"""
     
     commands = (
         """ DROP TABLE IF EXISTS students, 
                 student_plans, friends, 
                 locations, exchanges
+        """,
+        """CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
         """,
         """
         CREATE TABLE students (
@@ -48,14 +48,15 @@ def create_tables():
         """,
         """
         CREATE TABLE exchanges (
-                meal_exchange_id UUID PRIMARY KEY,
+                meal_exchange_id UUID DEFAULT uuid_generate_v4 () 
+                PRIMARY KEY,
                 student1_PUID VARCHAR(255) NOT NULL,
                 student2_PUID VARCHAR(255) NOT NULL,
                 meal VARCHAR(255) NOT NULL,
                 exchange1_date DATE,
                 exchange1_location_id VARCHAR(255),
                 exchange2_date DATE,
-                exchge2_location_id VARCHAR(255),
+                exchange2_location_id VARCHAR(255),
                 expiration_date DATE NOT NULL,
                 status VARCHAR(255) NOT NULL
         )

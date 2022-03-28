@@ -57,7 +57,7 @@ class Exchanges:
          exchange2_location_id, expiration_date, status FROM exchanges 
          WHERE 
          student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\'
-        AND status='Incomplete''''
+        AND status="Incomplete"'''
 
         try:
             # connection establishment
@@ -105,7 +105,7 @@ class Exchanges:
          exchange2_location_id, expiration_date, status FROM exchanges 
          WHERE 
          student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\'
-                AND status='Complete''''
+                AND status="Complete"'''
 
         try:
             # connection establishment

@@ -178,7 +178,34 @@ class Exchanges:
         stmt = f'''DELETE FROM exchanges WHERE meal_exchange_id=
         \'{meal_exchange_id}\''''
 
-        db_insert(stmt, None)
+        ### do we need to send the meal_exchange_id again? ###
+        db_insert(stmt, meal_exchange_id)
+
+    @classmethod
+    def add_exchange1(cls, meal_exchange_id, exchange1_date,
+                   exchange1_location_id):
+
+        stmt=f'''UPDATE exchanges SET exchange1_date = \'
+        {exchange1_date}\' AND exchange1_location_id = \
+        '{exchange1_location_id}\' 
+        WHERE meal_exchange_id=\'{meal_exchange_id}\''''
+
+        db_insert(stmt, [exchange1_date, exchange1_location_id,
+                         meal_exchange_id])
+
+    #### separate method or just combine w some string concatenation
+    # for the numbers??? ######
+    @classmethod
+    def add_exchange2(cls, meal_exchange_id, exchange2_date,
+                      exchange2_location_id):
+        stmt = f'''UPDATE exchanges SET exchange2_date = \'
+        {exchange2_date}\' AND exchange2_location_id = \
+        '{exchange2_location_id}\' 
+        WHERE meal_exchange_id=\'{meal_exchange_id}\''''
+
+        db_insert(stmt, [exchange2_date, exchange2_location_id,
+                         meal_exchange_id])
+
 
 # getters and setters unfinished
 # this also breaks exchanges.html

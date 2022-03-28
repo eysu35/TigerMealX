@@ -28,9 +28,9 @@ def exchanges():
     return render_template('exchanges.html', curr_exchanges=curr_exchanges,past_exchanges=past_exchanges)
 
 
-@app.route('/faq/')
+@app.route('/about/')
 def faq():
-    return render_template('faq.html')
+    return render_template('about.html')
 
 
 @app.route('/help/')

@@ -206,7 +206,6 @@ class Exchanges:
         db_insert(stmt, [exchange2_date, exchange2_location_id,
                          meal_exchange_id])
 
-
 # getters and setters unfinished
 # this also breaks exchanges.html
 class Exchange:

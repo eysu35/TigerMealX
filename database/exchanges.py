@@ -88,6 +88,7 @@ class Exchanges:
             if conn is not None:
                 conn.close()
                 print("success")
+                print("hello")
 
         return current_exchanges
 
@@ -154,11 +155,19 @@ class Exchanges:
 
 #### OK we dont need to generate this random int because the db will
         # do this automatically when we insert a row. ####
-        stmt = '''INSERT INTO exchanges(mealx_id, stdnt1_PUID, stdnt2_PUID,
-                meal,exchge1_date, exchge1_loc, exchge2_date, exchge2_loc, 
-                exp_date, status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        stmt = '''INSERT INTO exchanges(meal_exchange_id, student1_puid, 
+        student2_puid, meal, exchange1_date, exchange1_location_id, 
+        exchange2_date, exchange2_location_id, expiration_date, 
+        status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
 
         db_insert(stmt, exchange.to_ordered_tuple())
+
+    @classmethod
+    def remove_exchange(cls, meal_exchange_id):
+        stmt = f'''DELETE FROM exchanges WHERE meal_exchange_id=
+        \'{meal_exchange_id}\''''
+
+        db_insert(stmt, None)
 
 # getters and setters unfinished
 # this also breaks exchanges.html

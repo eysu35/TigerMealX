@@ -105,7 +105,7 @@ if __name__ == '__main__':
     add_data('exchanges', ["123456789", "112345678", "lunch",
                            '2001-01-01', 'Ivy', None , None,
                            '2001-01-31', 'Incomplete'])
-    add_data('exchanges', ["920228341", "920195317", "breakfast",
+    add_data('exchanges', ["920228342", "920195317", "breakfast",
                            '2015-02-15', "Tiger Inn", '2015-02-25' ,
                            "Dining Hall", '2015-03-15', "Complete"])
     add_data('exchanges', ["123456789", "920228342", "lunch",

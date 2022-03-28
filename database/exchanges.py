@@ -138,7 +138,7 @@ class Exchanges:
             if conn is not None:
                 conn.close()
                 print("success")
-                print("past")
+                # print("past")
 
         return past_exchanges
 

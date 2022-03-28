@@ -8,7 +8,8 @@ class Students:
     @classmethod
     def get_puid_from_name(cls, name):
         str_name = str(name)
-        stmt = f'''SELECT PUID FROM students WHERE student_name LIKE \'%{str_name}%\''''
+        stmt = f'''SELECT puid FROM students WHERE student_name LIKE 
+        \'%{str_name}%\''''
         puid = None
 
         try:
@@ -34,7 +35,8 @@ class Students:
     @classmethod
     def search_students_by_name(cls, name):
         str_name = str(name)
-        stmt = f'''SELECT student_name FROM students WHERE student_name LIKE \'%{str_name}%\''''
+        stmt = f'''SELECT student_name FROM students WHERE student_name 
+        LIKE \'%{str_name}%\''''
         students = []
 
         try:
@@ -60,12 +62,11 @@ class Students:
 
         return students
 
-
     # returns list of Student objects that are friends of the given puid
     @classmethod
     def get_friend_names(cls, puid):
         # build the sql statement
-        stmt = f"""SELECT friend_PUID FROM friends WHERE PUID={puid}"""
+        stmt = f"""SELECT friend_puid FROM friends WHERE puid={puid}"""
 
         friend_data = []
 
@@ -104,7 +105,6 @@ class Students:
                 print("success")
 
         return friend_data
-
 
 class Student:
 

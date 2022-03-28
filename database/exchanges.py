@@ -68,7 +68,7 @@ class Exchanges:
 
             cur.execute(stmt)
 
-            if cur.fetchone() == None:
+            if cur.fetchall() == None:
                 return None
 
             for row in cur.fetchall():
@@ -120,7 +120,7 @@ class Exchanges:
 
             cur.execute(stmt)
 
-            if cur.fetchone() == None:
+            if cur.fetchall() == None:
                 return None
 
             for row in cur.fetchall():

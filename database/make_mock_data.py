@@ -6,7 +6,48 @@
 #-----------------------------------------------------------------------
 import psycopg2
 from config import config
+import csv
+import pandas as pd
+import numpy as np
+import random
+import time
+from psycopg2.extensions import register_adapter, AsIs
 #-----------------------------------------------------------------------
+
+def remove_all_data():
+    commands = (
+        """ DELETE FROM students
+        """,
+        """ DELETE FROM student_plans
+        """,
+        """ DELETE FROM locations
+        """,
+        """ DELETE FROM friends
+        """,
+        """ DELETE FROM exchanges
+        """,)
+
+    try:
+        # connection establishment
+        params = config()
+        conn = psycopg2.connect(**params)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        # add in each row of mock data into the relevant table
+        for command in commands:
+            cur.execute(command)
+
+        # close communication with the PostgreSQL database server
+        cur.close()
+        # commit the changes
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print("success")        
 
 def add_data(table, row_data):
 
@@ -52,67 +93,168 @@ def add_data(table, row_data):
         if conn is not None:
             conn.close()
             print("success")
+    
+
+def str_time_prop(start, end, time_format, prop):
+    """Get a time at a proportion of a range of two formatted times.
+
+    start and end should be strings specifying times formatted in the
+    given format (strftime-style), giving an interval [start, end].
+    prop specifies how a proportion of the interval to be taken after
+    start.  The returned time will be in the specified format.
+    """
+
+    stime = time.mktime(time.strptime(start, time_format))
+    etime = time.mktime(time.strptime(end, time_format))
+
+    ptime = stime + prop * (etime - stime)
+
+    return time.strftime(time_format, time.localtime(ptime))
+
+
+def random_date(start, end, prop):
+    return str_time_prop(start, end, '%m/%d/%Y %I:%M %p', prop)
+
+def getRandomDate():
+    return random_date("1/1/2021 1:30 PM", "1/1/2022 4:50 AM", random.random())
+    # return "hello"
+
+def getRandomMeal():
+    meals = ['breakfast','lunch','dinner']
+    return meals[np.random.randint(len(meals))]
+
+def addapt_numpy_float64(numpy_float64):
+    return AsIs(numpy_float64)
+def addapt_numpy_int64(numpy_int64):
+    return AsIs(numpy_int64)
+
 
 if __name__ == '__main__':
-    # students table
-    add_data('students', ["920228342", "eysu", "Ellen Su", "1111",
-                          True])
-    add_data('students', ["920195317", "arinm", "Arin Mukherjee",
-                          "2222", True])
-    add_data('students', ["920227978", "cwallant", "Charles "
-                          "Coppieters", "3333", True])
-    add_data('students', ["123456789", "smaleson", "Shayna Maleson",
-                          "4444", True])
-    add_data('students', ["112345678", "floydb", "Floyd Benedikter",
-                          "5555", True])
-    # add student that does not have valid plan
-    add_data('students', ["000000000", "test", "Test Test", "6666",
-                          False])
-    # add second campus dining student
-    add_data('students', ["000000001", "test2", "Test2 Test2", "7777",
-                          True])
 
-    # student plans table
-    add_data('student_plans', ["1111", "1234"])
-    add_data('student_plans', ["2222", "5678"])
-    add_data('student_plans', ["3333", "6789"])
-    add_data('student_plans', ["4444", "4440"])
-    add_data('student_plans', ["5555", "0000"])
-    add_data('student_plans', ["6666", "0001"])
-    add_data('student_plans', ["7777", "5678"])
+    # Takes care of (can't adapt type 'numpy.int64') error
+    register_adapter(np.float64, addapt_numpy_float64)
+    register_adapter(np.int64, addapt_numpy_int64)
 
-    # locations table
-    add_data('locations', ["1234", "Tiger Inn"])
-    add_data('locations', ["5678", "Campus Dining"])
-    add_data('locations', ["6789", "Cottage"])
-    add_data('locations', ["4440", "Quad"])
-    add_data('locations', ["0000", "Ivy"])
-    add_data('locations', ["0001", "Independent"])
+    # Delete data in all ables 
+    remove_all_data()
+
+    # Eating club -> Meal Plan id dictionary
+    club_meal_plan_dict = {'Dining Hall': '~dining_hall_meal_plan_id~',
+                            'Terrace': '~terrace_meal_plan_id~', 
+                             'Tower': '~tower_meal_plan_id~',
+                             'Cannon': '~cannon_meal_plan_id~',
+                             'Quad': '~quad_meal_plan_id~',
+                             'Colonial': '~colonial_meal_plan_id~',
+                             'Ivy': '~ivy_meal_plan_id~',
+                             'TI': '~ti_meal_plan_id~',
+                             'Cottage': '~cottage_meal_plan_id~',
+                             'Cap': '~cap_meal_plan_id~',
+                             'Cloister': '~cloister_meal_plan_id~',
+                             'Charter': '~charter_meal_plan_id~'}
+
+    # Student Plans Table Dictionary
+    student_plans_dict = {'~dining_hall_meal_plan_id~': '~dining_hall_location_id~',
+                            '~terrace_meal_plan_id~': '~terrace_location_id~', 
+                             '~tower_meal_plan_id~': '~tower_location_id~',
+                             '~cannon_meal_plan_id~': '~cannon_location_id~',
+                             '~quad_meal_plan_id~': '~quad_location_id~',
+                             '~colonial_meal_plan_id~': '~colonial_location_id~',
+                             '~ivy_meal_plan_id~': '~ivy_location_id~',
+                             '~ti_meal_plan_id~': '~ti_location_id~',
+                             '~cottage_meal_plan_id~': '~cottage_location_id~',
+                             '~cap_meal_plan_id~': '~cap_location_id~',
+                             '~cloister_meal_plan_id~': '~cloister_location_id~',
+                             '~charter_meal_plan_id~': '~charter_location_id~'}
+
+                    
+    # Locations Table Dictionary
+    locations_dict = {'~dining_hall_location_id~': 'Dining Hall',
+                            '~terrace_location_id~': 'Terrace', 
+                             '~tower_location_id~': 'Tower',
+                             '~cannon_location_id~': 'Cannon',
+                             '~quad_location_id~': 'Quad',
+                             '~colonial_location_id~': 'Colonial',
+                             '~ivy_location_id~': 'Ivy',
+                             '~ti_location_id~': 'TI',
+                             '~cottage_location_id~': 'Cottage',
+                             '~cap_location_id~': 'Cap',
+                             '~cloister_location_id~': 'Cloister',
+                             '~charter_location_id~': 'Charter'}
+
+    # Read csv file as dataframe
+    filename = 'Meal Plan Info Form (Responses) - Form Responses 1.csv'
+    df = pd.read_csv(filename)
+
+    # Add students
+    for index, row in df.iterrows():
+        add_data('students', [row['PUID (number on your prox)'], 
+                              row['NetID'], 
+                              row['Name'], 
+                              row['Meal Plan'], 
+                              True])
+
+    
+    # Add friends: 
+    # Note: Sometimes the same pair is randomly selected multiple times. 
+    # However, there is only ever one copy in the table.
+    num_friendships = 10
+    puids = df.loc[:,"PUID (number on your prox)"]
+    for i in range(num_friendships):
+        # Get random index
+        n1 = np.random.randint(num_friendships)
+        
+        # Get different random index
+        n2 = n1
+        while (n1 == n2):
+            n2 = np.random.randint(num_friendships)
+
+        # Create friendship from PUIDs of two indices
+        add_data('friends', [puids[n1], puids[n2]])
+        
+    # Add student_plans 
+    for key in student_plans_dict:
+        add_data('student_plans', [key, student_plans_dict[key]])
+
+    # Add locations
+    for key in locations_dict:
+        add_data('locations', [key, locations_dict[key]])
+        
+    # Add exchanges
+    num_exchanges = 10
+
+    # Returns club corresponding to puid
+    def getClubFromID(puid):
+        user = df.loc[df["PUID (number on your prox)"] == puid]
+        return user['Meal Plan'].iloc[0]
+
+    for i in range(num_exchanges):
+        # Get random index
+        n1 = np.random.randint(num_exchanges)
+        
+        # Get different random index
+        n2 = n1
+        while (n1 == n2):
+            n2 = np.random.randint(num_exchanges)
 
 
-    # friends table
-    add_data('friends', ["920228342", "123456789"])
-    add_data('friends', ["112345678", "123456789"])
-    add_data('friends', ["920195317", "920228342"])
-    add_data('friends', ["920195317", "112345678"])
-    add_data('friends', ["123456789", "920195317"])
-    add_data('friends', ["000000000", "920228342"])
-    add_data('friends', ["000000001", "920195317"])
-    add_data('friends', ["000000001", "123456789"])
+        # a = puids[n1]
+        # print(a)
+        # b = puids[n2]
+        # print(b)
+        # c = getRandomMeal()
+        # print(c)
+        # d = getRandomDate()
+        # print(d)
+        # e = getClubFromID(a)
+        # print(e)
+        # f = getRandomDate()
+        # print(f)
 
+        # add_data('exchanges', [a,b,c,d,e,None,None,f,'Incomplete'])    
 
-    # exchanges table
-    add_data('exchanges', ["123456789", "112345678", "lunch",
-                           '2001-01-01', 'Ivy', None , None,
-                           '2001-01-31', 'Incomplete'])
-    add_data('exchanges', ["920228342", "920195317", "breakfast",
-                           '2015-02-15', "Tiger Inn", '2015-02-25' ,
-                           "Dining Hall", '2015-03-15', "Complete"])
-    add_data('exchanges', ["123456789", "920228342", "lunch",
-                           None, None, None, None, '2022-04-05',
-                           "Incomplete"])
+        exchange_params = [puids[n1], puids[n2], getRandomMeal(), getRandomDate(), 
+                            getClubFromID(puids[n1]), None, None, getRandomDate(), 'Incomplete']
 
+        add_data('exchanges', exchange_params)
 
-
-
-
+    

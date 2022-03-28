@@ -5,12 +5,58 @@
     <title>TigerMealX - Help</title>
 </head>
 <body>
-    <p>Send an email to campus dining?</p>
-<!--    <form action = "http://localhost:5000" method = "get">-->
-<!--        <p><input type = "submit" value = "Home" /></p>-->
-<!--    </form>-->
-    <form action="/index">
-         <button type="submit">Home</button>
-    </form>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('../static/background.jpg');
+            background-size: cover;
+        }
+        .help-section {
+            background-color: white;
+            margin-bottom: 15%;
+            
+            width: 70%;
+            position: absolute;
+            top:15%;
+            left: 0;
+            right: 0;
+            
+            margin: auto;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            text-align: left;
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+        p {
+            text-align: left;
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+        .matheyimage {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+        
+    </style>
+    {% include 'navbar.html' %}
+    <div class="help-section">
+        <h1>Help</h1>
+        <h2>What is TigerMealX?</h2>
+        <p>TigerMealX is a new platform allowing Princeton University students to meal exchange more easily.</p>
+        <h2>What is a meal exchange?</h2>
+        <p>The Meal Exchange Program makes it possible for students with meal plans to dine with their friends at eating clubs, or between two different participating clubs, without spending additional funds. Administered jointly by the Inter-Club Council and Campus Dining, the program includes club-to-dining hall exchanges as well as club-to-club exchanges.</p>
+        <h2>How does TigerMealX work?</h2>
+        <p>TigerMealX is built in collaboration with Princeton Dining and interacts directly with the official university system to facilitate meal exchanges.</p>
+        <h2>Who can I swap with?</h2>
+        <p>You can swap with any other student on a dining hall plan or eating club plan.</p>
+    </div>
+    
 </body>
 </html>

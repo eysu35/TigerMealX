@@ -50,7 +50,7 @@ class Students:
             cur.execute(stmt)
             results = cur.fetchall()
             for result in results:
-                student = Student(None, result[0], None)
+                student = Student(None, None, result[0], None)
                 students.append(student)
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -108,17 +108,18 @@ class Students:
 
 class Student:
 
-    def __init__(self, puid, name, club):
+    def __init__(self, puid, netid, name, mealplanid):
         self._puid = puid
-        # self._netid = netid
+        self._netid = netid
         self._name = name
-        self._club = club
-        # self._mealplan = mealplan
+        self._mealplanid = mealplanid
+        # self._club = club
         # self._location_id = location_id
         # other fields?
 
     def __str__(self):
-        return f'{self._name}, {self._puid}, {self._club}'
+        return f'{self._puid}, {self._netid}, {self._name},' \
+               f' {self._mealplanid}'
 
     def get_puid(self):
         return self._puid
@@ -126,11 +127,11 @@ class Student:
     def set_puid(self, puid):
         self._puid = puid
 
-    # def get_netid(self):
-    #     return self._netid
+    def get_netid(self):
+        return self._netid
 
-    # def set_netid(self, netid):
-    #     self._netid = netid
+    def set_netid(self, netid):
+        self._netid = netid
 
     def get_name(self):
         return self._name
@@ -138,11 +139,11 @@ class Student:
     def set_name(self, name):
         self._name = name
 
-    def get_club(self):
-        return self._club
+    def get_mealplanid(self):
+        return self._mealplanid
 
-    def set_club(self, club):
-        self._club = club
+    def set_mealplanid(self, mealplanid):
+        self._club = mealplanid
 
 
 if __name__ == '__main__':

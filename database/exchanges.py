@@ -68,10 +68,10 @@ class Exchanges:
 
             cur.execute(stmt)
 
-            if cur.fetchall() == None:
-                return None
-
             for row in cur.fetchall():
+                if row == None:
+                    return None
+
                 puid1 = row[1]
                 puid2 = row[2]
                 stmt_std1_name = f'''SELECT student_name FROM 
@@ -120,10 +120,9 @@ class Exchanges:
 
             cur.execute(stmt)
 
-            if cur.fetchall() == None:
-                return None
-
             for row in cur.fetchall():
+                if row == None:
+                    return None
                 puid1 = row[1]
                 puid2 = row[2]
                 stmt_std1_name = f'''SELECT student_name FROM 

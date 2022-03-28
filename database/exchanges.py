@@ -48,7 +48,6 @@ class Exchanges:
     # can take string or integer PUID
     @classmethod
     def get_current_exchanges(cls, studentid):
-        print(studentid)
         current_exchanges = []
         # access the database here and assemble a list of Exchange objects
         # how is status encoded?

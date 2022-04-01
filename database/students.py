@@ -34,32 +34,32 @@ class Students:
 
         return first_name
 
-    @classmethod
-    def get_puid_from_name(cls, name):
-        str_name = str(name)
-        stmt = f'''SELECT puid FROM students WHERE student_name LIKE 
-            \'%{str_name}%\''''
-        puid = None
-
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
-
-            conn.autocommit = True
-            cur = conn.cursor()
-
-            cur.execute(stmt)
-            puid = cur.fetchone()[0]
-
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn is not None:
-                conn.close()
-                print("success")
-
-        return puid
+    # @classmethod
+    # def get_puid_from_name(cls, name):
+    #     str_name = str(name)
+    #     stmt = f'''SELECT puid FROM students WHERE student_name LIKE
+    #         \'%{str_name}%\''''
+    #     puid = None
+    #
+    #     try:
+    #         # connection establishment
+    #         params = config()
+    #         conn = psycopg2.connect(**params)
+    #
+    #         conn.autocommit = True
+    #         cur = conn.cursor()
+    #
+    #         cur.execute(stmt)
+    #         puid = cur.fetchone()[0]
+    #
+    #     except (Exception, psycopg2.DatabaseError) as error:
+    #         print(error)
+    #     finally:
+    #         if conn is not None:
+    #             conn.close()
+    #             print("success")
+    #
+    #     return puid
 
     @classmethod
     def get_puid_from_netid(cls, netid):

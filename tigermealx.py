@@ -26,7 +26,7 @@ def base():
 def exchanges():
     netid = auth.authenticate()
     name = Students.get_first_name_from_netid(netid)
-    studentid = Students.get_puid_from_netid()
+    studentid = Students.get_puid_from_netid(netid)
     curr_exchanges = Exchanges.get_current_exchanges(studentid)
     past_exchanges = Exchanges.get_past_exchanges('studentid')
     return render_template('exchanges.html',
@@ -37,7 +37,7 @@ def exchanges():
 @app.route('/about/')
 def faq():
     netid = auth.authenticate()
-    name = Students.get_name_from_netid(netid)
+    name = Students.get_first_name_from_netid(netid)
 
     return render_template('about.html', name=name)
 
@@ -45,7 +45,7 @@ def faq():
 @app.route('/help/')
 def help_page():
     netid = auth.authenticate()
-    name = Students.get_name_from_netid(netid)
+    name = Students.get_first_name_from_netid(netid)
 
     return render_template('help.html', name=name)
 

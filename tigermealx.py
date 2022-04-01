@@ -28,7 +28,7 @@ def exchanges():
     name = Students.get_first_name_from_netid(netid)
     studentid = Students.get_puid_from_netid(netid)
     curr_exchanges = Exchanges.get_current_exchanges(studentid)
-    past_exchanges = Exchanges.get_past_exchanges('studentid')
+    past_exchanges = Exchanges.get_past_exchanges(studentid)
     return render_template('exchanges.html',
                            curr_exchanges=curr_exchanges,
                            past_exchanges=past_exchanges, name=name)

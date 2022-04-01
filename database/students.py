@@ -6,10 +6,41 @@ import psycopg2
 class Students:
 
     @classmethod
+    def get_name_from_netid(cls, netid):
+        str_netid = str(netid)
+        print(str_netid)
+        stmt = f'''SELECT student_name FROM students WHERE 
+        netid=\'{str_netid}\''''
+
+        first_name = None
+
+        try:
+            # connection establishment
+            params = config()
+            conn = psycopg2.connect(**params)
+
+            conn.autocommit = True
+            cur = conn.cursor()
+
+            cur.execute(stmt)
+            first_name = cur.fetchone()[2]
+            first_name = first_name.split(' ')[0]
+            print(first_name)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
+                print("success")
+
+        return first_name
+
+    @classmethod
     def get_puid_from_name(cls, name):
         str_name = str(name)
         stmt = f'''SELECT puid FROM students WHERE student_name LIKE 
-        \'%{str_name}%\''''
+            \'%{str_name}%\''''
         puid = None
 
         try:

@@ -8,7 +8,6 @@ class Students:
     @classmethod
     def get_first_name_from_netid(cls, netid):
         str_netid = str(netid).strip()
-        print(str_netid)
         stmt = f'''SELECT student_name FROM students WHERE 
         netid=\'{str_netid}\''''
         first_name = None

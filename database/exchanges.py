@@ -56,7 +56,7 @@ class Exchanges:
         meal, exchange1_date, exchange1_location_id, exchange2_date,
          exchange2_location_id, expiration_date, status FROM exchanges 
          WHERE 
-         student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\'
+         (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\')
         AND status=\'Incomplete\''''
 
         try:
@@ -108,7 +108,7 @@ class Exchanges:
         meal, exchange1_date, exchange1_location_id, exchange2_date,
          exchange2_location_id, expiration_date, status FROM exchanges 
          WHERE 
-         student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\'
+         (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\')
                 AND status =\'Complete\''''
 
         try:

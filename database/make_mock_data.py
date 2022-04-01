@@ -5,7 +5,7 @@
 # Authors:
 #-----------------------------------------------------------------------
 import psycopg2
-from config import config
+from config1 import config
 import csv
 import pandas as pd
 import numpy as np
@@ -128,8 +128,12 @@ def addapt_numpy_float64(numpy_float64):
 def addapt_numpy_int64(numpy_int64):
     return AsIs(numpy_int64)
 
+def get_club_from_id(df, puid):
+    user = df.loc[df["PUID (number on your prox)"] == puid]
+    return user['Meal Plan'].iloc[0]
 
-if __name__ == '__main__':
+
+def main():
 
     # Takes care of (can't adapt type 'numpy.int64') error
     register_adapter(np.float64, addapt_numpy_float64)
@@ -257,4 +261,38 @@ if __name__ == '__main__':
 
         add_data('exchanges', exchange_params)
 
-    
+
+def add_ellen_and_shayna_exchanges():
+
+    exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
+                       'Quad', None, None, getRandomDate(), 'Incomplete']
+    add_data('exchanges', exchange_params)
+
+    exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
+                       'TI', None, None, getRandomDate(), 'Incomplete']
+    add_data('exchanges', exchange_params)
+
+    exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
+                       'Quad', None, None, getRandomDate(), 'Incomplete']
+    add_data('exchanges', exchange_params)
+
+    exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
+                       'TI', None, None, getRandomDate(), 'Incomplete']
+    add_data('exchanges', exchange_params)
+
+    exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
+                       'TI', None, None, getRandomDate(), 'Incomplete']
+    add_data('exchanges', exchange_params)
+
+    exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
+                       'TI', getRandomDate(), 'Quad', getRandomDate(), 'Complete']
+    add_data('exchanges', exchange_params)
+
+    exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
+                       'TI', getRandomDate(), 'Quad', getRandomDate(), 'Complete']
+    add_data('exchanges', exchange_params)
+
+
+if __name__ == '__main__':
+    main()
+    add_ellen_and_shayna_exchanges()

@@ -11,19 +11,7 @@ import auth
 @app.route('/index', methods=['GET'])
 def base():
     netid = auth.authenticate()
-    # assume it's a name for now but need to also check for PUID
-    # search_name = request.args.get('studentName')
-    # if search_name is None or search_name == '':
-    #     students = []
-    # else:
-    #     students = Students.search_students_by_name(search_name)
-    # search_puid = Students.get_puid_from_name(search_name)
     name = Students.get_name_from_netid(netid)
-    return render_template('navbar.html', name=name)
-
-@app.route('/search')
-def search():
-    username = auth.authenticate()
     # assume it's a name for now but need to also check for PUID
     search_name = request.args.get('studentName')
     if search_name is None or search_name == '':
@@ -32,8 +20,7 @@ def search():
         students = Students.search_students_by_name(search_name)
     # search_puid = Students.get_puid_from_name(search_name)
 
-    return render_template('index.html', students=students)
-
+    return render_template('index.html', students=students, name=name)
 
 @app.route('/exchanges/')
 def exchanges():

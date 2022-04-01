@@ -7,11 +7,10 @@ class Students:
 
     @classmethod
     def get_name_from_netid(cls, netid):
-        str_netid = str(netid)
+        str_netid = str(netid).strip()
         print(str_netid)
         stmt = f'''SELECT student_name FROM students WHERE 
         netid=\'{str_netid}\''''
-
         first_name = None
 
         try:
@@ -23,9 +22,8 @@ class Students:
             cur = conn.cursor()
 
             cur.execute(stmt)
-            first_name = cur.fetchone()[2]
+            first_name = cur.fetchone()[0]
             first_name = first_name.split(' ')[0]
-            print(first_name)
 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)

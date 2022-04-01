@@ -11,7 +11,7 @@ import auth
 @app.route('/index', methods=['GET'])
 def base():
     netid = auth.authenticate()
-    name = Students.get_name_from_netid(netid)
+    name = Students.get_first_name_from_netid(netid)
     # assume it's a name for now but need to also check for PUID
     search_name = request.args.get('studentName')
     if search_name is None or search_name == '':
@@ -25,11 +25,10 @@ def base():
 @app.route('/exchanges/')
 def exchanges():
     netid = auth.authenticate()
-    name = Students.get_name_from_netid(netid)
-    studentid = request.args.get('studentid')
-    studentid = "123456789"
-    curr_exchanges = Exchanges.get_current_exchanges('123456789')
-    past_exchanges = Exchanges.get_past_exchanges('920228341')
+    name = Students.get_first_name_from_netid(netid)
+    studentid = Students.get_puid_from_netid()
+    curr_exchanges = Exchanges.get_current_exchanges(studentid)
+    past_exchanges = Exchanges.get_past_exchanges('studentid')
     return render_template('exchanges.html',
                            curr_exchanges=curr_exchanges,
                            past_exchanges=past_exchanges, name=name)

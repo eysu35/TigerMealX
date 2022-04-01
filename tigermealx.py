@@ -24,26 +24,31 @@ def base():
 
 @app.route('/exchanges/')
 def exchanges():
-    username = auth.authenticate()
-
+    netid = auth.authenticate()
+    name = Students.get_name_from_netid(netid)
     studentid = request.args.get('studentid')
     studentid = "123456789"
     curr_exchanges = Exchanges.get_current_exchanges('123456789')
     past_exchanges = Exchanges.get_past_exchanges('920228341')
-    return render_template('exchanges.html', curr_exchanges=curr_exchanges,past_exchanges=past_exchanges)
+    return render_template('exchanges.html',
+                           curr_exchanges=curr_exchanges,
+                           past_exchanges=past_exchanges, name=name)
 
 
 @app.route('/about/')
 def faq():
-    username = auth.authenticate()
+    netid = auth.authenticate()
+    name = Students.get_name_from_netid(netid)
 
-    return render_template('about.html')
+    return render_template('about.html', name=name)
 
 
 @app.route('/help/')
 def help_page():
-    username = auth.authenticate()
-    return render_template('help.html')
+    netid = auth.authenticate()
+    name = Students.get_name_from_netid(netid)
+
+    return render_template('help.html', name=name)
 
 
 if __name__ == '__main__':

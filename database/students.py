@@ -5,6 +5,36 @@ import psycopg2
 # container class for students
 class Students:
 
+    # takes a puid as integer or string, puid should come from validated list of students (puid must already exist in db)
+    @classmethod
+    def get_student_by_puid(cls, puid):
+        str_puid = str(puid).strip()
+        stmt = f'''SELECT puid, netid, student_name, meal_plan_id, isvalidformealexchange FROM students WHERE 
+                puid=\'{str_puid}\''''
+        student = None
+
+        try:
+            # connection establishment
+            params = config()
+            conn = psycopg2.connect(**params)
+
+            conn.autocommit = True
+            cur = conn.cursor()
+
+            cur.execute(stmt)
+            res = cur.fetchone()
+            student = Student(res[0], res[1], res[2], res[3], res[4])
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
+                print("success")
+
+        return student
+
+
     @classmethod
     def get_first_name_from_netid(cls, netid):
         str_netid = str(netid).strip()
@@ -89,7 +119,7 @@ class Students:
     @classmethod
     def search_students_by_name(cls, name):
         str_name = str(name)
-        stmt = f'''SELECT student_name FROM students WHERE 
+        stmt = f'''SELECT puid, netid, student_name, meal_plan_id, isvalidformealexchange FROM students WHERE 
         LOWER(student_name) LIKE LOWER(\'%{str_name}%\')'''
         students = []
 
@@ -104,7 +134,7 @@ class Students:
             cur.execute(stmt)
             results = cur.fetchall()
             for result in results:
-                student = Student(None, None, result[0], None)
+                student = Student(result[0], result[1], result[2], result[3], result[4])
                 students.append(student)
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -162,11 +192,12 @@ class Students:
 
 class Student:
 
-    def __init__(self, puid, netid, name, mealplanid):
+    def __init__(self, puid, netid, name, mealplanid, isvalid):
         self._puid = puid
         self._netid = netid
         self._name = name
         self._mealplanid = mealplanid
+        self._isvalid = isvalid
         # self._club = club
         # self._location_id = location_id
         # other fields?
@@ -201,8 +232,11 @@ class Student:
 
 
 if __name__ == '__main__':
-    Students.get_friend_names(123456789)
-    print(Students.get_puid_from_name('Shayna'))
-    result = Students.search_students_by_name('a')
-    for item in result:
-        print(item)
+    # Students.get_friend_names(123456789)
+    # print(Students.get_puid_from_name('Shayna'))
+    # result = Students.search_students_by_name('a')
+    # for item in result:
+    #     print(item)
+
+    print(Students.get_student_by_puid(920228016))
+    print(Students.search_students_by_name('a'))

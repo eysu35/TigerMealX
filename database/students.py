@@ -201,6 +201,7 @@ class Students:
         # build the sql statement
         stmt = f"""SELECT meal_plan_id FROM students WHERE puid
         =\'{str_puid}\'"""
+        location_name = None
 
         try:
             # connection establishment
@@ -212,18 +213,21 @@ class Students:
 
             cur.execute(stmt)
             meal_plan_id = cur.fetchone()[0]
+            print(meal_plan_id)
 
             stmt2 = f"""SELECT location_id FROM students_plans
             WHERE meal_plan_id=\'{meal_plan_id}\'"""
 
             cur.execute(stmt2)
             location_id = cur.fetchone()[0]
+            print(location_id)
 
             stmt3 = f"""SELECT location_name FROM locations
             WHERE location_id={location_id}"""
 
             cur.execute(stmt3)
             location_name = cur.fetchone()[0]
+            print(location_name)
 
             # close communication with the PostgreSQL database server
             cur.close()

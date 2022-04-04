@@ -86,16 +86,11 @@
         </style>
         </head>
         <body>
-            <form action="/action_page.php">
-                <p>Which meal would you like to exchange with {{name}}:</p>
-                <input type="radio" id="break" name="age" value="Breakfast">
-                <label for="age1">Breakfast</label><br>
-                <input type="radio" id="age2" name="age" value="60">
-                <label for="age2">Lunch</label><br>  
-                <input type="radio" id="age3" name="age" value="100">
-                <label for="age3">Dinner</label><br><br>
-                <input type="submit" value="Submit">
-              </form>
+            
+                <p>Inviting {{name}} ({{location}})</p>
+                
+                <button onclick="myCancel()">Cancel</button>
+                <button onclick="myAccept()">Accept</button>
      
   <script>
 
@@ -105,7 +100,13 @@
     get: (searchParams, prop) => searchParams.get(prop),
     });
     let puid = params.puid;
-    
+    function myAccept() {
+        alert("Email sent!");
+    }
+    function myCancel() {
+        indow.location.href='/index'
+
+    }
 
 
     function setup()

@@ -1,4 +1,4 @@
-from config1 import config
+from config import config
 import psycopg2
 import random
 

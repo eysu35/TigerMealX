@@ -5,7 +5,7 @@
 # Authors:
 # -----------------------------------------------------------------------
 import psycopg2
-from config1 import config
+from config import config
 # -----------------------------------------------------------------------
 
 # connection establishment

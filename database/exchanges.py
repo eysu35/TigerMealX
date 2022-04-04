@@ -150,23 +150,33 @@ class Exchanges:
         return past_exchanges
 
     @classmethod
-    def add_new_exchange(cls, student1_name, student2_name, meal):
-        # get puids
-        stmt = f'''SELECT puid FROM students WHERE student_name=LOWER(\
-        '{student1_name}\')'''
+    def add_new_exchange(cls, puid1, puid2, meal):
+        # # get puids
+        # stmt = f'''SELECT puid FROM students WHERE student_name=LOWER(\
+        # '{student1_name}\')'''
+        # result = db_execute_fetchone(stmt)
+        # puid1 = result[0]
+        #
+        # stmt = f'''SELECT puid FROM students WHERE student_name=LOWER(\
+        # '{student2_name}\')'''
+        # result = db_execute_fetchone(stmt)
+        # puid2 = result[0]
+
+        stmt = f'''SELECT student_name FROM students WHERE puid=\'{puid1}\''''
         result = db_execute_fetchone(stmt)
-        puid1 = result[0]
+        student1_name = result[0]
 
-        stmt = f'''SELECT puid FROM students WHERE student_name=LOWER(\
-        '{student2_name}\')'''
+        stmt = f'''SELECT student_name FROM students WHERE puid=\'{puid2}\''''
         result = db_execute_fetchone(stmt)
-        puid2 = result[0]
+        student2_name = result[0]
 
-        exchange = Exchange(random.randint(50, 1000), puid1, student1_name, puid2, student2_name, meal, None, None, None, None, 'date', 'Incomplete')
+        exchange = Exchange(puid1, student1_name,
+                            puid2, student2_name,
+                            meal, None, None, None, None, None, 'Incomplete')
 
-#### OK we dont need to generate this random int because the db will
+        #### OK we dont need to generate this random int because the db will
         # do this automatically when we insert a row. ####
-        stmt = '''INSERT INTO exchanges(meal_exchange_id, student1_puid, 
+        stmt = '''INSERT INTO exchanges(student1_puid, 
         student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, 
         status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
@@ -195,6 +205,7 @@ class Exchanges:
 
     #### separate method or just combine w some string concatenation
     # for the numbers??? ######
+    # wtf ?/ where does the meal exchange ID come from
     @classmethod
     def add_exchange2(cls, meal_exchange_id, exchange2_date,
                       exchange2_location_id):
@@ -207,15 +218,14 @@ class Exchanges:
                          meal_exchange_id])
 
 # getters and setters unfinished
-# this also breaks exchanges.html
 class Exchange:
 
     def __str__(self):
-        return f'ID: {self._mealx_id}\n{self._name1} ({self._puid1}) and {self._name2} ({self._puid2}) for {self._meal} ({self._status})'
+        return f'{self._name1} ({self._puid1}) and {self._name2} ({self._puid2}) for {self._meal} ({self._status})'
 
-    def __init__(self, mealx_id, puid1, name1, puid2, name2, meal,
+    def __init__(self, puid1, name1, puid2, name2, meal,
                  exch1_date, exch1_loc, exch2_date, exch2_loc, exp, status):
-        self._mealx_id = mealx_id
+        # self._mealx_id = mealx_id
         self._puid1 = puid1
         self._puid2 = puid2
         self._name1 = name1
@@ -231,14 +241,14 @@ class Exchange:
 
     # returns tuple of table info in order of table columns for use in insert statement
     def to_ordered_tuple(self):
-        return self._mealx_id, self._puid1, self._puid2, self._meal, self._exch1_date,\
+        return self._puid1, self._puid2, self._meal, self._exch1_date,\
                self._exch1_loc, self._exch2_date, self._exch2_loc, self._exp, self._status
 
-    def get_mealx_id(self):
-        return self._mealx_id
-
-    def set_mealx_id(self, mealx_id):
-        self._mealx_id = mealx_id
+    # def get_mealx_id(self):
+    #     return self._mealx_id
+    #
+    # def set_mealx_id(self, mealx_id):
+    #     self._mealx_id = mealx_id
 
     def get_puid1(self):
         return self._puid1

@@ -190,6 +190,53 @@ class Students:
 
         return friend_data
 
+    @classmethod
+    def get_location_name_from_puid(cls, puid):
+        str_puid = str(puid).strip()
+        # build the sql statement
+        stmt = f"""SELECT meal_plan_id FROM students WHERE puid
+        =\'{str_puid}\'"""
+
+        meal_plan_id = None
+
+        try:
+            # connection establishment
+            params = config()
+            conn = psycopg2.connect(**params)
+
+            conn.autocommit = True
+            cur = conn.cursor()
+
+            cur.execute(stmt)
+            meal_plan_id = cur.fetchone()[0]
+
+            stmt2 = f"""SELECT location_id FROM students_plans
+            WHERE meal_plan_id=\'{meal_plan_id}\'"""
+            location_id = None
+
+            cur.execute(stmt2)
+            location_id = cur.fetchone()[0]
+
+            stmt3 = f"""SELECT location_name FROM locations
+            WHERE location_id={location_id}"""
+            location_name = None
+
+            cur.execute(stmt3)
+            location_name = cur.fetchone()[0]
+
+            # close communication with the PostgreSQL database server
+            cur.close()
+            # commit the changes
+            conn.commit()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
+                print("success")
+
+        return location_name
+
 class Student:
 
     def __init__(self, puid, netid, name, mealplanid, isvalid):

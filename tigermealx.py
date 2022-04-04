@@ -24,7 +24,7 @@ def base():
     return render_template('index.html', students=students, name=name)
 
 @app.route('/exchanges/')
-def exchanges():
+def show_exchanges():
     netid = auth.authenticate()
     name = Students.get_first_name_from_netid(netid)
     studentid = Students.get_puid_from_netid(netid)
@@ -51,13 +51,25 @@ def help_page():
     return render_template('help.html', name=name)
 
 @app.route('/exchangeportal')
-def exchange():
-    puid = request.args.get('puid')
-    student = Students.get_student_by_puid(puid)
-    name = student.get_name()
-    location = Students.get_location_name_from_puid(puid)
-    print(location)
-    return render_template('exchange_init.html', name=name,location=location)
+def initiate_exchange():
+    puid2 = request.args.get('puid')
+    student2 = Students.get_student_by_puid(puid2)
+    name2 = student2.get_name()
+    location2 = Students.get_location_name_from_puid(puid2)
+    return render_template('exchange_init.html', puid2=puid2,
+                           name2=name2,
+                           location2=location2)
+
+@app.route('/postnewexchange')
+def post_new_exchange():
+    netid1 = auth.authenticate()
+    puid1 = Students.get_puid_from_netid(netid1)
+    puid2 = request.args.get('puid2')
+    ## take out meal arg
+    Exchanges.add_new_exchange(puid1, puid2, "Lunch")
+    return
+
+
 
 
 if __name__ == '__main__':

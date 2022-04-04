@@ -54,10 +54,9 @@ class Exchanges:
         stmt = f'''SELECT meal_exchange_id, student1_puid, 
         student2_puid, 
         meal, exchange1_date, exchange1_location_id, exchange2_date,
-         exchange2_location_id, expiration_date, status FROM exchanges 
-         WHERE 
-         student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\'
-        AND status=\'Incomplete\''''
+        exchange2_location_id, expiration_date, status FROM exchanges 
+        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'
+        {studentid}\') AND status=\'Incomplete\''''
 
         try:
             # connection establishment
@@ -84,7 +83,8 @@ class Exchanges:
                 cur.execute(stmt_std2_name)
                 std2_name = cur.fetchone()[0]
 
-                exch_obj = Exchange(row[0], row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+                ###  PUT ROW[0] IN LATER AS OPTIONAL ARG
+                exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
                                     row[7], row[8], row[9])
                 current_exchanges.append(exch_obj)
 
@@ -106,10 +106,9 @@ class Exchanges:
         stmt = f'''SELECT meal_exchange_id, student1_puid, 
         student2_puid, 
         meal, exchange1_date, exchange1_location_id, exchange2_date,
-         exchange2_location_id, expiration_date, status FROM exchanges 
-         WHERE 
-         student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\'
-                AND status =\'Complete\''''
+        exchange2_location_id, expiration_date, status FROM exchanges 
+        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'
+        {studentid}\') AND status =\'Complete\''''
 
         try:
             # connection establishment
@@ -135,7 +134,8 @@ class Exchanges:
                 cur.execute(stmt_std2_name)
                 std2_name = cur.fetchone()[0]
 
-                exch_obj = Exchange(row[0], row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+                ###  PUT ROW[0] IN LATER AS OPTIONAL ARG
+                exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
                                     row[7], row[8], row[9])
                 past_exchanges.append(exch_obj)
 
@@ -172,14 +172,15 @@ class Exchanges:
 
         exchange = Exchange(puid1, student1_name,
                             puid2, student2_name,
-                            meal, None, None, None, None, None, 'Incomplete')
+                            meal, None, None, None, None, '2022-02-10',
+                            'Incomplete')
 
         #### OK we dont need to generate this random int because the db will
         # do this automatically when we insert a row. ####
         stmt = '''INSERT INTO exchanges(student1_puid, 
         student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, 
-        status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
 
         db_insert(stmt, exchange.to_ordered_tuple())
 

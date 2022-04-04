@@ -87,7 +87,7 @@
         </head>
         <body>
             
-                <p>Inviting {{name}} ({{location}})</p>
+                <p>Inviting {{name2}} ({{location2}})</p>
                 
                 <button onclick="myCancel()">Cancel</button>
                 <button onclick="myAccept()">Accept</button>
@@ -101,8 +101,10 @@
     });
     let puid = params.puid;
     function myAccept() {
+        window.location.href='/postnewexchange?puid2={{puid2}}'
         alert("Email sent!");
         window.open('mailto:test@example.com?subject=subject&body=body');
+        window.location.href='/index'
     }
     function myCancel() {
         window.location.href='/index'

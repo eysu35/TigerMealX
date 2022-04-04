@@ -49,6 +49,14 @@ def help_page():
 
     return render_template('help.html', name=name)
 
+@app.route('/exchangeportal')
+def exchange():
+    puid = request.args.get('puid')
+    student = Students.get_student_by_puid(puid)
+    name = student.get_name()
+    club = student.get_location()
+    return render_template('exchange_init.html', name=name)
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # auto restart

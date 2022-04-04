@@ -18,6 +18,7 @@ def base():
         students = []
     else:
         students = Students.search_students_by_name(search_name)
+    print(students)
     # search_puid = Students.get_puid_from_name(search_name)
 
     return render_template('index.html', students=students, name=name)
@@ -54,14 +55,9 @@ def exchange():
     puid = request.args.get('puid')
     student = Students.get_student_by_puid(puid)
     name = student.get_name()
-<<<<<<< HEAD
-    # location = Students.get_location_name_from_puid(puid)
-    return render_template('exchange_init.html', name=name,location='Fake')
-=======
-    location = Students.get_location_name_from_puid()
-    return render_template('exchange_init.html', name=name,
-                           location=location)
->>>>>>> a5178526b10bb7e1844854de98b591f5d6d01bd0
+    location = Students.get_location_name_from_puid(puid)
+    print(location)
+    return render_template('exchange_init.html', name=name,location=location)
 
 
 if __name__ == '__main__':

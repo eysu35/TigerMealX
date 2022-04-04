@@ -5,7 +5,7 @@
 # Authors:
 #-----------------------------------------------------------------------
 import psycopg2
-from config import config
+from config1 import config
 import csv
 import pandas as pd
 import numpy as np

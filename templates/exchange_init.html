@@ -102,9 +102,10 @@
     let puid = params.puid;
     function myAccept() {
         alert("Email sent!");
+        window.open('mailto:test@example.com?subject=subject&body=body');
     }
     function myCancel() {
-        indow.location.href='/index'
+        window.location.href='/index'
 
     }
 

@@ -1,4 +1,4 @@
-from config import config
+from config1 import config
 import psycopg2
 
 
@@ -212,34 +212,31 @@ class Students:
             cur = conn.cursor()
 
             cur.execute(stmt)
-            meal_plan_id = cur.fetchone()[0]
-            print(meal_plan_id)
+            location_name = cur.fetchone()[0]
 
-            stmt2 = f"""SELECT location_id FROM student_plans
-            WHERE meal_plan_id=\'{meal_plan_id}\'"""
+            # stmt2 = f"""SELECT location_id FROM student_plans
+            # WHERE meal_plan_id=\'{meal_plan_id}\'"""
 
             cur.execute(stmt2)
             location_id = cur.fetchone()[0]
-            print(location_id)
 
             stmt3 = f"""SELECT location_name FROM locations
             WHERE location_id=\'{location_id}\'"""
 
             cur.execute(stmt3)
             location_name = cur.fetchone()[0]
-            print(location_name)
 
-            # close communication with the PostgreSQL database server
-            cur.close()
-            # commit the changes
-            conn.commit()
+            # # close communication with the PostgreSQL database server
+            # cur.close()
+            # # commit the changes
+            # conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
-            if conn is not None:
-                conn.close()
-                print("success")
-
+             if conn is not None:
+                 conn.close()
+                 print("success")
+        print(location_name)
         return location_name
 
 class Student:

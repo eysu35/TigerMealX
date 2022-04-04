@@ -202,8 +202,6 @@ class Students:
         stmt = f"""SELECT meal_plan_id FROM students WHERE puid
         =\'{str_puid}\'"""
 
-        meal_plan_id = None
-
         try:
             # connection establishment
             params = config()
@@ -217,14 +215,12 @@ class Students:
 
             stmt2 = f"""SELECT location_id FROM students_plans
             WHERE meal_plan_id=\'{meal_plan_id}\'"""
-            location_id = None
 
             cur.execute(stmt2)
             location_id = cur.fetchone()[0]
 
             stmt3 = f"""SELECT location_name FROM locations
             WHERE location_id={location_id}"""
-            location_name = None
 
             cur.execute(stmt3)
             location_name = cur.fetchone()[0]

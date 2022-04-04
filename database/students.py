@@ -215,7 +215,7 @@ class Students:
             meal_plan_id = cur.fetchone()[0]
             print(meal_plan_id)
 
-            stmt2 = f"""SELECT location_id FROM students_plans
+            stmt2 = f"""SELECT location_id FROM student_plans
             WHERE meal_plan_id=\'{meal_plan_id}\'"""
 
             cur.execute(stmt2)

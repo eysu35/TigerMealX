@@ -223,7 +223,7 @@ class Students:
             print(location_id)
 
             stmt3 = f"""SELECT location_name FROM locations
-            WHERE location_id={location_id}"""
+            WHERE location_id=\'{location_id}\'"""
 
             cur.execute(stmt3)
             location_name = cur.fetchone()[0]

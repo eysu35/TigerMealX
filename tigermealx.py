@@ -54,8 +54,9 @@ def exchange():
     puid = request.args.get('puid')
     student = Students.get_student_by_puid(puid)
     name = student.get_name()
-    club = student.get_location()
-    return render_template('exchange_init.html', name=name)
+    location = Students.get_location_name_from_puid()
+    return render_template('exchange_init.html', name=name,
+                           location=location)
 
 
 if __name__ == '__main__':

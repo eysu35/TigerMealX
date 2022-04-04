@@ -134,6 +134,11 @@ class Students:
             cur.execute(stmt)
             results = cur.fetchall()
             for result in results:
+                # print(results[0])
+                # print(results[1])
+                # print(results[2])
+                # print(results[3])
+                # print(results[4])
                 student = Student(result[0], result[1], result[2], result[3], result[4])
                 students.append(student)
 

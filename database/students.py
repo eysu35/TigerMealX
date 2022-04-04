@@ -25,6 +25,7 @@ class Students:
             res = cur.fetchone()
             student = Student(res[0], res[1], res[2], res[3], res[4])
 
+            cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
@@ -54,6 +55,7 @@ class Students:
             first_name = cur.fetchone()[0]
             first_name = first_name.split(' ')[0]
 
+            cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
@@ -62,33 +64,6 @@ class Students:
                 print("success")
 
         return first_name
-
-    # @classmethod
-    # def get_puid_from_name(cls, name):
-    #     str_name = str(name)
-    #     stmt = f'''SELECT puid FROM students WHERE student_name LIKE
-    #         \'%{str_name}%\''''
-    #     puid = None
-    #
-    #     try:
-    #         # connection establishment
-    #         params = config()
-    #         conn = psycopg2.connect(**params)
-    #
-    #         conn.autocommit = True
-    #         cur = conn.cursor()
-    #
-    #         cur.execute(stmt)
-    #         puid = cur.fetchone()[0]
-    #
-    #     except (Exception, psycopg2.DatabaseError) as error:
-    #         print(error)
-    #     finally:
-    #         if conn is not None:
-    #             conn.close()
-    #             print("success")
-    #
-    #     return puid
 
     @classmethod
     def get_puid_from_netid(cls, netid):
@@ -107,6 +82,7 @@ class Students:
             cur.execute(stmt)
             puid = cur.fetchone()[0]
 
+            cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
@@ -134,14 +110,10 @@ class Students:
             cur.execute(stmt)
             results = cur.fetchall()
             for result in results:
-                # print(results[0])
-                # print(results[1])
-                # print(results[2])
-                # print(results[3])
-                # print(results[4])
                 student = Student(result[0], result[1], result[2], result[3], result[4])
                 students.append(student)
 
+            cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
@@ -174,7 +146,8 @@ class Students:
             for friend_puid in friend_puids:
                 actual_puid = friend_puid[0]
                 # print(actual_puid)
-                stmt2 = f"""SELECT student_name, meal_plan FROM students WHERE PUID={actual_puid}"""
+                stmt2 = f"""SELECT student_name, meal_plan FROM 
+                students WHERE puid=\'{actual_puid}\'"""
                 cur.execute(stmt2)
                 row = cur.fetchone()
 
@@ -184,8 +157,6 @@ class Students:
 
             # close communication with the PostgreSQL database server
             cur.close()
-            # commit the changes
-            conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
@@ -199,7 +170,7 @@ class Students:
     def get_location_name_from_puid(cls, puid):
         str_puid = str(puid).strip()
         # build the sql statement
-        stmt = f"""SELECT meal_plan_id FROM students WHERE puid
+        stmt = f"""SELECT meal_plan_id FROM students WHERE PUID
         =\'{str_puid}\'"""
         location_name = None
 
@@ -212,31 +183,32 @@ class Students:
             cur = conn.cursor()
 
             cur.execute(stmt)
-            location_name = cur.fetchone()[0]
+            meal_plan_id = cur.fetchone()[0]
+            print(meal_plan_id + "1")
 
-            # stmt2 = f"""SELECT location_id FROM student_plans
-            # WHERE meal_plan_id=\'{meal_plan_id}\'"""
+            stmt2 = f"""SELECT location_id FROM student_plans
+            WHERE meal_plan_id=\'{meal_plan_id}\'"""
 
             cur.execute(stmt2)
             location_id = cur.fetchone()[0]
+            print(location_id + "2")
 
             stmt3 = f"""SELECT location_name FROM locations
             WHERE location_id=\'{location_id}\'"""
 
             cur.execute(stmt3)
             location_name = cur.fetchone()[0]
+            print(location_name + "3")
 
-            # # close communication with the PostgreSQL database server
-            # cur.close()
-            # # commit the changes
-            # conn.commit()
+            # close communication with the PostgreSQL database server
+            cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
              if conn is not None:
                  conn.close()
                  print("success")
-        print(location_name)
+        print(location_name + "4")
         return location_name
 
 class Student:
@@ -247,9 +219,6 @@ class Student:
         self._name = name
         self._mealplanid = mealplanid
         self._isvalid = isvalid
-        # self._club = club
-        # self._location_id = location_id
-        # other fields?
 
     def __str__(self):
         return f'{self._puid}, {self._netid}, {self._name},' \

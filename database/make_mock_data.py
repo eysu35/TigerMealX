@@ -157,18 +157,18 @@ def main():
                              'Charter': '~charter_meal_plan_id~'}
 
     # Student Plans Table Dictionary
-    student_plans_dict = {'~dining_hall_meal_plan_id~': '~dining_hall_location_id~',
-                            '~terrace_meal_plan_id~': '~terrace_location_id~', 
-                             '~tower_meal_plan_id~': '~tower_location_id~',
-                             '~cannon_meal_plan_id~': '~cannon_location_id~',
-                             '~quad_meal_plan_id~': '~quad_location_id~',
-                             '~colonial_meal_plan_id~': '~colonial_location_id~',
-                             '~ivy_meal_plan_id~': '~ivy_location_id~',
-                             '~ti_meal_plan_id~': '~ti_location_id~',
-                             '~cottage_meal_plan_id~': '~cottage_location_id~',
-                             '~cap_meal_plan_id~': '~cap_location_id~',
-                             '~cloister_meal_plan_id~': '~cloister_location_id~',
-                             '~charter_meal_plan_id~': '~charter_location_id~'}
+    student_plans_dict = {'Dining Hall': '~dining_hall_location_id~',
+                            'Terrace': '~terrace_location_id~',
+                             'Tower': '~tower_location_id~',
+                             'Cannon': '~cannon_location_id~',
+                             'Quad': '~quad_location_id~',
+                             'Colonial': '~colonial_location_id~',
+                             'Ivy': '~ivy_location_id~',
+                             'TI': '~ti_location_id~',
+                             'Cottage': '~cottage_location_id~',
+                             'Cap': '~cap_location_id~',
+                             'Cloister': '~cloister_location_id~',
+                             'Charter': '~charter_location_id~'}
 
                     
     # Locations Table Dictionary

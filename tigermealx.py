@@ -13,12 +13,8 @@ def base():
     netid = auth.authenticate()
     name = Students.get_first_name_from_netid(netid)
     # assume it's a name for now but need to also check for PUID
-    search_name = request.args.get('studentName')
-    if search_name is None or search_name == '':
-        students = []
-    else:
-        students = Students.search_students_by_name(search_name)
-    print(students)
+    students = Students.search_students_by_name('')
+    
     # search_puid = Students.get_puid_from_name(search_name)
 
     return render_template('index.html', students=students, name=name)

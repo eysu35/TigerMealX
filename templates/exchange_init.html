@@ -46,13 +46,27 @@
         }
         
         /* Add styles to the form container */
-        .container {
-          position: absolute;
-          right: 0;
-          margin: 20px;
-          max-width: 300px;
-          padding: 16px;
-          background-color: white;
+        #container, .container {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: unset;
+        margin: unset;
+        left: unset;
+        top: unset;
+        }
+        .box {
+        width: auto;
+        text-align: center;
+        background-color: #FFFFFF;
+        box-shadow: 1px 1px 8px #999999;
+        border-radius: 13px;
+        -webkit-box-shadow: 1px 1px 8px #999999;
+        -webkit-border-radius: 13px;
+        -moz-box-shadow: 1px 1px 8px #999999;
+        -moz-border-radius: 13px;
+        padding: 10px 24px 10px 24px;
         }
         
         /* Full-width input fields */
@@ -86,12 +100,16 @@
         </style>
         </head>
         <body>
-            
+            <div id="container">
+              <div class="box">
                 <p>Inviting {{name2}} ({{location2}})</p>
-                
+                <p class ="notice">
+                  If you click "accept", you will receive an email with a barcode. For help click <a href="../help">here</a>
+                </p>
                 <button onclick="myCancel()">Cancel</button>
                 <button onclick="myAccept()">Accept</button>
-     
+              </div>
+            </div>
   <script>
 
     'use strict';

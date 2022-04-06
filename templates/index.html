@@ -82,7 +82,7 @@
     <input list="studentList" name="puid" id="student">
     <datalist id='studentList'>
       {% for student in students: %}
-      <option value='{{student.get_puid()}}'>{{student.get_name()}}</option>
+      <option value='{{student}}'>{{student.get_name()}}</option>
       {% endfor %}
     </datalist>
     <input type="submit">

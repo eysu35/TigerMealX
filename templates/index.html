@@ -29,6 +29,30 @@
        font-size:30px;
        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
      }
+
+     .box {
+        width: auto;
+        text-align: center;
+        background-color: #FFFFFF;
+        box-shadow: 1px 1px 8px #999999;
+        border-radius: 13px;
+        -webkit-box-shadow: 1px 1px 8px #999999;
+        -webkit-border-radius: 13px;
+        -moz-box-shadow: 1px 1px 8px #999999;
+        -moz-border-radius: 13px;
+        padding: 10px 24px 10px 24px;
+        }
+
+     #container, .container {
+        height: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: unset;
+        margin: 30%;
+        left: unset;
+        top: unset;
+        }
      
      .main-section {
         margin-top:30%;
@@ -50,18 +74,36 @@
    </style>
  
   {% include 'navbar.html' %}
-   
-   <div class="main-section">
-     <form action="" method="get">
-       <input type="text" id="studentName" name="studentName" placeholder="Enter Student Name or ID to Swap">
-      </form>
-       {% for student in students: %}
-       <div class="studentSearchResult">
-          <a href="\exchangeportal?puid={{student.get_puid()}}">{{student.get_name()}}</a>
-       </div>
-       {% endfor %}
+  <div id="container">
+    <div class="box">  
+    <!-- <input type='text' oninput='onInput()' id='input' list='studentList' /> -->
+    <form action="/exchangeportal" method="get">
+      <label for="student">Choose a student to swap with:</label>
+    <input list="studentList" name="puid" id="student">
+    <datalist id='studentList'>
+      {% for student in students: %}
+      <option value='{{student.get_puid()}}'>{{student.get_name()}}</option>
+      {% endfor %}
+    </datalist>
+    <input type="submit">
+  </form>
    </div>
-     
+   </div>
+
+   <script>
+    function onInput() {
+    var val = document.getElementById("input").value;
+    var opts = document.getElementById('studentList').childNodes;
+    for (var i = 0; i < opts.length; i++) {
+      if (opts[i].value === val) {
+        // An item was selected from the list!
+        // yourCallbackHere()
+        alert(opts[i].value);
+        break;
+      }
+    }
+  }
+    </script>
     
  </body>
 </html>

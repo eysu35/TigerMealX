@@ -101,10 +101,10 @@
     });
     let puid = params.puid;
     function myAccept() {
-        window.location.href='/postnewexchange?puid2={{puid2}}'
+        window.location.href='/postnewexchange?puid2={{puid2}}';
         alert("Email sent!");
         window.open('mailto:test@example.com?subject=subject&body=body');
-        window.location.href='/index'
+        window.location.href='/index';
     }
     function myCancel() {
         window.location.href='/index'

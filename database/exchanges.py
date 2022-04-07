@@ -5,7 +5,7 @@ import psycopg2
 import random
 
 
-# returns the cursor
+# opens and closes connection, returns list of rows retrieved by executing stmt
 def db_execute_fetchall(stmt):
     try:
         # connection establishment
@@ -20,10 +20,52 @@ def db_execute_fetchall(stmt):
         print(error)
     finally:
         if conn is not None:
+            cur.close()
             conn.close()
             print("success")
 
 
+# opens and closes connection, returns first row retrieved by executing stmt
+def db_execute_fetchone(stmt):
+    try:
+        # connection establishment
+        params = config()
+        conn = psycopg2.connect(**params)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        cur.execute(stmt)
+        return cur.fetchone()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            cur.close()
+            conn.close()
+            print("success")
+
+
+# opens and closes connection, returns first val in first row retrieved by executing stmt (ex. name)
+def db_execute_fetch_first_val(stmt):
+    try:
+        # connection establishment
+        params = config()
+        conn = psycopg2.connect(**params)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        cur.execute(stmt)
+        return cur.fetchone()[0]
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            cur.close()
+            conn.close()
+            print("success")
+
+
+# inserts data list into db using statement
 def db_insert(stmt, data):
     try:
         # connection establishment
@@ -40,6 +82,7 @@ def db_insert(stmt, data):
         print(error)
     finally:
         if conn is not None:
+            cur.close()
             conn.close()
             print("success")
 
@@ -60,42 +103,25 @@ class Exchanges:
         WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'
         {studentid}\') AND status=\'Incomplete\''''
 
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
-            conn.autocommit = True
-            cur = conn.cursor()
+        rows = db_execute_fetchall(stmt)
+        for row in rows:
+            if row is None:
+                return None
 
-            cur.execute(stmt)
+            puid1 = row[1]
+            puid2 = row[2]
 
-            for row in cur.fetchall():
-                if row == None:
-                    return None
+            stmt_std1_name = f'''SELECT student_name FROM 
+            students WHERE puid=\'{puid1}\''''
+            std1_name = db_execute_fetch_first_val(stmt_std1_name)
 
-                puid1 = row[1]
-                puid2 = row[2]
-                stmt_std1_name = f'''SELECT student_name FROM 
-                students WHERE puid=\'{puid1}\''''
-                cur.execute(stmt_std1_name)
-                std1_name = cur.fetchall()[0]
+            stmt_std2_name = f'''SELECT student_name FROM 
+            students WHERE puid=\'{puid2}\''''
+            std2_name = db_execute_fetch_first_val(stmt_std2_name)
 
-                stmt_std2_name = f'''SELECT student_name FROM 
-                students WHERE puid=\'{puid2}\''''
-                cur.execute(stmt_std2_name)
-                std2_name = cur.fetchall()[0]
-
-                ###  PUT ROW[0] IN LATER AS OPTIONAL ARG
-                exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
-                                    row[7], row[8], row[9])
-                current_exchanges.append(exch_obj)
-
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn is not None:
-                conn.close()
-                print("success")
+            exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+                                row[7], row[8], row[9])
+            current_exchanges.append(exch_obj)
 
         return current_exchanges
 
@@ -112,56 +138,39 @@ class Exchanges:
         WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'
         {studentid}\') AND status =\'Complete\''''
 
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
-            conn.autocommit = True
-            cur = conn.cursor()
+        rows = db_execute_fetchall(stmt)
 
-            cur.execute(stmt)
+        for row in rows:
+            if row is None:
+                return None
 
-            for row in cur.fetchall():
-                if row == None:
-                    return None
-                puid1 = row[1]
-                puid2 = row[2]
-                stmt_std1_name = f'''SELECT student_name FROM 
-                students WHERE puid=\'{puid1}\''''
-                cur.execute(stmt_std1_name)
-                std1_name = cur.fetchall()[0]
+            puid1 = row[1]
+            puid2 = row[2]
 
-                stmt_std2_name = f'''SELECT student_name FROM 
-                students WHERE puid=\'{puid2}\''''
-                cur.execute(stmt_std2_name)
-                std2_name = cur.fetchall()[0]
+            stmt_std1_name = f'''SELECT student_name FROM 
+            students WHERE puid=\'{puid1}\''''
+            std1_name = db_execute_fetch_first_val(stmt_std1_name)
 
-                ###  PUT ROW[0] IN LATER AS OPTIONAL ARG
-                exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
-                                    row[7], row[8], row[9])
-                past_exchanges.append(exch_obj)
+            stmt_std2_name = f'''SELECT student_name FROM 
+            students WHERE puid=\'{puid2}\''''
+            std2_name = db_execute_fetch_first_val(stmt_std2_name)
 
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn is not None:
-                conn.close()
-                print("success")
-                # print("past")
+            exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+                                row[7], row[8], row[9])
+            past_exchanges.append(exch_obj)
 
         return past_exchanges
+
 
     @classmethod
     def add_new_exchange(cls, puid1, puid2, meal):
         stmt = f'''SELECT student_name FROM students WHERE 
             puid=\'{puid1}\''''
-        result = db_execute_fetchall(stmt)[0]
-        student1_name = result[0]
+        student1_name = db_execute_fetch_first_val(stmt)
 
         stmt = f'''SELECT student_name FROM students WHERE 
             puid=\'{puid2}\''''
-        result = db_execute_fetchall(stmt)[0]
-        student2_name = result[0]
+        student2_name = db_execute_fetch_first_val(stmt)
 
         exchange = Exchange(None, puid1, student1_name,
                             puid2, student2_name,
@@ -197,9 +206,9 @@ class Exchanges:
         ### CAN RESET THESE TIMES LATER
         if (7 < hour < 10):
             meal = 'breakfast'
-        else if (11 < hour < 14):
+        elif (11 < hour < 14):
             meal = 'lunch'
-        else if (17 < hour < 22):
+        elif (17 < hour < 22):
             meal = 'dinner'
 
         ### fix this to the right format of Values %s etc
@@ -224,8 +233,6 @@ class Exchanges:
         # and location 2 id matches the other
         ### REALIZING THAT WE ALSO NEED TO DO THIS FOR FIRSTMEAL
 
-
-
         # Make sure that the students are exchanging during the
         # same meal
         hour = int(str(time).split(':')[0])
@@ -233,9 +240,9 @@ class Exchanges:
         ### CAN RESET THESE TIMES LATER
         if (7 < hour < 10):
             meal2 = 'breakfast'
-        else if (11 < hour < 14):
+        elif (11 < hour < 14):
             meal2 = 'lunch'
-        else if (17 < hour < 22):
+        elif (17 < hour < 22):
             meal2 = 'dinner'
 
         assert (meal2 == meal)
@@ -248,6 +255,7 @@ class Exchanges:
         db_insert(stmt, [exchange2_date, exchange2_location_id,
                          meal_exchange_id])
 
+
 # getters and setters unfinished
 class Exchange:
 
@@ -256,8 +264,8 @@ class Exchange:
                f'and {self._name2} ({self._puid2}) for {self._meal} ' \
                f'({self._status})'
 
-    def __init__(self, mealx_id, puid1, name1, puid2, name2, meal,
-                 exch1_date, exch1_loc, exch2_date, exch2_loc, exp, status):
+    def __init__(self, puid1, name1, puid2, name2, meal,
+                 exch1_date, exch1_loc, exch2_date, exch2_loc, exp, status, mealx_id=None):
         self._mealx_id = mealx_id
         self._puid1 = puid1
         self._puid2 = puid2

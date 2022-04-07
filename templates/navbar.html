@@ -1,85 +1,44 @@
-<html>
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+    .navbar-nav > li{
+      padding-left:30px;
+      padding-right:30px;
+    }
+  </style>
+</head>
 <body>
 
-   <style>
-     .logo {
-       float: left;
-     }
-     /* ~~ Top Navigation Bar ~~ */
- 
-     #navigation-container {
-       width: 100%;
-       margin: 0 auto;
-       height: 30px;
-     }
- 
-     .navigation-bar {
-       background-color: white;
-       height: 70px;
-       width: 100%;
-       text-align:right;
-     }
-     .navigation-bar img{
-       float:left;
-       height: 50px;
-       margin-top: 10px;
-     }
-     .navigation-bar ul {
-       padding: 0px;
-       margin: 0px;
-       margin-top: 20px;
-       text-align: right;
-       display:inline-block;
-       vertical-align:top;
-     }
- 
-     .navigation-bar ul title{
-       padding: 0px;
-       margin: 0px;
-       float: left;
-       display:inline-block;
-       vertical-align:top;
-     }
- 
-     .navigation-bar li {
-       list-style-type: none;
-       padding: 0px;
-       height: 24px;
-       margin-top: 4px;
-       margin-bottom: 4px;
-       display: inline;
-     }
- 
-     .navigation-bar li a {
-       color: black;
-       font-size: 26px;
-       font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-       text-decoration: none;
- 
-       padding: 5px 15px;
-       opacity: 0.7;
-     }
-     .navigation-bar li a:hover {
-       color: orange;
-     }
-     
-   </style>
- 
-   
-    <div class="navigation-bar">
-     <div id="navigation-container">
-       <img src="../static/logo.png">
-       <ul>
-         <li><a href="../index">Home</a></li>
-         <li><a href="../exchanges">Past Exchanges</a></li>
-         <li><a href="../help">Help</a></li>
-         <li><a href="../about">About</a></li>
+<nav class="navbar navbar-expand-md bg-light navbar-dark navbar-fixed-top">
+
+  <img href="index.html" src="../static/logo.png" width="200" height="60">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" style="background-color:#FFA500;">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li><a href="../index">Home</a></li>
+         <li><a width="40" href="../exchanges">Past Exchanges</a></li>
+         <li><a width="40" href="../help">Help</a></li>
+         <li><a width="40" href="../about">About</a></li>
 <!--           reformat-->
-           <li>Hello {{name}}!</li>
-       </ul>
-     </div>
-   </div>   
-   
-    
- </body>
+         <li><a width="40" >Hello {{name}}!</a></li>  
+    </ul>
+  </div>  
+</nav>
+<br>
+
+
+
+</body>
 </html>

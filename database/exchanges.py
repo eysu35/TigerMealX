@@ -1,6 +1,6 @@
 from datetime import date
 from datetime import datetime
-from config import config
+from config4 import config
 import psycopg2
 import random
 
@@ -86,7 +86,8 @@ class Exchanges:
                 std2_name = cur.fetchall()[0]
 
                 ###  PUT ROW[0] IN LATER AS OPTIONAL ARG
-                exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+                exch_obj = Exchange(row[0], row[1], std1_name, row[2],
+                                    std2_name, row[3], row[4], row[5], row[6],
                                     row[7], row[8], row[9])
                 current_exchanges.append(exch_obj)
 
@@ -137,7 +138,8 @@ class Exchanges:
                 std2_name = cur.fetchall()[0]
 
                 ###  PUT ROW[0] IN LATER AS OPTIONAL ARG
-                exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+                exch_obj = Exchange(row[0], row[1], std1_name, row[2],
+                                    std2_name, row[3], row[4], row[5], row[6],
                                     row[7], row[8], row[9])
                 past_exchanges.append(exch_obj)
 
@@ -197,9 +199,9 @@ class Exchanges:
         ### CAN RESET THESE TIMES LATER
         if (7 < hour < 10):
             meal = 'breakfast'
-        else if (11 < hour < 14):
+        elif (11 < hour < 14):
             meal = 'lunch'
-        else if (17 < hour < 22):
+        elif (17 < hour < 22):
             meal = 'dinner'
 
         ### fix this to the right format of Values %s etc
@@ -233,9 +235,9 @@ class Exchanges:
         ### CAN RESET THESE TIMES LATER
         if (7 < hour < 10):
             meal2 = 'breakfast'
-        else if (11 < hour < 14):
+        elif (11 < hour < 14):
             meal2 = 'lunch'
-        else if (17 < hour < 22):
+        elif (17 < hour < 22):
             meal2 = 'dinner'
 
         assert (meal2 == meal)

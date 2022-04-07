@@ -1,4 +1,4 @@
-from config import config
+from config4 import config
 import psycopg2
 
 

@@ -100,11 +100,12 @@
         </style>
         </head>
         <body>
+          {% include 'navbar.html' %}
             <div id="container">
               <div class="box">
                 <p>Inviting {{name2}} ({{location2}})</p>
                 <p class ="notice">
-                  If you click "accept", you will receive an email with a barcode. For help click <a href="../help">here</a>
+                  If you click "accept", you will receive an email with a barcode. For help click <a href="../help">here</a>.
                 </p>
                 <button onclick="myCancel()">Cancel</button>
                 <button onclick="myAccept()">Accept</button>

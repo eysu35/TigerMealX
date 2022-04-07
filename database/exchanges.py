@@ -1,10 +1,12 @@
+from datetime import date
+from datetime import datetime
 from config import config
 import psycopg2
 import random
 
 
 # returns the cursor
-def db_execute_fetchone(stmt):
+def db_execute_fetchall(stmt):
     try:
         # connection establishment
         params = config()
@@ -13,7 +15,7 @@ def db_execute_fetchone(stmt):
         cur = conn.cursor()
 
         cur.execute(stmt)
-        return cur.fetchone()
+        return cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
@@ -76,12 +78,12 @@ class Exchanges:
                 stmt_std1_name = f'''SELECT student_name FROM 
                 students WHERE puid=\'{puid1}\''''
                 cur.execute(stmt_std1_name)
-                std1_name = cur.fetchone()[0]
+                std1_name = cur.fetchall()[0]
 
                 stmt_std2_name = f'''SELECT student_name FROM 
                 students WHERE puid=\'{puid2}\''''
                 cur.execute(stmt_std2_name)
-                std2_name = cur.fetchone()[0]
+                std2_name = cur.fetchall()[0]
 
                 ###  PUT ROW[0] IN LATER AS OPTIONAL ARG
                 exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
@@ -127,12 +129,12 @@ class Exchanges:
                 stmt_std1_name = f'''SELECT student_name FROM 
                 students WHERE puid=\'{puid1}\''''
                 cur.execute(stmt_std1_name)
-                std1_name = cur.fetchone()[0]
+                std1_name = cur.fetchall()[0]
 
                 stmt_std2_name = f'''SELECT student_name FROM 
                 students WHERE puid=\'{puid2}\''''
                 cur.execute(stmt_std2_name)
-                std2_name = cur.fetchone()[0]
+                std2_name = cur.fetchall()[0]
 
                 ###  PUT ROW[0] IN LATER AS OPTIONAL ARG
                 exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
@@ -151,29 +153,20 @@ class Exchanges:
 
     @classmethod
     def add_new_exchange(cls, puid1, puid2, meal):
-        # # get puids
-        # stmt = f'''SELECT puid FROM students WHERE student_name=LOWER(\
-        # '{student1_name}\')'''
-        # result = db_execute_fetchone(stmt)
-        # puid1 = result[0]
-        #
-        # stmt = f'''SELECT puid FROM students WHERE student_name=LOWER(\
-        # '{student2_name}\')'''
-        # result = db_execute_fetchone(stmt)
-        # puid2 = result[0]
-
-        stmt = f'''SELECT student_name FROM students WHERE puid=\'{puid1}\''''
-        result = db_execute_fetchone(stmt)
+        stmt = f'''SELECT student_name FROM students WHERE 
+            puid=\'{puid1}\''''
+        result = db_execute_fetchall(stmt)[0]
         student1_name = result[0]
 
-        stmt = f'''SELECT student_name FROM students WHERE puid=\'{puid2}\''''
-        result = db_execute_fetchone(stmt)
+        stmt = f'''SELECT student_name FROM students WHERE 
+            puid=\'{puid2}\''''
+        result = db_execute_fetchall(stmt)[0]
         student2_name = result[0]
 
-        exchange = Exchange(puid1, student1_name,
+        exchange = Exchange(None, puid1, student1_name,
                             puid2, student2_name,
-                            meal, None, None, None, None, '2022-02-10',
-                            'Incomplete')
+                            meal, None, None, None, None,
+                            str(date.today()), 'Incomplete')
 
         #### OK we dont need to generate this random int because the db will
         # do this automatically when we insert a row. ####
@@ -193,23 +186,60 @@ class Exchanges:
         db_insert(stmt, meal_exchange_id)
 
     @classmethod
-    def add_exchange1(cls, meal_exchange_id, exchange1_date,
-                   exchange1_location_id):
+    def exchange_firstmeal(cls, meal_exchange_id,
+                            exchange1_location_id,
+                      time):
+        exchange1_date = date.today()
+        exp_date = exchange1_date + datetime.timedelta(days=30)
+        # assume time is in the format HH:MM:SS
+        hour = int(str(time).split(':')[0])
+        ##min = int(str(time).split(':')[1]) ### do we need???
+        ### CAN RESET THESE TIMES LATER
+        if (7 < hour < 10):
+            meal = 'breakfast'
+        else if (11 < hour < 14):
+            meal = 'lunch'
+        else if (17 < hour < 22):
+            meal = 'dinner'
 
-        stmt=f'''UPDATE exchanges SET exchange1_date = \'
-        {exchange1_date}\' AND exchange1_location_id = \
-        '{exchange1_location_id}\' 
+        ### fix this to the right format of Values %s etc
+        stmt=f'''UPDATE exchanges SET meal = \'{meal}\' 
+        AND exchange1_date = \'{exchange1_date}\'
+        AND exchange1_location_id = \'{exchange1_location_id}\' 
+        AND expiration_date = \'{exp_date}\'
         WHERE meal_exchange_id=\'{meal_exchange_id}\''''
 
         db_insert(stmt, [exchange1_date, exchange1_location_id,
                          meal_exchange_id])
 
-    #### separate method or just combine w some string concatenation
-    # for the numbers??? ######
-    # wtf ?/ where does the meal exchange ID come from
     @classmethod
-    def add_exchange2(cls, meal_exchange_id, exchange2_date,
-                      exchange2_location_id):
+    def exchange_secondmeal(cls, meal_exchange_id, exchange2_date,
+                      exchange2_location_id, time):
+        stmt = f'''SELECT student1_PUID, student2_PUID, 
+        exchange1_location_id, meal'''
+        puid1, puid2, exchange1_loc, meal = db_execute_fetchall(stmt)
+
+        ### NEED TO DO
+        ### check to see exchange1 location matches one of the 2,
+        # and location 2 id matches the other
+        ### REALIZING THAT WE ALSO NEED TO DO THIS FOR FIRSTMEAL
+
+
+
+        # Make sure that the students are exchanging during the
+        # same meal
+        hour = int(str(time).split(':')[0])
+        ##min = int(str(time).split(':')[1]) ### do we need???
+        ### CAN RESET THESE TIMES LATER
+        if (7 < hour < 10):
+            meal2 = 'breakfast'
+        else if (11 < hour < 14):
+            meal2 = 'lunch'
+        else if (17 < hour < 22):
+            meal2 = 'dinner'
+
+        assert (meal2 == meal)
+
         stmt = f'''UPDATE exchanges SET exchange2_date = \'
         {exchange2_date}\' AND exchange2_location_id = \
         '{exchange2_location_id}\' 
@@ -222,11 +252,13 @@ class Exchanges:
 class Exchange:
 
     def __str__(self):
-        return f'{self._name1} ({self._puid1}) and {self._name2} ({self._puid2}) for {self._meal} ({self._status})'
+        return f'{self._mealx_id} and {self._name1} ({self._puid1}) ' \
+               f'and {self._name2} ({self._puid2}) for {self._meal} ' \
+               f'({self._status})'
 
-    def __init__(self, puid1, name1, puid2, name2, meal,
+    def __init__(self, mealx_id, puid1, name1, puid2, name2, meal,
                  exch1_date, exch1_loc, exch2_date, exch2_loc, exp, status):
-        # self._mealx_id = mealx_id
+        self._mealx_id = mealx_id
         self._puid1 = puid1
         self._puid2 = puid2
         self._name1 = name1
@@ -242,14 +274,15 @@ class Exchange:
 
     # returns tuple of table info in order of table columns for use in insert statement
     def to_ordered_tuple(self):
-        return self._puid1, self._puid2, self._meal, self._exch1_date,\
+        return self._mealx_id, self._puid1, self._puid2, self._meal, \
+               self._exch1_date,\
                self._exch1_loc, self._exch2_date, self._exch2_loc, self._exp, self._status
 
-    # def get_mealx_id(self):
-    #     return self._mealx_id
-    #
-    # def set_mealx_id(self, mealx_id):
-    #     self._mealx_id = mealx_id
+    def get_mealx_id(self):
+        return self._mealx_id
+
+    def set_mealx_id(self, mealx_id):
+        self._mealx_id = mealx_id
 
     def get_puid1(self):
         return self._puid1

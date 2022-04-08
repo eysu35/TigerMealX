@@ -5,13 +5,14 @@
 # Authors:
 #-----------------------------------------------------------------------
 import psycopg2
-from config import config
+from config1 import config
 import csv
 import pandas as pd
 import numpy as np
 import random
 import time
 from psycopg2.extensions import register_adapter, AsIs
+import uuid
 #-----------------------------------------------------------------------
 
 def remove_all_data():
@@ -47,7 +48,7 @@ def remove_all_data():
     finally:
         if conn is not None:
             conn.close()
-            print("success")        
+            # print("success")        
 
 def add_data(table, row_data):
 
@@ -92,7 +93,7 @@ def add_data(table, row_data):
     finally:
         if conn is not None:
             conn.close()
-            print("success")
+            # print("success")
     
 
 def str_time_prop(start, end, time_format, prop):
@@ -132,6 +133,15 @@ def get_club_from_id(df, puid):
     user = df.loc[df["PUID (number on your prox)"] == puid]
     return user['Meal Plan'].iloc[0]
 
+def location_id_from_location(loc):
+    words = loc.lower().split()
+
+    loc_id = "~"
+    for word in words:
+        loc_id += word + '_'
+    loc_id += 'location_id~'
+
+    return loc_id
 
 def main():
 
@@ -141,36 +151,9 @@ def main():
 
     # Delete data in all ables 
     remove_all_data()
-
-    # Eating club -> Meal Plan id dictionary
-    club_meal_plan_dict = {'Dining Hall': '~dining_hall_meal_plan_id~',
-                            'Terrace': '~terrace_meal_plan_id~', 
-                             'Tower': '~tower_meal_plan_id~',
-                             'Cannon': '~cannon_meal_plan_id~',
-                             'Quad': '~quad_meal_plan_id~',
-                             'Colonial': '~colonial_meal_plan_id~',
-                             'Ivy': '~ivy_meal_plan_id~',
-                             'TI': '~ti_meal_plan_id~',
-                             'Cottage': '~cottage_meal_plan_id~',
-                             'Cap': '~cap_meal_plan_id~',
-                             'Cloister': '~cloister_meal_plan_id~',
-                             'Charter': '~charter_meal_plan_id~'}
-
-    # Student Plans Table Dictionary
-    student_plans_dict = {'Dining Hall': '~dining_hall_location_id~',
-                            'Terrace': '~terrace_location_id~',
-                             'Tower': '~tower_location_id~',
-                             'Cannon': '~cannon_location_id~',
-                             'Quad': '~quad_location_id~',
-                             'Colonial': '~colonial_location_id~',
-                             'Ivy': '~ivy_location_id~',
-                             'TI': '~ti_location_id~',
-                             'Cottage': '~cottage_location_id~',
-                             'Cap': '~cap_location_id~',
-                             'Cloister': '~cloister_location_id~',
-                             'Charter': '~charter_location_id~'}
-
                     
+    
+
     # Locations Table Dictionary
     locations_dict = {'~dining_hall_location_id~': 'Dining Hall',
                             '~terrace_location_id~': 'Terrace', 
@@ -189,13 +172,20 @@ def main():
     filename = 'Meal Plan Info Form (Responses) - Form Responses 1.csv'
     df = pd.read_csv(filename)
 
-    # Add students
+    # Add students/student_plans
     for index, row in df.iterrows():
+
+        rand_id = str(uuid.uuid4())
+
+        # Add student entry
         add_data('students', [row['PUID (number on your prox)'], 
-                              row['NetID'], 
-                              row['Name'], 
-                              row['Meal Plan'], 
-                              True])
+                                row['NetID'], 
+                                row['Name'], 
+                                rand_id, 
+                                True])
+
+        # Add student_plans entry
+        add_data('student_plans', [rand_id, location_id_from_location(row['Meal Plan'])])
 
     
     # Add friends: 
@@ -214,10 +204,6 @@ def main():
 
         # Create friendship from PUIDs of two indices
         add_data('friends', [puids[n1], puids[n2]])
-        
-    # Add student_plans 
-    for key in student_plans_dict:
-        add_data('student_plans', [key, student_plans_dict[key]])
 
     # Add locations
     for key in locations_dict:
@@ -238,23 +224,7 @@ def main():
         # Get different random index
         n2 = n1
         while (n1 == n2):
-            n2 = np.random.randint(num_exchanges)
-
-
-        # a = puids[n1]
-        # print(a)
-        # b = puids[n2]
-        # print(b)
-        # c = getRandomMeal()
-        # print(c)
-        # d = getRandomDate()
-        # print(d)
-        # e = getClubFromID(a)
-        # print(e)
-        # f = getRandomDate()
-        # print(f)
-
-        # add_data('exchanges', [a,b,c,d,e,None,None,f,'Incomplete'])    
+            n2 = np.random.randint(num_exchanges)   
 
         exchange_params = [puids[n1], puids[n2], getRandomMeal(), getRandomDate(), 
                             getClubFromID(puids[n1]), None, None, getRandomDate(), 'Incomplete']

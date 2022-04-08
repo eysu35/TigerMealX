@@ -5,7 +5,7 @@
 # Authors:
 #-----------------------------------------------------------------------
 import psycopg2
-from config import config
+from config1 import config
 #-----------------------------------------------------------------------
 
 def create_tables():
@@ -24,12 +24,12 @@ def create_tables():
             PUID VARCHAR(255) PRIMARY KEY,
             netID VARCHAR(255) NOT NULL,
             student_name VARCHAR(255) NOT NULL,
-            meal_plan_id VARCHAR(255) NOT NULL,
+            meal_plan_id UUID NOT NULL,
             isValidForMealExchange BOOLEAN NOT NULL
         )
         """,
         """ CREATE TABLE student_plans (
-                meal_plan_id VARCHAR(255) PRIMARY KEY,
+                meal_plan_id UUID PRIMARY KEY,
                 location_id VARCHAR(255) NOT NULL
                 )
         """,

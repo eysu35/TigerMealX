@@ -36,9 +36,9 @@ class Exchanges:
             students WHERE puid=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
 
-            exch_obj = Exchange(row[0], row[1], std1_name, row[2],
+            exch_obj = Exchange(row[1], std1_name, row[2],
                                 std2_name, row[3], row[4], row[5], row[6],
-                                row[7], row[8], row[9])
+                                row[7], row[8], row[9], mealx_id=row[0])
             current_exchanges.append(exch_obj)
 
         return current_exchanges
@@ -73,9 +73,9 @@ class Exchanges:
             students WHERE puid=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
 
-            exch_obj = Exchange(row[0], row[1], std1_name, row[2],
+            exch_obj = Exchange(row[1], std1_name, row[2],
                                 std2_name, row[3], row[4], row[5], row[6],
-                                row[7], row[8], row[9])
+                                row[7], row[8], row[9], mealx_id=row[0])
             past_exchanges.append(exch_obj)
 
         return past_exchanges
@@ -91,10 +91,10 @@ class Exchanges:
             puid=\'{puid2}\''''
         student2_name = db_access.fetch_first_val(stmt)
 
-        exchange = Exchange(None, puid1, student1_name,
+        exchange = Exchange(puid1, student1_name,
                             puid2, student2_name,
                             None, None, None, None, None,
-                            str(date.today()), 'Incomplete')
+                            str(date.today()), 'Incomplete', mealx_id=None)
 
         stmt = '''INSERT INTO exchanges(student1_puid, 
         student2_puid, meal, exchange1_date, exchange1_location_id, 

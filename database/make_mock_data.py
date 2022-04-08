@@ -133,6 +133,15 @@ def get_club_from_id(df, puid):
     user = df.loc[df["PUID (number on your prox)"] == puid]
     return user['Meal Plan'].iloc[0]
 
+def location_id_from_location(loc):
+    words = loc.lower().split()
+
+    loc_id = "~"
+    for word in words:
+        loc_id += word + '_'
+    loc_id += 'location_id~'
+
+    return loc_id
 
 def main():
 
@@ -143,6 +152,8 @@ def main():
     # Delete data in all ables 
     remove_all_data()
                     
+    
+
     # Locations Table Dictionary
     locations_dict = {'~dining_hall_location_id~': 'Dining Hall',
                             '~terrace_location_id~': 'Terrace', 
@@ -174,7 +185,7 @@ def main():
                                 True])
 
         # Add student_plans entry
-        add_data('student_plans', [rand_id, row['Meal Plan']])
+        add_data('student_plans', [rand_id, location_id_from_location(row['Meal Plan'])])
 
     
     # Add friends: 

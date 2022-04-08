@@ -5,7 +5,7 @@
 # Authors:
 #-----------------------------------------------------------------------
 import psycopg2
-from config1 import config
+from config import config
 import csv
 import pandas as pd
 import numpy as np
@@ -191,7 +191,7 @@ def main():
     # Add friends: 
     # Note: Sometimes the same pair is randomly selected multiple times. 
     # However, there is only ever one copy in the table.
-    num_friendships = 10
+    num_friendships = 50
     puids = df.loc[:,"PUID (number on your prox)"]
     for i in range(num_friendships):
         # Get random index
@@ -210,7 +210,7 @@ def main():
         add_data('locations', [key, locations_dict[key]])
         
     # Add exchanges
-    num_exchanges = 10
+    num_exchanges = 50
 
     # Returns club corresponding to puid
     def getClubFromID(puid):
@@ -232,37 +232,37 @@ def main():
         add_data('exchanges', exchange_params)
 
 
-def add_ellen_and_shayna_exchanges():
-
-    exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
-                       'Quad', None, None, getRandomDate(), 'Incomplete']
-    add_data('exchanges', exchange_params)
-
-    exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
-                       'TI', None, None, getRandomDate(), 'Incomplete']
-    add_data('exchanges', exchange_params)
-
-    exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
-                       'Quad', None, None, getRandomDate(), 'Incomplete']
-    add_data('exchanges', exchange_params)
-
-    exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
-                       'TI', None, None, getRandomDate(), 'Incomplete']
-    add_data('exchanges', exchange_params)
-
-    exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
-                       'TI', None, None, getRandomDate(), 'Incomplete']
-    add_data('exchanges', exchange_params)
-
-    exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
-                       'TI', getRandomDate(), 'Quad', getRandomDate(), 'Complete']
-    add_data('exchanges', exchange_params)
-
-    exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
-                       'TI', getRandomDate(), 'Quad', getRandomDate(), 'Complete']
-    add_data('exchanges', exchange_params)
+# def add_ellen_and_shayna_exchanges():
+#
+#     exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
+#                        'Quad', None, None, getRandomDate(), 'Incomplete']
+#     add_data('exchanges', exchange_params)
+#
+#     exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
+#                        'TI', None, None, getRandomDate(), 'Incomplete']
+#     add_data('exchanges', exchange_params)
+#
+#     exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
+#                        'Quad', None, None, getRandomDate(), 'Incomplete']
+#     add_data('exchanges', exchange_params)
+#
+#     exchange_params = ['920228016', '920228342', getRandomMeal(), getRandomDate(),
+#                        'TI', None, None, getRandomDate(), 'Incomplete']
+#     add_data('exchanges', exchange_params)
+#
+#     exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
+#                        'TI', None, None, getRandomDate(), 'Incomplete']
+#     add_data('exchanges', exchange_params)
+#
+#     exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
+#                        'TI', getRandomDate(), 'Quad', getRandomDate(), 'Complete']
+#     add_data('exchanges', exchange_params)
+#
+#     exchange_params = ['920228342', '920228016', getRandomMeal(), getRandomDate(),
+#                        'TI', getRandomDate(), 'Quad', getRandomDate(), 'Complete']
+#     add_data('exchanges', exchange_params)
 
 
 if __name__ == '__main__':
     main()
-    add_ellen_and_shayna_exchanges()
+    #add_ellen_and_shayna_exchanges()

@@ -5,7 +5,7 @@
 # Authors:
 #-----------------------------------------------------------------------
 import psycopg2
-from config1 import config
+from config import config
 #-----------------------------------------------------------------------
 
 def create_tables():
@@ -52,7 +52,7 @@ def create_tables():
                 PRIMARY KEY,
                 student1_PUID VARCHAR(255) NOT NULL,
                 student2_PUID VARCHAR(255) NOT NULL,
-                meal VARCHAR(255) NOT NULL,
+                meal VARCHAR(255),
                 exchange1_date DATE,
                 exchange1_location_id VARCHAR(255),
                 exchange2_date DATE,

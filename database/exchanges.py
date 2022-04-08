@@ -36,7 +36,8 @@ class Exchanges:
             students WHERE puid=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
 
-            exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+            exch_obj = Exchange(row[0], row[1], std1_name, row[2],
+                                std2_name, row[3], row[4], row[5], row[6],
                                 row[7], row[8], row[9])
             current_exchanges.append(exch_obj)
 
@@ -72,7 +73,8 @@ class Exchanges:
             students WHERE puid=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
 
-            exch_obj = Exchange(row[1], std1_name, row[2], std2_name, row[3], row[4], row[5], row[6],
+            exch_obj = Exchange(row[0], row[1], std1_name, row[2],
+                                std2_name, row[3], row[4], row[5], row[6],
                                 row[7], row[8], row[9])
             past_exchanges.append(exch_obj)
 
@@ -80,7 +82,7 @@ class Exchanges:
 
 
     @classmethod
-    def add_new_exchange(cls, puid1, puid2, meal):
+    def add_new_exchange(cls, puid1, puid2):
         stmt = f'''SELECT student_name FROM students WHERE 
             puid=\'{puid1}\''''
         student1_name = db_access.fetch_first_val(stmt)
@@ -91,17 +93,16 @@ class Exchanges:
 
         exchange = Exchange(None, puid1, student1_name,
                             puid2, student2_name,
-                            meal, None, None, None, None,
+                            None, None, None, None, None,
                             str(date.today()), 'Incomplete')
 
-        #### OK we dont need to generate this random int because the db will
-        # do this automatically when we insert a row. ####
         stmt = '''INSERT INTO exchanges(student1_puid, 
         student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, 
         status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
 
         db_access.insert_data(stmt, exchange.to_ordered_tuple())
+        print("hi")
 
     @classmethod
     def remove_exchange(cls, meal_exchange_id):
@@ -111,66 +112,117 @@ class Exchanges:
         ### do we need to send the meal_exchange_id again? ###
         db_access.insert_data(stmt, meal_exchange_id)
 
-    @classmethod
-    def exchange_firstmeal(cls, meal_exchange_id,
-                            exchange1_location_id,
-                      time):
-        exchange1_date = date.today()
-        exp_date = exchange1_date + datetime.timedelta(days=30)
-        # assume time is in the format HH:MM:SS
-        hour = int(str(time).split(':')[0])
-        ##min = int(str(time).split(':')[1]) ### do we need???
-        ### CAN RESET THESE TIMES LATER
-        if (7 < hour < 10):
-            meal = 'breakfast'
-        elif (11 < hour < 14):
-            meal = 'lunch'
-        elif (17 < hour < 22):
-            meal = 'dinner'
+    # @classmethod
 
-        ### fix this to the right format of Values %s etc
-        stmt=f'''UPDATE exchanges SET meal = \'{meal}\' 
-        AND exchange1_date = \'{exchange1_date}\'
-        AND exchange1_location_id = \'{exchange1_location_id}\' 
-        AND expiration_date = \'{exp_date}\'
-        WHERE meal_exchange_id=\'{meal_exchange_id}\''''
-
-        db_access.insert_data(stmt, [exchange1_date, exchange1_location_id,
-                         meal_exchange_id])
-
-    @classmethod
-    def exchange_secondmeal(cls, meal_exchange_id, exchange2_date,
-                      exchange2_location_id, time):
-        stmt = f'''SELECT student1_PUID, student2_PUID, 
-        exchange1_location_id, meal'''
-        puid1, puid2, exchange1_loc, meal = db_access.fetchall(stmt)
-
-        ### NEED TO DO
-        ### check to see exchange1 location matches one of the 2,
-        # and location 2 id matches the other
-        ### REALIZING THAT WE ALSO NEED TO DO THIS FOR FIRSTMEAL
-
-        # Make sure that the students are exchanging during the
-        # same meal
-        hour = int(str(time).split(':')[0])
-        ##min = int(str(time).split(':')[1]) ### do we need???
-        ### CAN RESET THESE TIMES LATER
-        if (7 < hour < 10):
-            meal2 = 'breakfast'
-        elif (11 < hour < 14):
-            meal2 = 'lunch'
-        elif (17 < hour < 22):
-            meal2 = 'dinner'
-
-        assert (meal2 == meal)
-
-        stmt = f'''UPDATE exchanges SET exchange2_date = \'
-        {exchange2_date}\' AND exchange2_location_id = \
-        '{exchange2_location_id}\' 
-        WHERE meal_exchange_id=\'{meal_exchange_id}\''''
-
-        db_access.insert_data(stmt, [exchange2_date, exchange2_location_id,
-                         meal_exchange_id])
+    # def check_valid_exchange(cls, puid1, puid2, location_id):
+    #     try:
+    #         # check if both students have valid plans for exchange
+    #         stmt = f'''SELECT FROM students WHERE PUID = \'{puid1}\''''
+    #         student1 = db_access.fetchone(stmt)
+    #         stmt = f'''SELECT FROM students WHERE PUID = \'{puid2}\''''
+    #         student2 = db_access.fetchone(stmt)
+    #
+    #         assert (student1[4] and student2[4]), "Student plan unable " \
+    #                                               "to exchange."
+    #
+    #         # check if location_id matches one of student plans
+    #         stmt = f'''SELECT location_id FROM student_plans WHERE
+    #                 meal_plan_id = \'{student1[3]}'''
+    #         loc1_id = db_access.fetch_first_val(stmt)
+    #
+    #         stmt = f'''SELECT location_id FROM student_plans WHERE
+    #                    meal_plan_id = \'{student2[3]}'''
+    #         loc2_id = db_access.fetch_first_val(stmt)
+    #
+    #         assert ((location_id == loc1_id) or (location_id == loc2_id),
+    #             "Invalid location for students to exchange meal."
+    #     except AssertionError as msg:
+    #         print(msg)
+    #
+    #     # Check if two students have an exchange between them
+    #     stmt = f'''SELECT FROM exchanges WHERE student1_PUID =
+    #             \'{puid1}\' AND student2_PUID = \'{puid2}\''''
+    #     exchanges = db_access.fetch_all(stmt)
+    #
+    #     valid_exchange_id = None
+    #     for exchange in exchanges:
+    #         if exchange is None:
+    #             return("No open exchange between students")
+    #         valid_exchange_id = exchange[0]
+    #         # check if exchange has expired
+    #         if exchange[8] > date.today():
+    #             return("Exchange has expired")
+    #         # check if exchange has been completed
+    #         if exchange[9] == "Complete":
+    #             return("Exchange has been completed")
+    #
+    #     return valid_exchange_id
+    #
+    #
+    # def exchange_firstmeal(cls, puid1, puid2,
+    #                         exchange1_location_id, time):
+    #     meal_exchange_id = check_valid_exchange(puid1, puid2,
+    #                                            exchange1_location_id)
+    #
+    #     exchange1_date = date.today()
+    #     exp_date = exchange1_date + datetime.timedelta(days=30)
+    #     # assume time is in the format HH:MM:SS
+    #     hour = int(str(time).split(':')[0])
+    #     ##min = int(str(time).split(':')[1]) ### do we need???
+    #     ### CAN RESET THESE TIMES LATER
+    #     if (7 < hour < 10):
+    #         meal = 'breakfast'
+    #     elif (11 < hour < 14):
+    #         meal = 'lunch'
+    #     elif (17 < hour < 22):
+    #         meal = 'dinner'
+    #     ### put this statement to remove error that meal might not be
+    #     # set but will never occur since students will not be able to
+    #     # swipe outside of these meal times
+    #     else: meal = None
+    #
+    #     ### fix this to the right format of Values %s etc
+    #     stmt=f'''UPDATE exchanges SET meal = \'{meal}\'
+    #     AND exchange1_date = \'{exchange1_date}\'
+    #     AND exchange1_location_id = \'{exchange1_location_id}\'
+    #     AND expiration_date = \'{exp_date}\'
+    #     WHERE meal_exchange_id=\'{meal_exchange_id}\''''
+    #
+    #     db_access.insert_data(stmt, [exchange1_date, exchange1_location_id,
+    #                      meal_exchange_id])
+    #
+    # @classmethod
+    # def exchange_secondmeal(cls, puid1, puid2,
+    #                   exchange2_location_id, time):
+    #     meal_exchange_id = check_valid_exchange(puid1, puid2,
+    #                                             exchange2_location_id)
+    #
+    #     ### NEED TO DO
+    #     ### check to see exchange1 location matches one of the 2,
+    #     # and location 2 id matches the other
+    #     ### REALIZING THAT WE ALSO NEED TO DO THIS FOR FIRSTMEAL
+    #
+    #     # Make sure that the students are exchanging during the
+    #     # same meal
+    #     hour = int(str(time).split(':')[0])
+    #     ##min = int(str(time).split(':')[1]) ### do we need???
+    #     ### CAN RESET THESE TIMES LATER
+    #     if (7 < hour < 10):
+    #         meal2 = 'breakfast'
+    #     elif (11 < hour < 14):
+    #         meal2 = 'lunch'
+    #     elif (17 < hour < 22):
+    #         meal2 = 'dinner'
+    #
+    #     assert (meal2 == meal)
+    #
+    #     stmt = f'''UPDATE exchanges SET exchange2_date = \'
+    #     {exchange2_date}\' AND exchange2_location_id = \
+    #     '{exchange2_location_id}\'
+    #     WHERE meal_exchange_id=\'{meal_exchange_id}\''''
+    #
+    #     db_access.insert_data(stmt, [exchange2_date, exchange2_location_id,
+    #                      meal_exchange_id])
 
 
 # getters and setters unfinished

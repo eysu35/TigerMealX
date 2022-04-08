@@ -53,7 +53,7 @@ def remove_all_data():
 def add_data(table, row_data):
 
     if table == 'students':
-        sql = '''INSERT INTO students(puid, netid, student_name, 
+        sql = '''INSERT INTO students(PUID, netID, student_name, 
         meal_plan_id, isvalidformealexchange) VALUES (%s, %s, %s, %s, %s
         )'''
 
@@ -66,12 +66,12 @@ def add_data(table, row_data):
                 location_name) VALUES (%s, %s)'''
 
     if table == "friends":
-        sql = '''INSERT INTO friends(puid, friend_puid) VALUES (%s, 
+        sql = '''INSERT INTO friends(PUID, friend_PUID) VALUES (%s, 
         %s)'''
 
     if table == "exchanges":
-        sql = '''INSERT INTO exchanges(student1_puid, 
-        student2_puid, meal, exchange1_date, exchange1_location_id, 
+        sql = '''INSERT INTO exchanges(student1_PUID, 
+        student2_PUID, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, status)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
 

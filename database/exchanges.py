@@ -13,9 +13,9 @@ class Exchanges:
         current_exchanges = []
         # access the database here and assemble a list of Exchange objects
         # how is status encoded?
-        stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
+        stmt = f'''SELECT meal_exchange_id, student1_PUID, student2_PUID, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges 
-        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') AND status=\'Incomplete\''''
+        WHERE (student1_PUID=\'{studentid}\' OR student2_PUID=\'{studentid}\') AND status=\'Incomplete\''''
 
         rows = db_access.fetchall(stmt)
         for row in rows:
@@ -26,11 +26,11 @@ class Exchanges:
             puid2 = row[2]
 
             stmt_std1_name = f'''SELECT student_name FROM 
-            students WHERE puid=\'{puid1}\''''
+            students WHERE PUID=\'{puid1}\''''
             std1_name = db_access.fetch_first_val(stmt_std1_name)
 
             stmt_std2_name = f'''SELECT student_name FROM 
-            students WHERE puid=\'{puid2}\''''
+            students WHERE PUID=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
 
             exch_obj = Exchange(row[1], std1_name, row[2],
@@ -46,9 +46,9 @@ class Exchanges:
         # access the database here and assemble a list of Exchange objects
         past_exchanges = []
         # access the database here and assemble a list of Exchange objects
-        stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
+        stmt = f'''SELECT meal_exchange_id, student1_PUID, student2_PUID, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges WHERE 
-        (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') AND status=\'Complete\''''
+        (student1_PUID=\'{studentid}\' OR student2_PUID=\'{studentid}\') AND status=\'Complete\''''
 
         rows = db_access.fetchall(stmt)
         print('past exchanges: ', rows)
@@ -61,11 +61,11 @@ class Exchanges:
             puid2 = row[2]
 
             stmt_std1_name = f'''SELECT student_name FROM 
-            students WHERE puid=\'{puid1}\''''
+            students WHERE PUID=\'{puid1}\''''
             std1_name = db_access.fetch_first_val(stmt_std1_name)
 
             stmt_std2_name = f'''SELECT student_name FROM 
-            students WHERE puid=\'{puid2}\''''
+            students WHERE PUID=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
 
             exch_obj = Exchange(row[1], std1_name, row[2],
@@ -75,7 +75,6 @@ class Exchanges:
             print(past_exchanges)
 
         return past_exchanges
-
 
     @classmethod
     def add_new_exchange(cls, puid1, puid2):
@@ -92,13 +91,12 @@ class Exchanges:
                             None, None, None, None, None,
                             str(date.today()), 'Incomplete', mealx_id=None)
 
-        stmt = '''INSERT INTO exchanges(student1_puid, 
-        student2_puid, meal, exchange1_date, exchange1_location_id, 
+        stmt = '''INSERT INTO exchanges(student1_PUID, 
+        student2_PUID, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, 
         status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
 
-        db_access.insert_data(stmt, exchange.to_ordered_tuple())
-        print("hi")
+        db_access.insert_data(stmt, exchange.to_ordered_tuple_without_mealx_id())
 
     @classmethod
     def remove_exchange(cls, meal_exchange_id):
@@ -109,13 +107,12 @@ class Exchanges:
         db_access.insert_data(stmt, meal_exchange_id)
 
     # @classmethod
-
     # def check_valid_exchange(cls, puid1, puid2, location_id):
     #     try:
     #         # check if both students have valid plans for exchange
-    #         stmt = f'''SELECT FROM students WHERE PUID = \'{puid1}\''''
+    #         stmt = f'''SELECT PUID, netID, student_name, meal_plan_id, isValidForMealExchange FROM students WHERE PUID = \'{puid1}\''''  # should puid be lowercase?
     #         student1 = db_access.fetchone(stmt)
-    #         stmt = f'''SELECT FROM students WHERE PUID = \'{puid2}\''''
+    #         stmt = f'''SELECT PUID, netID, student_name, meal_plan_id, isValidForMealExchange FROM students WHERE PUID = \'{puid2}\''''
     #         student2 = db_access.fetchone(stmt)
     #
     #         assert (student1[4] and student2[4]), "Student plan unable " \
@@ -123,38 +120,40 @@ class Exchanges:
     #
     #         # check if location_id matches one of student plans
     #         stmt = f'''SELECT location_id FROM student_plans WHERE
-    #                 meal_plan_id = \'{student1[3]}'''
+    #                 meal_plan_id = \'{student1[3]}\''''
     #         loc1_id = db_access.fetch_first_val(stmt)
     #
     #         stmt = f'''SELECT location_id FROM student_plans WHERE
-    #                    meal_plan_id = \'{student2[3]}'''
+    #                    meal_plan_id = \'{student2[3]}\''''
     #         loc2_id = db_access.fetch_first_val(stmt)
     #
     #         assert ((location_id == loc1_id) or (location_id == loc2_id),
-    #             "Invalid location for students to exchange meal."
+    #                 "Invalid location for students to exchange meal.")
     #     except AssertionError as msg:
     #         print(msg)
     #
     #     # Check if two students have an exchange between them
-    #     stmt = f'''SELECT FROM exchanges WHERE student1_PUID =
+    #     stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id,
+    #     exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges WHERE student1_PUID =
     #             \'{puid1}\' AND student2_PUID = \'{puid2}\''''
-    #     exchanges = db_access.fetch_all(stmt)
+    #     exchanges = db_access.fetchall(stmt)
     #
     #     valid_exchange_id = None
     #     for exchange in exchanges:
     #         if exchange is None:
-    #             return("No open exchange between students")
+    #             return ("No open exchange between students")
     #         valid_exchange_id = exchange[0]
     #         # check if exchange has expired
     #         if exchange[8] > date.today():
-    #             return("Exchange has expired")
+    #             return ("Exchange has expired")
     #         # check if exchange has been completed
     #         if exchange[9] == "Complete":
-    #             return("Exchange has been completed")
+    #             return ("Exchange has been completed")
     #
     #     return valid_exchange_id
-    #
-    #
+
+
+    # HOW DO WE KNOW JUST FROM SWIPING WHETHER ITS FIRST OR SECOND???
     # def exchange_firstmeal(cls, puid1, puid2,
     #                         exchange1_location_id, time):
     #     meal_exchange_id = check_valid_exchange(puid1, puid2,
@@ -245,10 +244,16 @@ class Exchange:
         self._exp = exp
         self._init_date = None
 
+    # returns tuple of table info in order of table columns without mealxid
+    def to_ordered_tuple_without_mealx_id(self):
+        return self._puid1, self._puid2, self._meal, \
+               self._exch1_date, \
+               self._exch1_loc, self._exch2_date, self._exch2_loc, self._exp, self._status
+
     # returns tuple of table info in order of table columns for use in insert statement
     def to_ordered_tuple(self):
         return self._mealx_id, self._puid1, self._puid2, self._meal, \
-               self._exch1_date,\
+               self._exch1_date, \
                self._exch1_loc, self._exch2_date, self._exch2_loc, self._exp, self._status
 
     def get_mealx_id(self):
@@ -326,6 +331,7 @@ class Exchange:
     # def to_dict(self):
     #     return {'name': self._name, 'place': self._place,
     #         'meal': self._meal, 'status': self._status, 'exp': self._exp}
+
 
 # -----------------------------------------------------------------------
 

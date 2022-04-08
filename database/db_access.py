@@ -19,7 +19,7 @@ def fetchall(stmt):
         if conn is not None:
             cur.close()
             conn.close()
-            print("fetch all success")
+            # print("fetch all success")
 
 
 # opens and closes connection, returns first row retrieved by executing stmt
@@ -39,7 +39,7 @@ def fetchone(stmt):
         if conn is not None:
             cur.close()
             conn.close()
-            print("fetch one success")
+            # print("fetch one success")
 
 
 # opens and closes connection, returns first val in first row retrieved by executing stmt (ex. name)
@@ -59,7 +59,7 @@ def fetch_first_val(stmt):
         if conn is not None:
             cur.close()
             conn.close()
-            print("fetch first val success")
+            # print("fetch first val success")
 
 
 # inserts data list into db using statement

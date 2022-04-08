@@ -1,4 +1,4 @@
-from config import config
+from database import db_access
 import psycopg2
 
 
@@ -11,84 +11,29 @@ class Students:
         str_puid = str(puid).strip()
         stmt = f'''SELECT puid, netid, student_name, meal_plan_id, isvalidformealexchange FROM students WHERE 
                 puid=\'{str_puid}\''''
-        student = None
-
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
-
-            conn.autocommit = True
-            cur = conn.cursor()
-
-            cur.execute(stmt)
-            res = cur.fetchone()
-            student = Student(res[0], res[1], res[2], res[3], res[4])
-
-            cur.close()
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn is not None:
-                conn.close()
-                print("success")
+        student_info = db_access.fetchone(stmt)
+        student = Student(student_info[0], student_info[1], student_info[2], student_info[3], student_info[4])
 
         return student
-
 
     @classmethod
     def get_first_name_from_netid(cls, netid):
         str_netid = str(netid).strip()
         stmt = f'''SELECT student_name FROM students WHERE 
         netid=\'{str_netid}\''''
-        first_name = None
+        name = db_access.fetch_first_val(stmt)
 
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
+        if name is None:
+            print('error: could not retrieve name')
 
-            conn.autocommit = True
-            cur = conn.cursor()
-
-            cur.execute(stmt)
-            first_name = cur.fetchone()[0]
-            first_name = first_name.split(' ')[0]
-
-            cur.close()
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn is not None:
-                conn.close()
-                print("success")
-
+        first_name = name.split(' ')[0]
         return first_name
 
     @classmethod
     def get_puid_from_netid(cls, netid):
         str_netid = str(netid).strip()
         stmt = f'''SELECT puid FROM students WHERE netid=\'{str_netid}\''''
-        puid = None
-
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
-
-            conn.autocommit = True
-            cur = conn.cursor()
-
-            cur.execute(stmt)
-            puid = cur.fetchone()[0]
-
-            cur.close()
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn is not None:
-                conn.close()
-                print("success")
+        puid = db_access.fetch_first_val(stmt)
 
         return puid
 
@@ -98,28 +43,10 @@ class Students:
         stmt = f'''SELECT puid, netid, student_name, meal_plan_id, isvalidformealexchange FROM students WHERE 
         LOWER(student_name) LIKE LOWER(\'%{str_name}%\')'''
         students = []
-
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
-
-            conn.autocommit = True
-            cur = conn.cursor()
-
-            cur.execute(stmt)
-            results = cur.fetchall()
-            for result in results:
-                student = Student(result[0], result[1], result[2], result[3], result[4])
-                students.append(student)
-
-            cur.close()
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn is not None:
-                conn.close()
-                print("success")
+        results = db_access.fetchall(stmt)
+        for result in results:
+            student = Student(result[0], result[1], result[2], result[3], result[4])
+            students.append(student)
 
         return students
 
@@ -130,86 +57,42 @@ class Students:
         stmt = f"""SELECT friend_puid FROM friends WHERE puid={puid}"""
 
         friend_data = []
+        friend_puids = db_access.fetchall(stmt)
 
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
+        for friend_puid in friend_puids:
+            actual_puid = friend_puid[0]
 
-            conn.autocommit = True
-            cur = conn.cursor()
+            stmt2 = f"""SELECT student_name, meal_plan FROM 
+            students WHERE puid=\'{actual_puid}\'"""
+            row = db_access.fetchone(stmt2)
 
-            cur.execute(stmt)
-            friend_puids = cur.fetchall()  # why are these tuples with one thing in them
-            # print(friend_puids)
-
-            for friend_puid in friend_puids:
-                actual_puid = friend_puid[0]
-                # print(actual_puid)
-                stmt2 = f"""SELECT student_name, meal_plan FROM 
-                students WHERE puid=\'{actual_puid}\'"""
-                cur.execute(stmt2)
-                row = cur.fetchone()
-
-                student = Student(actual_puid, row[0], row[1])
-                # print(student)
-                friend_data.append(student)
-
-            # close communication with the PostgreSQL database server
-            cur.close()
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if conn is not None:
-                conn.close()
-                print("success")
+            student = Student(actual_puid, row[0], row[1])
+            friend_data.append(student)
 
         return friend_data
 
     @classmethod
     def get_location_name_from_puid(cls, puid):
         str_puid = str(puid).strip()
-        # build the sql statement
         stmt = f"""SELECT meal_plan_id FROM students WHERE PUID
         =\'{str_puid}\'"""
-        location_name = None
 
-        try:
-            # connection establishment
-            params = config()
-            conn = psycopg2.connect(**params)
+        meal_plan_id = db_access.fetch_first_val(stmt)
 
-            conn.autocommit = True
-            cur = conn.cursor()
+        stmt2 = f"""SELECT location_id FROM student_plans
+                    WHERE meal_plan_id=\'{meal_plan_id}\'"""
 
-            cur.execute(stmt)
-            meal_plan_id = cur.fetchone()[0]
-            print(meal_plan_id + "1")
+        location_id = db_access.fetch_first_val(stmt2)
+        # print(location_id + "2")
 
-            stmt2 = f"""SELECT location_id FROM student_plans
-            WHERE meal_plan_id=\'{meal_plan_id}\'"""
+        stmt3 = f"""SELECT location_name FROM locations
+                    WHERE location_id=\'{location_id}\'"""
 
-            cur.execute(stmt2)
-            location_id = cur.fetchone()[0]
-            print(location_id + "2")
+        location_name = db_access.fetch_first_val(stmt3)
+        # print(location_name + "3")
 
-            stmt3 = f"""SELECT location_name FROM locations
-            WHERE location_id=\'{location_id}\'"""
-
-            cur.execute(stmt3)
-            location_name = cur.fetchone()[0]
-            print(location_name + "3")
-
-            # close communication with the PostgreSQL database server
-            cur.close()
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-             if conn is not None:
-                 conn.close()
-                 print("success")
-        print(location_name + "4")
         return location_name
+
 
 class Student:
 

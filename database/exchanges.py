@@ -13,12 +13,9 @@ class Exchanges:
         current_exchanges = []
         # access the database here and assemble a list of Exchange objects
         # how is status encoded?
-        stmt = f'''SELECT meal_exchange_id, student1_puid, 
-        student2_puid, 
-        meal, exchange1_date, exchange1_location_id, exchange2_date,
-        exchange2_location_id, expiration_date, status FROM exchanges 
-        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'
-        {studentid}\') AND status=\'Incomplete\''''
+        stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
+        exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges 
+        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') AND status=\'Incomplete\''''
 
         rows = db_access.fetchall(stmt)
         for row in rows:
@@ -49,14 +46,12 @@ class Exchanges:
         # access the database here and assemble a list of Exchange objects
         past_exchanges = []
         # access the database here and assemble a list of Exchange objects
-        stmt = f'''SELECT meal_exchange_id, student1_puid, 
-        student2_puid, 
-        meal, exchange1_date, exchange1_location_id, exchange2_date,
-        exchange2_location_id, expiration_date, status FROM exchanges 
-        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'
-        {studentid}\') AND status =\'Complete\''''
+        stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
+        exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges WHERE 
+        (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') AND status=\'Complete\''''
 
         rows = db_access.fetchall(stmt)
+        print('past exchanges: ', rows)
 
         for row in rows:
             if row is None:
@@ -77,6 +72,7 @@ class Exchanges:
                                 std2_name, row[3], row[4], row[5], row[6],
                                 row[7], row[8], row[9], mealx_id=row[0])
             past_exchanges.append(exch_obj)
+            print(past_exchanges)
 
         return past_exchanges
 

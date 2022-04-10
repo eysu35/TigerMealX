@@ -13,9 +13,9 @@ class Exchanges:
         current_exchanges = []
         # access the database here and assemble a list of Exchange objects
         # how is status encoded?
-        stmt = f'''SELECT meal_exchange_id, student1_PUID, student2_PUID, meal, exchange1_date, exchange1_location_id, 
+        stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges 
-        WHERE (student1_PUID=\'{studentid}\' OR student2_PUID=\'{studentid}\') AND status=\'Incomplete\''''
+        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') AND status=\'Incomplete\''''
 
         rows = db_access.fetchall(stmt)
         for row in rows:
@@ -26,11 +26,11 @@ class Exchanges:
             puid2 = row[2]
 
             stmt_std1_name = f'''SELECT student_name FROM 
-            students WHERE PUID=\'{puid1}\''''
+            students WHERE puid=\'{puid1}\''''
             std1_name = db_access.fetch_first_val(stmt_std1_name)
 
             stmt_std2_name = f'''SELECT student_name FROM 
-            students WHERE PUID=\'{puid2}\''''
+            students WHERE puid=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
 
             exch_obj = Exchange(row[1], std1_name, row[2],
@@ -46,9 +46,9 @@ class Exchanges:
         # access the database here and assemble a list of Exchange objects
         past_exchanges = []
         # access the database here and assemble a list of Exchange objects
-        stmt = f'''SELECT meal_exchange_id, student1_PUID, student2_PUID, meal, exchange1_date, exchange1_location_id, 
+        stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges WHERE 
-        (student1_PUID=\'{studentid}\' OR student2_PUID=\'{studentid}\') AND status=\'Complete\''''
+        (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') AND status=\'Complete\''''
 
         rows = db_access.fetchall(stmt)
         print('past exchanges: ', rows)
@@ -61,11 +61,11 @@ class Exchanges:
             puid2 = row[2]
 
             stmt_std1_name = f'''SELECT student_name FROM 
-            students WHERE PUID=\'{puid1}\''''
+            students WHERE puid=\'{puid1}\''''
             std1_name = db_access.fetch_first_val(stmt_std1_name)
 
             stmt_std2_name = f'''SELECT student_name FROM 
-            students WHERE PUID=\'{puid2}\''''
+            students WHERE puid=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
 
             exch_obj = Exchange(row[1], std1_name, row[2],
@@ -91,8 +91,8 @@ class Exchanges:
                             None, None, None, None, None,
                             str(date.today()), 'Incomplete', mealx_id=None)
 
-        stmt = '''INSERT INTO exchanges(student1_PUID, 
-        student2_PUID, meal, exchange1_date, exchange1_location_id, 
+        stmt = '''INSERT INTO exchanges(student1_puid, 
+        student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, 
         status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
 
@@ -122,11 +122,11 @@ class Exchanges:
 
         # check that both students have valid plans and the location
         # matches one of their locations
-        stmt = f'''SELECT PUID, netID, student_name, meal_plan_id, 
-        isValidForMealExchange FROM students WHERE PUID = \'{puid1}\''''  # should puid be lowercase?
+        stmt = f'''SELECT puid, netid, student_name, meal_plan_id, 
+        is_valid_for_meal_exchange FROM students WHERE puid = \'{puid1}\''''  # should puid be lowercase?
         student1 = db_access.fetchone(stmt)
-        stmt = f'''SELECT PUID, netID, student_name, 
-        meal_plan_id, isValidForMealExchange FROM students WHERE PUID = \'{puid2}\''''
+        stmt = f'''SELECT puid, netid, student_name, 
+        meal_plan_id, is_valid_for_meal_exchange FROM students WHERE puid = \'{puid2}\''''
         student2 = db_access.fetchone(stmt)
 
         # check if both students have valid plans for exchange

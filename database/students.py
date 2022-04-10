@@ -29,6 +29,18 @@ class Students:
         return first_name
 
     @classmethod
+    def get_full_name_from_netid(cls, netid):
+        str_netid = str(netid).strip()
+        stmt = f'''SELECT student_name FROM students WHERE 
+            netid=\'{str_netid}\''''
+        name = db_access.fetch_first_val(stmt)
+
+        if name is None:
+            print('error: could not retrieve name')
+
+        return name
+
+    @classmethod
     def get_puid_from_netid(cls, netid):
         str_netid = str(netid).strip()
         stmt = f'''SELECT puid FROM students WHERE netid=\'{str_netid}\''''

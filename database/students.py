@@ -1,6 +1,5 @@
 from database import db_access
-import psycopg2
-
+import json
 
 # container class for students
 class Students:
@@ -131,6 +130,13 @@ class Student:
     def set_mealplanid(self, mealplanid):
         self._club = mealplanid
 
+    def toJSON(self):
+        info = {}
+        for item in self.__dict__.items():
+            new_key = item[0][1:]  # take off the underscore
+            info[new_key] = item[1]  # insert into new dict
+        return json.dumps(info)
+
 
 if __name__ == '__main__':
     # Students.get_friend_names(123456789)
@@ -139,5 +145,8 @@ if __name__ == '__main__':
     # for item in result:
     #     print(item)
 
-    print(Students.get_student_by_puid(920228016))
-    print(Students.search_students_by_name('a'))
+    # print(Students.get_student_by_puid(920228016))
+    # print(Students.search_students_by_name('a'))
+
+    foo = Student('123456789', 'smaleson', 'Shayna Maleson', 287347, True)
+    print(foo.toJSON())

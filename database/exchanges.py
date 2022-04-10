@@ -193,16 +193,58 @@ class Exchanges:
 
         db_access.execute_stmt(stmt)
 
+    # sets meal 2 info, mark exchange as complete
     @classmethod
     def update_meal2(cls, mealx_id, location_id):
         exchange2_date = date.today()
 
         stmt = f'''UPDATE exchanges SET 
         exchange2_date = \'{exchange2_date}\', 
-        exchange2_location_id = \'{location_id}\'
+        exchange2_location_id = \'{location_id}\',
+        status = \'Complete\'
         WHERE meal_exchange_id=\'{mealx_id}\''''
 
         db_access.execute(stmt)
+
+    # regularly comb through exchanges to check dates and set
+    # exchange objects statuses accordingly
+    @classmethod
+    def update_exchange_statuses(cls):
+        today = date.today()
+        stmt = f'''SELECT meal_exchange_id, expiration_date, 
+        exchange1_date FROM exchanges WHERE status = \'Incomplete\''''
+
+        exchanges = db_access.fetchall(stmt)
+
+        almost_expired_exchanges = []
+        for exchange in exchanges:
+            mealx_id = exchange[0]
+            exp_date = exchange[1]
+            exchange1_date = exchange[2]
+
+            # mark any exchanges with expiration dates that have
+            # passed as an expired exchange
+            if exp_date > today:
+                stmt = f'''UPDATE exchanges SET status = \'Expired\'
+                        WHERE meal_exchange_id=\'{mealx_id}\''''
+                db_access.execute(stmt)
+
+            # mark any exchanges that have not been used within the
+            # first five days as an unused exchange to clean table
+            if (exp_date == (today + timedelta(days=25))) and \
+                    (exchange1_date is None):
+                stmt = f'''UPDATE exchanges SET status = \'Unused\'
+                        WHERE meal_exchange_id=\'{mealx_id}\''''
+                db_access.execute(stmt)
+
+            # send any exchanges that are about to expire back
+            if exp_date == (today + timedelta(days=7)):
+                almost_expired_exchanges.append((mealx_id, '7 days'))
+
+            if exp_date == (today + timedelta(days=3)):
+                almost_expired_exchanges.append((mealx_id, '2 days'))
+
+        return almost_expired_exchanges
 
 # getters and setters unfinished
 class Exchange:

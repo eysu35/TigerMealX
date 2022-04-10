@@ -185,26 +185,23 @@ class Exchanges:
             break
         return True, "Exchange successfully updated!"
 
-
-
+    # sets meal 1 info for a validated exchange
     @classmethod
-    def update_exchange(cls, puid1, puid2, mealx_id, meal):
+    def update_meal1(cls, puid1, puid2, mealx_id, meal):
 
         exchange1_date = date.today()
-        exp_date = exchange1_date + datetime.timedelta(days=30)
+        exp_date = exchange1_date + datetime.timedelta(days=30)  # WTf is time delta
         # assume time is in the format HH:MM:SS
 
 
-        stmt=f'''UPDATE exchanges SET meal = \'{meal}\'
-        AND exchange1_date = \'{exchange1_date}\'
-        AND exchange1_location_id = \'{exchange1_location_id}\'
+        stmt = f'''UPDATE exchanges SET meal = \'{meal}\', exchange1_date = \'{exchange1_date}\', exchange1_location_id = \'{exchange1_location_id}\'
         AND expiration_date = \'{exp_date}\'
-        WHERE meal_exchange_id=\'{meal_exchange_id}\''''
+        WHERE meal_exchange_id=\'{meal_exchange_id}\'''' # FIX!!!!!
 
-        db_access.execute(stmt)
+        db_access.execute_stmt(stmt)
 
     @classmethod
-    def exchange_secondmeal(cls, puid1, puid2, mealx_id, meal2):
+    def update_meal2(cls, puid1, puid2, mealx_id, meal2):
         stmt = f'''SELECT meal FROM exchanges WHERE meal_exchange_id 
         = \'{mealx_id}\''''
         meal = db_access.fetch_first_val(stmt)

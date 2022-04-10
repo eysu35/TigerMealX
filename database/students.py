@@ -9,7 +9,7 @@ class Students:
     @classmethod
     def get_student_by_puid(cls, puid):
         str_puid = str(puid).strip()
-        stmt = f'''SELECT puid, netid, student_name, meal_plan_id, isvalidformealexchange FROM students WHERE 
+        stmt = f'''SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
                 puid=\'{str_puid}\''''
         student_info = db_access.fetchone(stmt)
         student = Student(student_info[0], student_info[1], student_info[2], student_info[3], student_info[4])
@@ -40,7 +40,7 @@ class Students:
     @classmethod
     def search_students_by_name(cls, name):
         str_name = str(name)
-        stmt = f'''SELECT puid, netid, student_name, meal_plan_id, isvalidformealexchange FROM students WHERE 
+        stmt = f'''SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
         LOWER(student_name) LIKE LOWER(\'%{str_name}%\')'''
         students = []
         results = db_access.fetchall(stmt)

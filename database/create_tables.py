@@ -21,11 +21,11 @@ def create_tables():
         """,
         """
         CREATE TABLE students (
-            PUID VARCHAR(255) PRIMARY KEY,
-            netID VARCHAR(255) NOT NULL,
+            puid VARCHAR(255) PRIMARY KEY,
+            netid VARCHAR(255) NOT NULL,
             student_name VARCHAR(255) NOT NULL,
             meal_plan_id UUID NOT NULL,
-            isValidForMealExchange BOOLEAN NOT NULL
+            is_valid_for_meal_exchange BOOLEAN NOT NULL
         )
         """,
         """ CREATE TABLE student_plans (
@@ -35,9 +35,9 @@ def create_tables():
         """,
         """
         CREATE TABLE friends (
-                PUID VARCHAR(255) NOT NULL,
-                friend_PUID VARCHAR(255) NOT NULL,
-                PRIMARY KEY (PUID, friend_PUID)
+                puid VARCHAR(255) NOT NULL,
+                friend_puid VARCHAR(255) NOT NULL,
+                PRIMARY KEY (puid, friend_puid)
         )
         """,
         """
@@ -50,8 +50,8 @@ def create_tables():
         CREATE TABLE exchanges (
                 meal_exchange_id UUID DEFAULT uuid_generate_v4 () 
                 PRIMARY KEY,
-                student1_PUID VARCHAR(255) NOT NULL,
-                student2_PUID VARCHAR(255) NOT NULL,
+                student1_puid VARCHAR(255) NOT NULL,
+                student2_puid VARCHAR(255) NOT NULL,
                 meal VARCHAR(255),
                 exchange1_date DATE,
                 exchange1_location_id VARCHAR(255),

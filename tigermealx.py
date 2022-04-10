@@ -14,10 +14,10 @@ def base():
     name = Students.get_first_name_from_netid(netid)
     # assume it's a name for now but need to also check for PUID
     students = Students.search_students_by_name('')
-    
+    print(netid)
     # search_puid = Students.get_puid_from_name(search_name)
 
-    return render_template('index.html', students=students, name=name)
+    return render_template('index.html', students=students, name=name, netid=netid)
 
 @app.route('/exchanges/')
 def show_exchanges():
@@ -49,7 +49,14 @@ def help_page():
 @app.route('/exchangeportal')
 def initiate_exchange():
     puid2 = request.args.get('puid')
-    student2 = Students.get_student_by_puid(puid2)
+    if(puid2==None or puid2==''):
+        return render_template('error.html', error_msg="missing puid")
+    try:
+        student2 = Students.get_student_by_puid(puid2)
+    except Exception as e:
+        print('tigermealx: ' + str(e))
+        return render_template('error.html', error_msg="invalid puid")
+    
     name2 = student2.get_name()
     location2 = Students.get_location_name_from_puid(puid2)
     return render_template('exchange_init.html', puid2=puid2,

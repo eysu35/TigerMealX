@@ -82,7 +82,9 @@
     <input  list="studentList" name="puid" id="student">
     <datalist id='studentList'>
       {% for student in students: %}
+      {% if student.get_netid()!=netid %}
       <option value='{{student.get_puid()}}' id="{{student.get_name()}}">{{student.get_name()}}</option>
+      {% endif %}
       {% endfor %}
     </datalist>
     <input type="hidden">

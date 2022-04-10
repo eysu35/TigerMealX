@@ -72,42 +72,36 @@
         margin-left: 3%;
      }
    </style>
- <link rel="icon" href="http://example.com/favicon.png">
   {% include 'navbar.html' %}
   <div id="container">
     <div class="box">  
     <!-- <input type='text' oninput='onInput()' id='input' list='studentList' /> -->
     <form action="../exchangeportal" method="get">
-      <label for="student">Choose a student to swap with:</label>
+      <label for="student">Choose a student to swap with: </label><br>
+      
     <input  list="studentList" name="puid" id="student">
     <datalist id='studentList'>
       {% for student in students: %}
-      <option value='{{student.get_puid()}}' id="{{student.get_netid()}}">{{student.get_name()}}</option>
+      <option value='{{student.get_puid()}}' id="{{student.get_name()}}">{{student.get_name()}}</option>
       {% endfor %}
     </datalist>
-    <input type="submit">
+    <input type="hidden">
   </form>
    </div>
    </div>
-
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
    <script>
-     function startexchange(value) {
-        alert(value);
-        console.log('exchanged');
-     }
-    function onInput() {
-    var val = document.getElementById("input").value;
-    var opts = document.getElementById('studentList').childNodes;
-    console.log("skrt");
-    for (var i = 0; i < opts.length; i++) {
-      if (opts[i].value === val) {
-        // An item was selected from the list!
-        // yourCallbackHere()
-        alert(opts[i].value);
-        break;
-      }
+     
+    
+
+    const input = document.querySelector('input');
+    const log = document.getElementById('name');
+
+    input.addEventListener('change', updateValue);
+
+    function updateValue(e) {
+        window.open('../exchangeportal?puid=' + e.target.value, value='_self');
     }
-  }
     </script>
       
     

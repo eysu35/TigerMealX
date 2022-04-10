@@ -73,12 +73,28 @@ def insert_data(stmt, data):
 
         cur.execute(stmt, data)
         cur.close()
-        # commit the changes
-        conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:
-            cur.close()
             conn.close()
             print("insert data success")
+
+
+# executes the given statement on the cursor
+def execute_stmt(stmt):
+    try:
+        # connection establishment
+        params = config()
+        conn = psycopg2.connect(**params)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        cur.execute(stmt)
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            # print("execute stmtm success")

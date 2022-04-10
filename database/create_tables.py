@@ -24,12 +24,12 @@ def create_tables():
             PUID VARCHAR(255) PRIMARY KEY,
             netID VARCHAR(255) NOT NULL,
             student_name VARCHAR(255) NOT NULL,
-            meal_plan_id VARCHAR(255) NOT NULL,
+            meal_plan_id UUID NOT NULL,
             isValidForMealExchange BOOLEAN NOT NULL
         )
         """,
         """ CREATE TABLE student_plans (
-                meal_plan_id VARCHAR(255) PRIMARY KEY,
+                meal_plan_id UUID PRIMARY KEY,
                 location_id VARCHAR(255) NOT NULL
                 )
         """,
@@ -52,7 +52,7 @@ def create_tables():
                 PRIMARY KEY,
                 student1_PUID VARCHAR(255) NOT NULL,
                 student2_PUID VARCHAR(255) NOT NULL,
-                meal VARCHAR(255) NOT NULL,
+                meal VARCHAR(255),
                 exchange1_date DATE,
                 exchange1_location_id VARCHAR(255),
                 exchange2_date DATE,

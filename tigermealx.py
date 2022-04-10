@@ -61,11 +61,8 @@ def post_new_exchange():
     netid1 = auth.authenticate()
     puid1 = Students.get_puid_from_netid(netid1)
     puid2 = request.args.get('puid2')
-    ## take out meal arg
-    Exchanges.add_new_exchange(puid1, puid2, "Lunch")
+    Exchanges.add_new_exchange(puid1, puid2)
     return
-
-
 
 
 if __name__ == '__main__':

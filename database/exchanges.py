@@ -46,7 +46,9 @@ class Exchanges:
         # access the database here and assemble a list of Exchange objects
         stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges WHERE 
-        (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') AND status=\'Complete\''''
+        (student1_puid=\'{studentid}\' OR student2_puid=\'
+        {studentid}\') AND (status=\'Complete\' OR status=\'Expired\' OR 
+        status=\'Unused\')'''
 
         rows = db_access.fetchall(stmt)
         print('past exchanges: ', rows)
@@ -209,7 +211,7 @@ class Exchanges:
     # regularly comb through exchanges to check dates and set
     # exchange objects statuses accordingly
     @classmethod
-    def update_exchange_statuses(cls):
+    def update_exchange_status(cls):
         today = date.today()
         stmt = f'''SELECT meal_exchange_id, expiration_date, 
         exchange1_date FROM exchanges WHERE status = \'Incomplete\''''

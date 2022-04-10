@@ -103,121 +103,122 @@ class Exchanges:
         stmt = f'''DELETE FROM exchanges WHERE meal_exchange_id=
         \'{meal_exchange_id}\''''
 
-        ### do we need to send the meal_exchange_id again? ###
-        db_access.insert_data(stmt, meal_exchange_id)
+        db_access.execute(stmt)
 
-    # @classmethod
-    # def check_valid_exchange(cls, puid1, puid2, location_id):
-    #     try:
-    #         # check if both students have valid plans for exchange
-    #         stmt = f'''SELECT PUID, netID, student_name, meal_plan_id, isValidForMealExchange FROM students WHERE PUID = \'{puid1}\''''  # should puid be lowercase?
-    #         student1 = db_access.fetchone(stmt)
-    #         stmt = f'''SELECT PUID, netID, student_name, meal_plan_id, isValidForMealExchange FROM students WHERE PUID = \'{puid2}\''''
-    #         student2 = db_access.fetchone(stmt)
-    #
-    #         assert (student1[4] and student2[4]), "Student plan unable " \
-    #                                               "to exchange."
-    #
-    #         # check if location_id matches one of student plans
-    #         stmt = f'''SELECT location_id FROM student_plans WHERE
-    #                 meal_plan_id = \'{student1[3]}\''''
-    #         loc1_id = db_access.fetch_first_val(stmt)
-    #
-    #         stmt = f'''SELECT location_id FROM student_plans WHERE
-    #                    meal_plan_id = \'{student2[3]}\''''
-    #         loc2_id = db_access.fetch_first_val(stmt)
-    #
-    #         assert ((location_id == loc1_id) or (location_id == loc2_id),
-    #                 "Invalid location for students to exchange meal.")
-    #     except AssertionError as msg:
-    #         print(msg)
-    #
-    #     # Check if two students have an exchange between them
-    #     stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id,
-    #     exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges WHERE student1_PUID =
-    #             \'{puid1}\' AND student2_PUID = \'{puid2}\''''
-    #     exchanges = db_access.fetchall(stmt)
-    #
-    #     valid_exchange_id = None
-    #     for exchange in exchanges:
-    #         if exchange is None:
-    #             return ("No open exchange between students")
-    #         valid_exchange_id = exchange[0]
-    #         # check if exchange has expired
-    #         if exchange[8] > date.today():
-    #             return ("Exchange has expired")
-    #         # check if exchange has been completed
-    #         if exchange[9] == "Complete":
-    #             return ("Exchange has been completed")
-    #
-    #     return valid_exchange_id
+    @classmethod
+    def check_valid_exchange(cls, puid1, puid2, location_id, time):
+
+        stmt = f'''SELECT meal_exchange_id, meal, exchange1_date, 
+        exchange1_location_id, exchange2_date, exchange2_location_id, 
+        status FROM exchanges WHERE ((student1_puid = \'{puid1}\' AND 
+        student2_puid =  \'{puid2}\') OR (student1_puid = \'{puid2}\' AND 
+        student2_puid =  \'{puid1}\')) AND status = \'Incomplete\' 
+        ORDER BY expiration_date ASC'''
+
+        #No exchanges between these students
+        exchanges = db_access.fetchall(stmt)
+        if len(exchanges) == 0:
+            return False, "No open exchange between these students."
+
+        # check that both students have valid plans and the location
+        # matches one of their locations
+        stmt = f'''SELECT PUID, netID, student_name, meal_plan_id, 
+        isValidForMealExchange FROM students WHERE PUID = \'{puid1}\''''  # should puid be lowercase?
+        student1 = db_access.fetchone(stmt)
+        stmt = f'''SELECT PUID, netID, student_name, 
+        meal_plan_id, isValidForMealExchange FROM students WHERE PUID = \'{puid2}\''''
+        student2 = db_access.fetchone(stmt)
+
+        # check if both students have valid plans for exchange
+        if (not student1[4] or not student2[4]):
+            return False, "Student plan unable to exchange."
+
+        # check if location_id matches one of student plans
+        stmt = f'''SELECT location_id FROM student_plans WHERE
+                meal_plan_id = \'{student1[3]}\''''
+        loc1_id = db_access.fetch_first_val(stmt)
+
+        stmt = f'''SELECT location_id FROM student_plans WHERE
+                   meal_plan_id = \'{student2[3]}\''''
+        loc2_id = db_access.fetch_first_val(stmt)
+
+        if ((location_id != loc1_id) and (location_id != loc2_id)):
+            return False, "Invalid location for students to exchange meal."
+
+        # determine which meal based on time
+        hour = int(str(time).split(':')[0])
+        if (7 < hour < 10):
+            meal = 'breakfast'
+        elif (11 < hour < 14):
+            meal = 'lunch'
+        elif (17 < hour < 22):
+            meal = 'dinner'
+        # error handling
+        else: meal = None
+
+        # at this point, validated open exchange between student 1
+        # and student 2. Determine if attempting to exchange for the
+        # first or second time, send to relevant method
+        for exchange in exchanges:
+            valid_exchange_id = exchange[0]
+            # if first exchange time is none, neither meal has been
+            # completed, initiate first exchange
+            if exchange[2] is None:
+                Exchanges.update_exchange(puid1, puid2,
+                                             valid_exchange_id, meal)
+                return True, "Exchange successfully updated!"
+
+            # if first exchange has been completed, check location
+            if exchange[3] == location_id:
+                return False, "Meal at this location already " \
+                              "completed for this exchange."
+
+            if exchange[1] != meal:
+                ### NEED TO THROW ERROR AFTER CHECKING ALL EXCHANGES???
+                continue
+
+            # initiate second exchange
+            #### CHANGE THIS TO ALSO JUST UPDATE_EXCHANGE AND GET RID
+            # OF DUPLICATE METHOD
+            Exchanges.exchange_secondmeal(puid1, puid2,
+                                          valid_exchange_id, meal)
+            break
+        return True, "Exchange successfully updated!"
 
 
-    # HOW DO WE KNOW JUST FROM SWIPING WHETHER ITS FIRST OR SECOND???
-    # def exchange_firstmeal(cls, puid1, puid2,
-    #                         exchange1_location_id, time):
-    #     meal_exchange_id = check_valid_exchange(puid1, puid2,
-    #                                            exchange1_location_id)
-    #
-    #     exchange1_date = date.today()
-    #     exp_date = exchange1_date + datetime.timedelta(days=30)
-    #     # assume time is in the format HH:MM:SS
-    #     hour = int(str(time).split(':')[0])
-    #     ##min = int(str(time).split(':')[1]) ### do we need???
-    #     ### CAN RESET THESE TIMES LATER
-    #     if (7 < hour < 10):
-    #         meal = 'breakfast'
-    #     elif (11 < hour < 14):
-    #         meal = 'lunch'
-    #     elif (17 < hour < 22):
-    #         meal = 'dinner'
-    #     ### put this statement to remove error that meal might not be
-    #     # set but will never occur since students will not be able to
-    #     # swipe outside of these meal times
-    #     else: meal = None
-    #
-    #     ### fix this to the right format of Values %s etc
-    #     stmt=f'''UPDATE exchanges SET meal = \'{meal}\'
-    #     AND exchange1_date = \'{exchange1_date}\'
-    #     AND exchange1_location_id = \'{exchange1_location_id}\'
-    #     AND expiration_date = \'{exp_date}\'
-    #     WHERE meal_exchange_id=\'{meal_exchange_id}\''''
-    #
-    #     db_access.insert_data(stmt, [exchange1_date, exchange1_location_id,
-    #                      meal_exchange_id])
-    #
-    # @classmethod
-    # def exchange_secondmeal(cls, puid1, puid2,
-    #                   exchange2_location_id, time):
-    #     meal_exchange_id = check_valid_exchange(puid1, puid2,
-    #                                             exchange2_location_id)
-    #
-    #     ### NEED TO DO
-    #     ### check to see exchange1 location matches one of the 2,
-    #     # and location 2 id matches the other
-    #     ### REALIZING THAT WE ALSO NEED TO DO THIS FOR FIRSTMEAL
-    #
-    #     # Make sure that the students are exchanging during the
-    #     # same meal
-    #     hour = int(str(time).split(':')[0])
-    #     ##min = int(str(time).split(':')[1]) ### do we need???
-    #     ### CAN RESET THESE TIMES LATER
-    #     if (7 < hour < 10):
-    #         meal2 = 'breakfast'
-    #     elif (11 < hour < 14):
-    #         meal2 = 'lunch'
-    #     elif (17 < hour < 22):
-    #         meal2 = 'dinner'
-    #
-    #     assert (meal2 == meal)
-    #
-    #     stmt = f'''UPDATE exchanges SET exchange2_date = \'
-    #     {exchange2_date}\' AND exchange2_location_id = \
-    #     '{exchange2_location_id}\'
-    #     WHERE meal_exchange_id=\'{meal_exchange_id}\''''
-    #
-    #     db_access.insert_data(stmt, [exchange2_date, exchange2_location_id,
-    #                      meal_exchange_id])
+
+    @classmethod
+    def update_exchange(cls, puid1, puid2, mealx_id, meal):
+
+        exchange1_date = date.today()
+        exp_date = exchange1_date + datetime.timedelta(days=30)
+        # assume time is in the format HH:MM:SS
+
+
+        stmt=f'''UPDATE exchanges SET meal = \'{meal}\'
+        AND exchange1_date = \'{exchange1_date}\'
+        AND exchange1_location_id = \'{exchange1_location_id}\'
+        AND expiration_date = \'{exp_date}\'
+        WHERE meal_exchange_id=\'{meal_exchange_id}\''''
+
+        db_access.execute(stmt)
+
+    @classmethod
+    def exchange_secondmeal(cls, puid1, puid2, mealx_id, meal2):
+        stmt = f'''SELECT meal FROM exchanges WHERE meal_exchange_id 
+        = \'{mealx_id}\''''
+        meal = db_access.fetch_first_val(stmt)
+        # Assert students are exchanging the same meal
+        if meal2 != meal:
+            return False, "Wrong meal "
+
+        stmt = f'''UPDATE exchanges SET exchange2_date = \'
+        {exchange2_date}\' AND exchange2_location_id = \
+        '{exchange2_location_id}\'
+        WHERE meal_exchange_id=\'{meal_exchange_id}\''''
+
+        db_access.insert_data(stmt, [exchange2_date, exchange2_location_id,
+                         meal_exchange_id])
 
 
 # getters and setters unfinished

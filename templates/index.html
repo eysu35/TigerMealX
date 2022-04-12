@@ -22,7 +22,7 @@
        background-size: cover;
      }
      input[type=text] {
-       width: 50%;
+       width: 100%;
        padding: 12px 20px;
        margin: 0px 0;
        box-sizing: border-box;
@@ -79,19 +79,86 @@
     <form action="../exchangeportal" method="get">
       <label for="student">Choose a student to swap with: </label><br>
       
-    <input  list="studentList" name="puid" id="student">
+    <input onselect="updateValue()" list="studentList" name="puid" id="student">
     <datalist id='studentList'>
       {% for student in students: %}
       {% if student.get_netid()!=netid %}
-      <option value='{{student.get_puid()}}' id="{{student.get_name()}}">{{student.get_name()}}</option>
+      
+      <option  onclick="updateValue()" value='{{student.get_puid()}}' id="{{student.get_name()}}">{{student.get_name()}}</option>
       {% endif %}
       {% endfor %}
+      </select>
     </datalist>
     <input type="hidden">
   </form>
    </div>
    </div>
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
+
+   <!-- Developmental! -->
+   <div id="container">
+       <div class="box">
+    <h2>Active Exchanges</h2>
+    <input type="text" class="form-control" placeholder="Name" id="Name">
+    <table class="table table-bordered table-hover">
+
+    <tbody>
+        <div id="studentTable">
+
+        </div>
+    </tbody>
+  </table>
+    </div>
+    </div>
+
+    </div>
+
+            <script>
+
+                'use strict';
+       
+               
+       
+                function handleResponse(response)
+                {
+                   $('#studentTable').html(response);
+                }
+       
+                let request = null;
+       
+                function getResults()
+                {
+                   let name = $('#Name').val();
+                   name = encodeURIComponent(name);
+                   
+                   let url = '/searchresults?name=' + name ;
+       
+                   if (request != null)
+                      request.abort();
+       
+                   request = $.ajax(
+                      {
+                         type: 'GET',
+                         url: url,
+                         success: handleResponse
+                      }
+                   );
+                }
+       
+                function setup()
+                {
+                   
+       
+                   $('#Name').on('input', getResults);
+       
+                }
+       
+                $('document').ready(setup);
+       
+             </script>
+   
+
+    <!--  -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
    <script>
      
     
@@ -102,6 +169,8 @@
     input.addEventListener('change', updateValue);
 
     function updateValue(e) {
+        
+
         window.open('../exchangeportal?puid=' + e.target.value, value='_self');
     }
     </script>

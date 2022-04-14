@@ -17,12 +17,16 @@
        background-repeat: no-repeat;
        background-size:cover;
      }
+     h2 {
+       text-align: center;
+       font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+     }
      .exchanges-section {
             background-color: white;
             margin-bottom: 15%;
             border-radius: 13px;
-            width: 70%;
-            position: absolute;
+            width: 80%;
+            position: unset;
             top:15%;
             left: 0;
             right: 0;
@@ -39,52 +43,62 @@
     {% if curr_exchanges|length == 0 %}
     <p>You have no current exchanges</p>
     {% else %}
-        <table>
-        <tr>
-
-          <th>Name</th>
-          <th width="'40px">Place</th>
-          <th>Meal</th>
-          <th>Completion date</th>
-          <th>Expiration date</th>
-    
-        </tr>
+        <h2>Active Exchanges</h2>
+        <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Meal</th>
+            <th scope="col">Next Location</th>
+            <th scope="col">Initiation Date</th>
+          </tr>
+        </thead>
+        <tbody>
          {% for exchange in curr_exchanges: %}
           <tr>
-            
-            <td align="left">>{{exchange.get_name2()}}</td>
-            <td align="right"> {{exchange.get_exch1_loc()}}</td>
-            <td width="20px"> {{exchange.get_status()}}</td>
+            <td>{{exchange.get_name2()}}</td>
+            <td> {{exchange.get_meal()}}</td>
+            {% if exchange.get_exch1_loc() == None %}
+            <td>Both clubs</td>
+            {% else %}
+            <td> Next</td>
+            {% endif %}
             <td> {{exchange.get_exp()}}</td>
           </tr>
          {% endfor %}
         {% endif %}
+         </tbody>
       </table>
 
 
       {% if past_exchanges|length == 0 %}
       <p>You have no past exchanges</p>
       {% else %}
-          <table>
-          <tr>
-  
-            <th>Name</th>
-            <th>Place</th>
-            <th>Meal</th>
-            <th>Completion date</th>
-            <th>Expiration date</th>
-      
-          </tr>
-           {% for exchange in past_exchanges: %}
-            <tr>
-              
-              <td align="left">>{{exchange.get_name2()}}</td>
-              <td align="right"> {{exchange.get_exch1_loc()}}</td>
-              <td width="20px"> {{exchange.get_status()}}</td>
-              <td> {{exchange.get_exp()}}</td>
-            </tr>
-           {% endfor %}
-          {% endif %}
+          <h2>Completed Exchanges</h2>
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Meal</th>
+                <th scope="col">Location 1</th>
+                <th scope="col">Date 1</th>
+                <th scope="col">Location 2</th>
+                <th scope="col">Date 2</th>
+              </tr>
+            </thead>
+            <tbody>
+             {% for exchange in past_exchanges: %}
+              <tr>
+                <td>{{exchange.get_name2()}}</td>
+                <td> {{exchange.get_meal()}}</td>
+                <td> {{exchange.get_exch1_loc()}}</td>
+                <td> {{exchange.get_exch1_date()}}</td>
+                <td> {{exchange.get_exch2_loc()}}</td>
+                <td> {{exchange.get_exch2_date()}}</td>
+              </tr>
+             {% endfor %}
+            {% endif %}
+             </tbody>
         </table>
       </div>
 

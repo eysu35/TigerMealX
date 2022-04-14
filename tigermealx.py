@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, request, make_response
 from keys import APP_SECRET_KEY
 from database.exchanges import Exchanges
 from database.students import Students
@@ -12,12 +12,10 @@ import auth
 def base():
     netid = auth.authenticate()
     name = Students.get_first_name_from_netid(netid)
-    # assume it's a name for now but need to also check for PUID
-    students = Students.search_students_by_name('')
-    print(netid)
+    
     # search_puid = Students.get_puid_from_name(search_name)
 
-    return render_template('index.html', students=students, name=name, netid=netid)
+    return render_template('index.html', name=name, netid=netid)
 
 @app.route('/exchanges/')
 def show_exchanges():
@@ -71,6 +69,22 @@ def post_new_exchange():
     puid2 = request.args.get('puid2')
     Exchanges.add_new_exchange(puid1, puid2)
     return
+
+@app.route('/searchresults', methods=['GET'])
+def search_results():
+    Name = request.args.get('name')
+    if len(Name) > 0:
+        students = Students.search_students_by_name(Name)
+        html = ''
+        pattern = "<tr><td width='130px'>%s</td><td width='130px'>%s</td><td width='130px'>%s</td></tr>"
+        for student in students:
+            html += pattern%(student.get_name(),student.get_netid(),student.get_puid())
+            
+    # assume it's a name for now but need to also check for PUID
+    else:
+        html = ''
+    response = make_response(html)
+    return response
 
 
 if __name__ == '__main__':

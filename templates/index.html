@@ -77,15 +77,12 @@
    <!-- Developmental! -->
    <div id="container">
        <div class="box">
-    <h2>Active Exchanges</h2>
+    <h2>Select a student to exchange with</h2>
     <input type="text" class="form-control" placeholder="Name" id="Name">
-    <table class="table table-bordered table-hover">
-
-    <tbody>
+    
         <div id="studentTable">
 
         </div>
-    </tbody>
   </table>
     </div>
     </div>
@@ -123,7 +120,10 @@
                       }
                    );
                 }
-       
+                function startexchange(puid)
+                {
+                  window.open("../exchangeportal?puid=" + puid, "_self");
+                }
                 function setup()
                 {
                    
@@ -139,23 +139,6 @@
 
     <!--  -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
-   <script>
-     
-    
-
-    const input = document.querySelector('input');
-    const log = document.getElementById('name');
-
-    input.addEventListener('change', updateValue);
-
-    function updateValue(e) {
-        
-
-        window.open('../exchangeportal?puid=' + e.target.value, value='_self');
-    }
-    </script>
-      
-    
     
  </body>
 </html>

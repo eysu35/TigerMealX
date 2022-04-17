@@ -75,9 +75,9 @@ def search_results():
     if len(Name) > 0:
         students = Students.search_students_by_name(Name)
         html = ''
-        pattern = "<tr><td width='130px'>%s</td><td width='130px'>%s</td><td width='130px'>%s</td></tr>"
+        pattern = "<tr onclick=\"../exchangeportal?puid2=%s\"><td width='130px'>%s</td><td width='130px'>%s</td><td width='130px'>%s</td></tr>"
         for student in students:
-            html += pattern%(student.get_name(),student.get_netid(),student.get_puid())
+            html += pattern%(student.get_puid(),student.get_name(),student.get_netid(),student.get_puid())
             
     # assume it's a name for now but need to also check for PUID
     else:

@@ -73,27 +73,7 @@
      }
    </style>
   {% include 'navbar.html' %}
-  <div id="container">
-    <div class="box">  
-    <!-- <input type='text' oninput='onInput()' id='input' list='studentList' /> -->
-    <form action="../exchangeportal" method="get">
-      <label for="student">Choose a student to swap with: </label><br>
-      
-    <input onselect="updateValue()" list="studentList" name="puid" id="student">
-    <datalist id='studentList'>
-      {% for student in students: %}
-      {% if student.get_netid()!=netid %}
-      
-      <option  onclick="updateValue()" value='{{student.get_puid()}}' id="{{student.get_name()}}">{{student.get_name()}}</option>
-      {% endif %}
-      {% endfor %}
-      </select>
-    </datalist>
-    <input type="hidden">
-  </form>
-   </div>
-   </div>
-
+  
    <!-- Developmental! -->
    <div id="container">
        <div class="box">

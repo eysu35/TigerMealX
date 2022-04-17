@@ -74,11 +74,11 @@ def search_results():
     Name = request.args.get('name')
     if len(Name) > 0:
         students = Students.search_students_by_name(Name)
-        html = '<table class="table table-bordered table-hover"><tbody>'
+        html = '<div class="table-wrapper-scroll-y my-custom-scrollbar"><table class="table table-bordered table-hover"><tbody>'
         pattern = "<tr onclick=\"startexchange(%s)\"><td width='130px'>%s</td><td width='130px'>%s</td></tr>"
         for student in students:
             html += pattern%(student.get_puid(),student.get_name(),student.get_netid())
-        html += '</tbody>'    
+        html += '</tbody></div>'    
     # assume it's a name for now but need to also check for PUID
     else:
         html = ''

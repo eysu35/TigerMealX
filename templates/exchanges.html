@@ -36,6 +36,15 @@
       p {
         text-align: center;
       }
+      .my-custom-scrollbar {
+        position: relative;
+        height: 30vh;
+        overflow: auto;
+        }
+        .table-wrapper-scroll-y {
+        display: block;
+        }
+
   </style>
   {% include 'navbar.html' %}
   <div class="exchanges-section">
@@ -44,6 +53,7 @@
     <p>You have no current exchanges</p>
     {% else %}
         <h2>Active Exchanges</h2>
+        <div class="table-wrapper-scroll-y my-custom-scrollbar">
         <table class="table table-bordered table-hover">
         <thead class="thead-light">
           <tr>
@@ -69,12 +79,14 @@
         {% endif %}
          </tbody>
       </table>
+      </div>
 
 
       {% if past_exchanges|length == 0 %}
       <p>You have no past exchanges</p>
       {% else %}
           <h2>Completed Exchanges</h2>
+          <div class="table-wrapper-scroll-y my-custom-scrollbar">
           <table class="table table-bordered table-hover">
             <thead class="thead-light">
               <tr>
@@ -100,6 +112,7 @@
             {% endif %}
              </tbody>
         </table>
+      </div>
       </div>
 
 </body>

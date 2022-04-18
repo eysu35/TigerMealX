@@ -33,6 +33,7 @@
             font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
             margin: auto;
             margin-top: 10vh;
+            padding: 1vh;
       }
       p {
         text-align: center;
@@ -78,10 +79,11 @@
             <td> {{exchange.get_exp()}}</td>
           </tr>
          {% endfor %}
-        {% endif %}
+        
          </tbody>
       </table>
     </div>
+    {% endif %}
       
 
       <h2>Completed Exchanges</h2>
@@ -111,10 +113,12 @@
                 <td> {{exchange.get_exch2_date()}}</td>
               </tr>
              {% endfor %}
-            {% endif %}
+            
              </tbody>
         </table>
       </div>
+      {% endif %}
+  </div>
       
 
 </body>

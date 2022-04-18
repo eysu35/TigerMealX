@@ -7,7 +7,7 @@ from send_email import send_email
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
 import auth
-# netid = None
+emails_enabled = True
 
 @app.route('/')
 @app.route('/index', methods=['GET'])
@@ -71,16 +71,24 @@ def initiate_exchange():
 
 @app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
-    netid = auth.authenticate()
-    name = Students.get_first_name_from_netid(netid)
+    netid1 = auth.authenticate()
     if request.method == 'POST':
         try:
-            netid1 = auth.authenticate()
+            name = Students.get_first_name_from_netid(netid1)
+
             puid1 = Students.get_puid_from_netid(netid1)
             puid2 = request.args.get('puid2')
             Exchanges.add_new_exchange(puid1, puid2)
 
-            send_email(Students.get_student_by_puid(puid2).get_name())
+            # get netid from puid for email purposes
+            student1 = Students.get_student_by_puid(puid1)
+            student2 = Students.get_student_by_puid(puid2)
+            netid2 = student2.get_netid()
+
+            if emails_enabled:
+                # send emails with the name of the other student
+                send_email(student2.get_name(), netid1)
+                send_email(student1.get_name(), netid2)
 
             html = render_template("index.html", name=name)
             response = make_response(html)

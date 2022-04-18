@@ -32,7 +32,7 @@
             right: 0;
             font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
             margin: auto;
-            margin-top: 15vh;
+            margin-top: 10vh;
       }
       p {
         text-align: center;
@@ -49,7 +49,7 @@
   </style>
   {% include 'navbar.html' %}
   <div class="exchanges-section">
-    <h2>Current Exchanges</h2>
+    <h2>Active Exchanges</h2>
     <!--- CURRENT EXCHANGE TABLE -->
     {% if curr_exchanges|length == 0 %}
     <p>You have no current exchanges</p>
@@ -61,7 +61,7 @@
           <tr>
             <th scope="col">Name</th>
             <th scope="col">Meal</th>
-            <th scope="col">Next Location</th>
+            <th scope="col">Locations Eaten At</th>
             <th scope="col">Expiration Date</th>
           </tr>
         </thead>
@@ -70,10 +70,10 @@
           <tr>
             <td>{{exchange.get_name2()}}</td>
             <td> {{exchange.get_meal()}}</td>
-            {% if exchange.get_exch1_loc_name() == None %}
-            <td>{{exchange.get_exch1_loc_name()[0]}}, {{exchange.get_exch2_loc_name()[1]}}</td>
+            {% if exchange.get_exch1_loc_id() == None %}
+            <td>None</td>
             {% else %}
-            <td> Next</td>
+            <td>{{exchange.get_exch1_loc_id()}}</td>
             {% endif %}
             <td> {{exchange.get_exp()}}</td>
           </tr>
@@ -81,13 +81,13 @@
         {% endif %}
          </tbody>
       </table>
+    </div>
       
 
-      <h2>Past Exchanges</h2>
+      <h2>Completed Exchanges</h2>
       {% if past_exchanges|length == 0 %}
       <p>You have no past exchanges</p>
       {% else %}
-          <h2>Completed Exchanges</h2>
           <div class="table-wrapper-scroll-y my-custom-scrollbar">
           <table class="table table-bordered table-hover">
             <thead class="thead-light">
@@ -105,9 +105,9 @@
               <tr>
                 <td>{{exchange.get_name2()}}</td>
                 <td> {{exchange.get_meal()}}</td>
-                <td> {{exchange.get_exch1_loc_name()}}</td>
+                <td> {{exchange.get_exch1_loc_id()}}</td>
                 <td> {{exchange.get_exch1_date()}}</td>
-                <td> {{exchange.get_exch2_loc_name()}}</td>
+                <td> {{exchange.get_exch2_loc_id()}}</td>
                 <td> {{exchange.get_exch2_date()}}</td>
               </tr>
              {% endfor %}
@@ -115,7 +115,7 @@
              </tbody>
         </table>
       </div>
-      </div>
+      
 
 </body>
 </html>

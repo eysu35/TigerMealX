@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>TigerMealX - Help</title>
 </head>
 <body>
@@ -41,6 +45,7 @@
             text-align: left;
             margin-left: 5%;
             margin-right: 5%;
+            font-size: large;
         }
         .matheyimage {
             margin: auto;
@@ -50,17 +55,68 @@
         
     </style>
     {% include 'navbar.html' %}
+        
     <div class="help-section">
-        <h1>Help</h1>
-        <h2>What is TigerMealX?</h2>
-        <p>TigerMealX is a new platform allowing Princeton University students to meal exchange more easily.</p>
-        <h2>What is a meal exchange?</h2>
-        <p>The Meal Exchange Program makes it possible for students with meal plans to dine with their friends at eating clubs, or between two different participating clubs, without spending additional funds. Administered jointly by the Inter-Club Council and Campus Dining, the program includes club-to-dining hall exchanges as well as club-to-club exchanges.</p>
-        <h2>How does TigerMealX work?</h2>
-        <p>TigerMealX is built in collaboration with Princeton Dining and interacts directly with the official university system to facilitate meal exchanges.</p>
-        <h2>Who can I swap with?</h2>
-        <p>You can swap with any other student on a dining hall plan or eating club plan.</p>
-    </div>
+        <div class="container" style="padding-top:1vh">
     
+    <h1>Help</h1>
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse1">What is TigerMealX?</a>
+        </h4>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse">
+        <div class="panel-body">
+            <p>TigerMealX is a new platform allowing Princeton University students to meal exchange more easily.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse2">What is a meal exchange?</a>
+        </h4>
+      </div>
+      <div id="collapse2" class="panel-collapse collapse">
+        <div class="panel-body">
+            <p>The Meal Exchange Program makes it possible for students with meal plans to dine with their friends at eating clubs, or between two different participating clubs, without spending additional funds. Administered jointly by the Inter-Club Council and Campus Dining, the program includes club-to-dining hall exchanges as well as club-to-club exchanges.</p>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse3">How does TigerMealX work?</a>
+        </h4>
+      </div>
+      <div id="collapse3" class="panel-collapse collapse">
+        <div class="panel-body">
+            <p>TigerMealX is built in collaboration with Princeton Dining and interacts directly with the official university system to facilitate meal exchanges.</p>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse4">Who can I swap with?</a>
+        </h4>
+      </div>
+      <div id="collapse4" class="panel-collapse collapse">
+        <div class="panel-body">
+            <p>You can swap with any other student on a dining hall plan or eating club plan.</p>
+        </div>
+      </div>
+    </div>
+  </div> 
+  </div>
+  </div>
 </body>
 </html>

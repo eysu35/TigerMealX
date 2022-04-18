@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, request, make_response
 from keys import APP_SECRET_KEY
 from database.exchanges import Exchanges
 from database.students import Students
+from send_email import send_email
 
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
@@ -77,6 +78,9 @@ def post_new_exchange():
             puid1 = Students.get_puid_from_netid(netid1)
             puid2 = request.args.get('puid2')
             Exchanges.add_new_exchange(puid1, puid2)
+
+            send_email(Students.get_student_by_puid(puid2).get_name())
+
             html = render_template("index.html", name=name)
             response = make_response(html)
             return response

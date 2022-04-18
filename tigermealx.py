@@ -7,7 +7,7 @@ from send_email import send_email
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
 import auth
-emails_enabled = False
+emails_enabled = True
 
 @app.route('/')
 @app.route('/index', methods=['GET'])

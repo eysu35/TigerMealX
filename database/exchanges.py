@@ -4,6 +4,31 @@ import random
 
 class Exchanges:
 
+    # get location name from location id
+    @classmethod
+    def get_exch_name(cls, loc_id):
+        stmt = f'''SELECT location_name FROM locations WHERE 
+        location_id = \'{loc_id}\''''
+        name = db_access.fetch_first_val(stmt)
+        return name
+
+    @classmethod
+    def get_plan_from_puid(cls, puid):
+        stmt = f'''SELECT meal_plan_id FROM students WHERE puid=\'
+                {puid}\''''
+        meal_plan_id = db_access.fetch_first_val(stmt)
+        print(meal_plan_id)
+
+        stmt = f'''SELECT location_id FROM student_plans WHERE 
+        meal_plan_id = \'{meal_plan_id}\''''
+        loc_id = db_access.fetch_first_val(stmt)
+
+        stmt = f'''SELECT location_name FROM locations WHERE 
+        location_id = \'{loc_id}\''''
+        loc_name = db_access.fetch_first_val(stmt)
+        print(loc_name)
+        return loc_name
+
     # returns current exchanges for studentid as a list of Exchange objects
     # can take string or integer PUID
     @classmethod
@@ -278,7 +303,8 @@ class Exchange:
                f'({self._status})'
 
     def __init__(self, puid1, name1, puid2, name2, meal,
-                 exch1_date, exch1_loc, exch2_date, exch2_loc, exp, status, mealx_id=None):
+                 exch1_date, exch1_loc_id, exch2_date, exch2_loc_id,
+                 exp, status, mealx_id=None):
         self._mealx_id = mealx_id
         self._puid1 = puid1
         self._puid2 = puid2
@@ -287,9 +313,9 @@ class Exchange:
         self._meal = meal
         self._status = status
         self._exch1_date = exch1_date
-        self._exch1_loc = exch1_loc
+        self._exch1_loc_id = exch1_loc_id
         self._exch2_date = exch2_date
-        self._exch2_loc = exch2_loc
+        self._exch2_loc_id = exch2_loc_id
         self._exp = exp
         self._init_date = None
 
@@ -297,13 +323,17 @@ class Exchange:
     def to_ordered_tuple_without_mealx_id(self):
         return self._puid1, self._puid2, self._meal, \
                self._exch1_date, \
-               self._exch1_loc, self._exch2_date, self._exch2_loc, self._exp, self._status
+               self._exch1_loc_id, self._exch2_date, \
+               self._exch2_loc_id, \
+               self._exp, self._status
 
     # returns tuple of table info in order of table columns for use in insert statement
     def to_ordered_tuple(self):
         return self._mealx_id, self._puid1, self._puid2, self._meal, \
                self._exch1_date, \
-               self._exch1_loc, self._exch2_date, self._exch2_loc, self._exp, self._status
+               self._exch1_loc_id, self._exch2_date, \
+               self._exch2_loc_id, \
+               self._exp, self._status
 
     def get_mealx_id(self):
         return self._mealx_id
@@ -323,6 +353,19 @@ class Exchange:
     def set_puid2(self, puid2):
         self._puid2 = puid2
 
+    def get_plans_from_puid(self):
+        puid1 = self.get_puid1()
+        print(puid1)
+        puid2 = self.get_puid2()
+        print(puid2)
+
+        plan1 = Exchanges.get_plan_from_puid(puid1)
+        print(plan1)
+        plan2 = Exchanges.get_plan_from_puid(puid2)
+        print(plan2)
+
+        return (plan1, plan2)
+
     def get_name1(self):
         return self._name1
 
@@ -341,17 +384,29 @@ class Exchange:
     def set_meal(self, meal):
         self._meal = meal
 
-    def get_exch1_loc(self):
-        return self._exch1_loc
+    def get_exch1_loc_id(self):
+        return self._exch1_loc_id
 
-    def set_exch1_loc(self, exch1_loc):
-        self._exch1_loc = exch1_loc
+    def set_exch1_loc_id(self, exch1_loc_id):
+        self._exch1_loc_id = exch1_loc_id
 
-    def get_exch2_loc(self):
-        return self._exch2_loc
+    # get name
+    def get_exch1_loc_name(self):
+        loc_id = self.get_exch1_loc_id()
+        loc_name = Exchanges.get_exch_name(loc_id)
+        return loc_name
 
-    def set_exch2_loc(self, exch2_loc):
-        self._exch2_loc = exch2_loc
+    def get_exch2_loc_id(self):
+        return self._exch2_loc_id
+
+    def set_exch2_loc_id(self, exch2_loc_id):
+        self._exch2_loc_id = exch2_loc_id
+
+    # get name
+    def get_exch2_loc_name(self):
+        loc_id = self.get_exch2_loc_id()
+        loc_name = Exchanges.get_exch_name(loc_id)
+        return loc_name
 
     def get_exch1_date(self):
         return self._exch1_date

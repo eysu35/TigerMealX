@@ -75,7 +75,7 @@ class Exchanges:
         status=\'Unused\')'''
 
         rows = db_access.fetchall(stmt)
-        print('past exchanges: ', rows)
+        # print('past exchanges: ', rows)
 
         for row in rows:
             if row is None:
@@ -127,10 +127,13 @@ class Exchanges:
         stmt = f'''DELETE FROM exchanges WHERE meal_exchange_id=
         \'{meal_exchange_id}\''''
 
-        db_access.execute(stmt)
+        db_access.execute_stmt(stmt)
 
+    # public method that validates the existence of an exchange between the
+    # students and updates the first or second meal accordingly
+    # returns (boolean success, error msg)
     @classmethod
-    def check_valid_exchange(cls, puid1, puid2, location_id, time):
+    def update_exchange(cls, puid1, puid2, location_id, time):
 
         stmt = f'''SELECT meal_exchange_id, meal, exchange1_date, 
         exchange1_location_id, exchange2_date, exchange2_location_id, 
@@ -139,7 +142,7 @@ class Exchanges:
         student2_puid =  \'{puid1}\')) AND status = \'Incomplete\' 
         ORDER BY expiration_date ASC'''
 
-        #No exchanges between these students
+        # No exchanges between these students
         exchanges = db_access.fetchall(stmt)
         if len(exchanges) == 0:
             return False, "No open exchange between these students."
@@ -154,7 +157,7 @@ class Exchanges:
         student2 = db_access.fetchone(stmt)
 
         # check if both students have valid plans for exchange
-        if (not student1[4] or not student2[4]):
+        if not student1[4] or not student2[4]:
             return False, "Student plan unable to exchange."
 
         # check if location_id matches one of student plans
@@ -166,7 +169,7 @@ class Exchanges:
                    meal_plan_id = \'{student2[3]}\''''
         loc2_id = db_access.fetch_first_val(stmt)
 
-        if ((location_id != loc1_id) and (location_id != loc2_id)):
+        if location_id != loc1_id and location_id != loc2_id:
             return False, "Invalid location for students to exchange meal."
 
         # determine which meal based on time
@@ -178,7 +181,8 @@ class Exchanges:
         elif (17 < hour < 22):
             meal = 'dinner'
         # error handling
-        else: meal = None
+        else:
+            return False, 'Not a valid meal time.'
 
         # at this point, validated open exchange between student 1
         # and student 2. Determine if attempting to exchange for the
@@ -190,7 +194,7 @@ class Exchanges:
             # if first exchange time is none, neither meal has been
             # completed, initiate first exchange
             if exchange[2] is None:
-                Exchanges.update_meal1(exchange_id, location_id, meal)
+                Exchanges._update_meal1(exchange_id, location_id, meal)
                 return True, "Exchange successfully updated!"
 
             # if first exchange has been completed, check right meal and
@@ -198,30 +202,31 @@ class Exchanges:
             if (exchange[1] == meal) and (exchange[3] != location_id):
                 valid_exchange_id = exchange_id
 
+        # maybe change the above logic to specify that the location is incorrect
+
         if valid_exchange_id is None:
             return False, "Students exchanging for wrong meal or " \
                           "wrong location."
 
-        Exchanges.update_meal2(valid_exchange_id, location_id)
+        Exchanges._update_meal2(valid_exchange_id, location_id)
         return True, "Exchange successfully updated!"
 
     # sets meal 1 info for a validated exchange
     @classmethod
-    def update_meal1(cls, mealx_id, location_id, meal):
+    def _update_meal1(cls, mealx_id, location_id, meal):
         exchange1_date = date.today()
         exp_date = exchange1_date + timedelta(days=30)
 
         stmt = f'''UPDATE exchanges SET meal = \'{meal}\', 
         exchange1_date = \'{exchange1_date}\', 
         exchange1_location_id = \'{location_id}\',
-        expiration_date = \'{exp_date}\',
-        WHERE meal_exchange_id=\'{mealx_id}\''''
+        expiration_date = \'{exp_date}\' WHERE meal_exchange_id=\'{mealx_id}\''''
 
         db_access.execute_stmt(stmt)
 
     # sets meal 2 info, mark exchange as complete
     @classmethod
-    def update_meal2(cls, mealx_id, location_id):
+    def _update_meal2(cls, mealx_id, location_id):
         exchange2_date = date.today()
 
         stmt = f'''UPDATE exchanges SET 
@@ -230,7 +235,7 @@ class Exchanges:
         status = \'Complete\'
         WHERE meal_exchange_id=\'{mealx_id}\''''
 
-        db_access.execute(stmt)
+        db_access.execute_stmt(stmt)
 
     # regularly comb through exchanges to check dates and set
     # exchange objects statuses accordingly
@@ -255,7 +260,7 @@ class Exchanges:
             if exp_date > today:
                 stmt = f'''UPDATE exchanges SET status = \'Expired\'
                         WHERE meal_exchange_id=\'{mealx_id}\''''
-                db_access.execute(stmt)
+                db_access.execute_stmt(stmt)
                 expired.append(mealx_id)
 
             # mark any exchanges that have not been used within the
@@ -264,7 +269,7 @@ class Exchanges:
                     (exchange1_date is None):
                 stmt = f'''UPDATE exchanges SET status = \'Unused\'
                         WHERE meal_exchange_id=\'{mealx_id}\''''
-                db_access.execute(stmt)
+                db_access.execute_stmt(stmt)
 
             # send any exchanges that are about to expire back
             if exp_date == (today + timedelta(days=7)):
@@ -444,9 +449,7 @@ def test():
     # exh = Exchanges.get_current_exchanges(112345678)
     # for e in exh:
     #     print(e)
-
-    Exchanges.add_new_exchange('Shayna Maleson', 'Ellen Su', 'breakfast')
-
+    pass
 
 if __name__ == '__main__':
     test()

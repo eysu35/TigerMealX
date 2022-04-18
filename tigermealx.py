@@ -7,6 +7,7 @@ from send_email import send_email
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
 import auth
+emails_enabled = True
 
 @app.route('/')
 @app.route('/index', methods=['GET'])
@@ -20,14 +21,14 @@ def base():
 
 @app.route('/exchanges/')
 def show_exchanges():
+    netid = auth.authenticate()
     try:
-        netid = auth.authenticate()
         name = Students.get_first_name_from_netid(netid)
         studentid = Students.get_puid_from_netid(netid)
         curr_exchanges = Exchanges.get_current_exchanges(studentid)
         past_exchanges = Exchanges.get_past_exchanges(studentid)
     except Exception as e:
-        print("tigermealx.py error: " + str(e))
+        print("tigermealx.py error [30]: " + str(e))
         return render_template('errordb.html')
     return render_template('exchanges.html',
                            curr_exchanges=curr_exchanges,
@@ -54,12 +55,12 @@ def initiate_exchange():
     netid = auth.authenticate()
     name = Students.get_first_name_from_netid(netid)
     puid2 = request.args.get('puid')
-    if(puid2==None or puid2==''):
+    if puid2 is None or puid2 == '':
         return render_template('error404.html')
     try:
         student2 = Students.get_student_by_puid(puid2)
     except Exception as e:
-        print("tigermealx.py error: " + str(e))
+        print("tigermealx.py error [62]: " + str(e))
         return render_template('error404.html')
     
     name2 = student2.get_name()
@@ -70,22 +71,30 @@ def initiate_exchange():
 
 @app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
-    netid = auth.authenticate()
-    name = Students.get_first_name_from_netid(netid)
+    netid1 = auth.authenticate()
     if request.method == 'POST':
         try:
-            netid1 = auth.authenticate()
+            name = Students.get_first_name_from_netid(netid1)
+
             puid1 = Students.get_puid_from_netid(netid1)
             puid2 = request.args.get('puid2')
             Exchanges.add_new_exchange(puid1, puid2)
 
-            send_email(Students.get_student_by_puid(puid2).get_name())
+            # get netid from puid for email purposes
+            student1 = Students.get_student_by_puid(puid1)
+            student2 = Students.get_student_by_puid(puid2)
+            netid2 = student2.get_netid()
+
+            if emails_enabled:
+                # send emails with the name of the other student
+                send_email(student2.get_name(), netid1)
+                send_email(student1.get_name(), netid2)
 
             html = render_template("index.html", name=name)
             response = make_response(html)
             return response
         except Exception as e:
-            print("tigermealx.py error: " + str(e))
+            print("tigermealx.py error [88]: " + str(e))
             return render_template('error404.html')
 
     
@@ -97,7 +106,7 @@ def search_results():
         try:
             students = Students.search_students_by_name(Name)
         except Exception as e:
-            print("tigermealx.py error: " + str(e))
+            print("tigermealx.py error [100]: " + str(e))
             return render_template('errordb.html')
         html = '<div class="table-wrapper-scroll-y my-custom-scrollbar"><table class="table table-bordered table-hover"><tbody>'
         pattern = "<tr onclick=\"startexchange(%s)\"><td width='130px'>%s</td><td width='130px'>%s</td></tr>"

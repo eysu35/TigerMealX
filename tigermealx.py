@@ -19,11 +19,15 @@ def base():
 
 @app.route('/exchanges/')
 def show_exchanges():
-    netid = auth.authenticate()
-    name = Students.get_first_name_from_netid(netid)
-    studentid = Students.get_puid_from_netid(netid)
-    curr_exchanges = Exchanges.get_current_exchanges(studentid)
-    past_exchanges = Exchanges.get_past_exchanges(studentid)
+    try:
+        netid = auth.authenticate()
+        name = Students.get_first_name_from_netid(netid)
+        studentid = Students.get_puid_from_netid(netid)
+        curr_exchanges = Exchanges.get_current_exchanges(studentid)
+        past_exchanges = Exchanges.get_past_exchanges(studentid)
+    except Exception as e:
+        print("tigermealx.py error: " + str(e))
+        return render_template('errordb.html')
     return render_template('exchanges.html',
                            curr_exchanges=curr_exchanges,
                            past_exchanges=past_exchanges, name=name)
@@ -50,12 +54,12 @@ def initiate_exchange():
     name = Students.get_first_name_from_netid(netid)
     puid2 = request.args.get('puid')
     if(puid2==None or puid2==''):
-        return render_template('error.html', error_msg="missing puid")
+        return render_template('error404.html')
     try:
         student2 = Students.get_student_by_puid(puid2)
     except Exception as e:
-        print('tigermealx: ' + str(e))
-        return render_template('error.html', error_msg="invalid puid")
+        print("tigermealx.py error: " + str(e))
+        return render_template('error404.html')
     
     name2 = student2.get_name()
     location2 = Students.get_location_name_from_puid(puid2)
@@ -65,14 +69,20 @@ def initiate_exchange():
 
 @app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
+    netid = auth.authenticate()
+    name = Students.get_first_name_from_netid(netid)
     if request.method == 'POST':
-        netid1 = auth.authenticate()
-        puid1 = Students.get_puid_from_netid(netid1)
-        puid2 = request.args.get('puid2')
-        Exchanges.add_new_exchange(puid1, puid2)
-        html = render_template("index.html")
-        response = make_response(html)
-        return response
+        try:
+            netid1 = auth.authenticate()
+            puid1 = Students.get_puid_from_netid(netid1)
+            puid2 = request.args.get('puid2')
+            Exchanges.add_new_exchange(puid1, puid2)
+            html = render_template("index.html", name=name)
+            response = make_response(html)
+            return response
+        except Exception as e:
+            print("tigermealx.py error: " + str(e))
+            return render_template('error404.html')
 
     
 
@@ -80,7 +90,11 @@ def post_new_exchange():
 def search_results():
     Name = request.args.get('name')
     if len(Name) > 0:
-        students = Students.search_students_by_name(Name)
+        try:
+            students = Students.search_students_by_name(Name)
+        except Exception as e:
+            print("tigermealx.py error: " + str(e))
+            return render_template('errordb.html')
         html = '<div class="table-wrapper-scroll-y my-custom-scrollbar"><table class="table table-bordered table-hover"><tbody>'
         pattern = "<tr onclick=\"startexchange(%s)\"><td width='130px'>%s</td><td width='130px'>%s</td></tr>"
         for student in students:

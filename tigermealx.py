@@ -110,6 +110,11 @@ def search_results():
     response = make_response(html)
     return response
 
+@app.errorhandler(Exception)
+def server_error(err):
+    app.logger.exception(err)
+    return render_template('error404.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # auto restart

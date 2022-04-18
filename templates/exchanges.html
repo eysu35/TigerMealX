@@ -48,11 +48,12 @@
   </style>
   {% include 'navbar.html' %}
   <div class="exchanges-section">
+    <h2>Current Exchanges</h2>
     <!--- CURRENT EXCHANGE TABLE -->
     {% if curr_exchanges|length == 0 %}
     <p>You have no current exchanges</p>
     {% else %}
-        <h2>Active Exchanges</h2>
+        
         <div class="table-wrapper-scroll-y my-custom-scrollbar">
         <table class="table table-bordered table-hover">
         <thead class="thead-light">
@@ -79,9 +80,9 @@
         {% endif %}
          </tbody>
       </table>
-      </div>
+      
 
-
+      <h2>Past Exchanges</h2>
       {% if past_exchanges|length == 0 %}
       <p>You have no past exchanges</p>
       {% else %}

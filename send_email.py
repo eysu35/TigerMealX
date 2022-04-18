@@ -10,7 +10,8 @@ def send_email(name):
     to = ['arinm@princeton.edu']
     # to = ['tigermealx@gmail.com']
     subject = 'Meal Exchange Notification'
-    body = 'Scan this barcode when completing your meal exchange with ' + name + '.'
+    body = 'You have successfully initiated your meal exchange with '\
+           + name + '. Please complete both meals within 30 days!'
 
     email_text = """\
     From: %s

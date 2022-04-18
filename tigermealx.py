@@ -64,6 +64,7 @@ def initiate_exchange():
 @app.route('/postnewexchange')
 def post_new_exchange():
     netid1 = auth.authenticate()
+    print('asdf')
     puid1 = Students.get_puid_from_netid(netid1)
     puid2 = request.args.get('puid2')
     Exchanges.add_new_exchange(puid1, puid2)

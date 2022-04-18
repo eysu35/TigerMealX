@@ -2,7 +2,6 @@ from datetime import date, datetime, timedelta
 from database import db_access
 import random
 
-
 class Exchanges:
 
     # returns current exchanges for studentid as a list of Exchange objects
@@ -218,7 +217,9 @@ class Exchanges:
 
         exchanges = db_access.fetchall(stmt)
 
-        almost_expired_exchanges = []
+        one_week = []
+        three_days = []
+        expired = []
         for exchange in exchanges:
             mealx_id = exchange[0]
             exp_date = exchange[1]
@@ -230,6 +231,7 @@ class Exchanges:
                 stmt = f'''UPDATE exchanges SET status = \'Expired\'
                         WHERE meal_exchange_id=\'{mealx_id}\''''
                 db_access.execute(stmt)
+                expired.append(mealx_id)
 
             # mark any exchanges that have not been used within the
             # first five days as an unused exchange to clean table
@@ -241,12 +243,31 @@ class Exchanges:
 
             # send any exchanges that are about to expire back
             if exp_date == (today + timedelta(days=7)):
-                almost_expired_exchanges.append((mealx_id, '7 days'))
+                one_week.append(mealx_id)
 
             if exp_date == (today + timedelta(days=3)):
-                almost_expired_exchanges.append((mealx_id, '2 days'))
+                three_days.append(mealx_id)
 
-        return almost_expired_exchanges
+        # return all exchanges that are expired or about to expire in
+        # one week or in 3 days
+        return (expired, one_week, three_days)
+
+    # return netids of 2 students given the mealx_id
+    @classmethod
+    def get_netid_from_mealx_id(cls, mealx_id):
+        stmt = f'''SELECT student1_puid, student2_puid FROM exchanges 
+        WHERE meal_exchange_id = \'{mealx_id}\''''
+        puid1, puid2 = db_access.fetchone(stmt)
+
+        stmt = f'''SELECT netid FROM students WHERE puid = 
+        \'{puid1}\''''
+        netid1 = db_access.fetch_first_val(stmt)
+
+        stmt = f'''SELECT netid FROM students WHERE puid = 
+                \'{puid2}\''''
+        netid2 = db_access.fetch_first_val(stmt)
+
+        return(netid1, netid2)
 
 # getters and setters unfinished
 class Exchange:

@@ -75,7 +75,7 @@ class Exchanges:
         status=\'Unused\')'''
 
         rows = db_access.fetchall(stmt)
-        print('past exchanges: ', rows)
+        # print('past exchanges: ', rows)
 
         for row in rows:
             if row is None:

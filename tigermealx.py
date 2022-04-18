@@ -94,8 +94,8 @@ def post_new_exchange():
             response = make_response(html)
             return response
         except Exception as e:
-            print("tigermealx.py error [88]: " + str(e))
-            return render_template('error404.html')
+            print("tigermealx.py error: " + str(e))
+            return render_template('error404.html', name = name)
 
     
 
@@ -121,8 +121,10 @@ def search_results():
 
 @app.errorhandler(Exception)
 def server_error(err):
+    netid = auth.authenticate()
+    name = Students.get_first_name_from_netid(netid)
     app.logger.exception(err)
-    return render_template('error404.html')
+    return render_template('error404.html', name=name)
 
 
 if __name__ == '__main__':

@@ -46,6 +46,8 @@ def help_page():
 
 @app.route('/exchangeportal')
 def initiate_exchange():
+    netid = auth.authenticate()
+    name = Students.get_first_name_from_netid(netid)
     puid2 = request.args.get('puid')
     if(puid2==None or puid2==''):
         return render_template('error.html', error_msg="missing puid")
@@ -57,7 +59,7 @@ def initiate_exchange():
     
     name2 = student2.get_name()
     location2 = Students.get_location_name_from_puid(puid2)
-    return render_template('exchange_init.html', puid2=puid2,
+    return render_template('exchange_init.html',name=name, puid2=puid2,
                            name2=name2,
                            location2=location2)
 

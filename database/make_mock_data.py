@@ -264,5 +264,11 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    rand_id = str(uuid.uuid4())
     #add_ellen_and_shayna_exchanges()
+    add_data('students', ['920261411',
+                          'bb5943',
+                          'Brianna Butler',
+                          rand_id,
+                          True])

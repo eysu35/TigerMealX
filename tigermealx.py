@@ -61,14 +61,18 @@ def initiate_exchange():
                            name2=name2,
                            location2=location2)
 
-@app.route('/postnewexchange')
+@app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
-    netid1 = auth.authenticate()
-    print('asdf')
-    puid1 = Students.get_puid_from_netid(netid1)
-    puid2 = request.args.get('puid2')
-    Exchanges.add_new_exchange(puid1, puid2)
-    return
+    if request.method == 'POST':
+        netid1 = auth.authenticate()
+        puid1 = Students.get_puid_from_netid(netid1)
+        puid2 = request.args.get('puid2')
+        Exchanges.add_new_exchange(puid1, puid2)
+        html = render_template("index.html")
+        response = make_response(html)
+        return response
+
+    
 
 @app.route('/searchresults', methods=['GET'])
 def search_results():

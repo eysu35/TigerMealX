@@ -1,4 +1,4 @@
-from config import config
+from config1 import config
 import psycopg2
 
 # opens and closes connection, returns list of rows retrieved by executing stmt

@@ -4,6 +4,7 @@ from database.exchanges import Exchanges
 from database.students import Students
 from send_email import send_email
 
+
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
 import auth
@@ -42,6 +43,12 @@ def faq():
 
     return render_template('about.html', name=name)
 
+@app.route('/admin/')
+def admin_page():
+    netid = auth.authenticate()
+    name = Students.get_first_name_from_netid(netid)
+
+    return render_template('admin.html', name=name)
 
 @app.route('/help/')
 def help_page():
@@ -98,6 +105,19 @@ def post_new_exchange():
             return render_template('error404.html', name = name)
 
     
+@app.route('/completeexchange', methods=['GET']) #Could be POST?
+def complete_exchange():
+    netid1 = request.args.get('netid1')
+    netid2 = request.args.get('netid2')
+    location = request.args.get('location')
+    time = request.args.get('time')
+
+    success, msg = Exchanges.update_exchange(netid1, netid2, location, time)
+    print(msg)
+
+    return render_template('admin.html', name=name)
+
+
 
 @app.route('/searchresults', methods=['GET'])
 def search_results():

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>TigerMealX - FAQs</title>
+</head>
+<body>
+    <style>
+        body {
+           min-height: 100vh;
+           background-image: url('../static/background.jpg');
+           background-position: top center;
+           background-repeat: no-repeat;
+           background-size:cover;
+        }
+        .vertical-scrollable> .row {
+          position: absolute;
+          top: 120px;
+          bottom: 100px;
+          left: 180px;
+          width: 50%;
+          overflow-y: scroll; 
+        }
+        .rules-section {
+            background-color: white;
+            border-radius: 13px;
+            width: 70%;
+            position: unset;
+            top:15%;
+            left: 0;
+            right: 0;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            margin: auto;
+            margin-top: 20vh;
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            text-align: left;
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+        p {
+            text-align: left;
+            margin-right: 5%;
+            font-size: medium;
+        }            
+    </style>
+    {% include 'navbar.html' %}
+    <div class="rules-section">
+        <div class="container" style="padding-top:1vh">
+            <h1>Admin Page</h1>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">netid 1</span>
+            </div>
+            <input type="text" class="form-control" id="netid1Input" aria-label="netid 1" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon2">netid 2</span>
+            </div>
+            <input type="text" class="form-control" id="netid2Input" aria-label="netid 2" aria-describedby="basic-addon2">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">location</span>
+            </div>
+            <input type="text" class="form-control" id="locationInput" aria-label="location" aria-describedby="basic-addon3">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon4">time</span>
+            </div>
+            <input type="text" class="form-control" id="timeInput" aria-label="time" aria-describedby="basic-addon4">
+        </div>
+        <input class="btn btn-primary btn-large btn-block" id="submitButton" type="submit" value="Submit">
+        
+    </div>
+
+    <script>
+        'use strict';
+
+        function handleResponse(response){
+            $("#netid1Input").val("");
+            $("#netid2Input").val("");
+            $("#locationInput").val("");
+            $("#timeInput").val("");
+        }
+
+        let request = null;
+
+        function getResults() 
+        {
+           let netid1 = $('#netid1Input').val();
+           let netid2 = $('#netid2Input').val();
+           let location = $('#locationInput').val();
+           let time = $('#timeInput').val();
+
+           netid1 = encodeURIComponent(netid1)
+           netid2 = encodeURIComponent(netid2)
+           location = encodeURIComponent(location)
+           time = encodeURIComponent(time) 
+
+           let url = '/completeexchange?netid1=' + netid1 + '&netid2=' + netid2 + '&location=' + location + '&time=' + time
+
+           if (request != null)
+              request.abort();
+
+           request = $.ajax(
+              {
+                 type: 'GET',
+                 url: url,
+                 success: handleResponse
+              }
+           );
+        }
+
+        function setup()
+        {
+           $('#submitButton').click(getResults);
+        }
+
+        $('document').ready(setup);
+     </script>
+    
+    <!-- Complete first of meal exchange -->
+    
+    <br><br>
+</body>
+</html>

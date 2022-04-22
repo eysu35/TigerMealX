@@ -96,7 +96,6 @@ class Exchanges:
                                 std2_name, row[3], row[4], row[5], row[6],
                                 row[7], row[8], row[9], mealx_id=row[0])
             past_exchanges.append(exch_obj)
-            print(past_exchanges)
 
         return past_exchanges
 
@@ -452,6 +451,7 @@ def test():
     # for e in exh:
     #     print(e)
     pass
+
 
 if __name__ == '__main__':
     test()

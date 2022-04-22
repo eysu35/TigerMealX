@@ -114,9 +114,7 @@ def complete_exchange():
 
     success, msg = Exchanges.update_exchange(netid1, netid2, location, time)
     print(msg)
-
-    return render_template('admin.html', name=name)
-
+    return msg
 
 
 @app.route('/searchresults', methods=['GET'])

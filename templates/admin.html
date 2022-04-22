@@ -87,10 +87,7 @@
         'use strict';
 
         function handleResponse(response){
-            $("#netid1Input").val("");
-            $("#netid2Input").val("");
-            $("#locationInput").val("");
-            $("#timeInput").val("");
+            $("#update_msg").html(response);
         }
 
         let request = null;

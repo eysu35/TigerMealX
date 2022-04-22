@@ -111,11 +111,11 @@ class Exchanges:
         stmt = f'''SELECT student_name FROM students WHERE 
             puid=\'{puid2}\''''
         student2_name = db_access.fetch_first_val(stmt)
-
+        exp_date = date.today + timedelta(days=30)
         exchange = Exchange(puid1, student1_name,
                             puid2, student2_name,
                             None, None, None, None, None,
-                            str(date.today()), 'Incomplete', mealx_id=None)
+                            str(exp_date), 'Incomplete', mealx_id=None)
 
         stmt = '''INSERT INTO exchanges(student1_puid, 
         student2_puid, meal, exchange1_date, exchange1_location_id, 

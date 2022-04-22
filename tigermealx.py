@@ -120,7 +120,9 @@ def complete_exchange():
 
     success, msg = Exchanges.update_exchange(puid1, puid2, location_id, time)
     print(msg)
-    return msg
+
+    return render_template('admin.html', name=name)
+
 
 
 @app.route('/searchresults', methods=['GET'])

@@ -79,30 +79,32 @@ def initiate_exchange():
 @app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
     netid1 = auth.authenticate()
-    if request.method == 'POST':
-        try:
-            name = Students.get_first_name_from_netid(netid1)
+    # if request.method == 'GET':
+    try:
+        name = Students.get_first_name_from_netid(netid1)
 
-            puid1 = Students.get_puid_from_netid(netid1)
-            puid2 = request.args.get('puid2')
-            Exchanges.add_new_exchange(puid1, puid2)
+        puid1 = Students.get_puid_from_netid(netid1)
+        puid2 = request.args.get('puid2')
+        Exchanges.add_new_exchange(puid1, puid2)
 
-            # get netid from puid for email purposes
-            student1 = Students.get_student_by_puid(puid1)
-            student2 = Students.get_student_by_puid(puid2)
-            netid2 = student2.get_netid()
+        # get netid from puid for email purposes
+        student1 = Students.get_student_by_puid(puid1)
+        student2 = Students.get_student_by_puid(puid2)
+        netid2 = student2.get_netid()
 
-            if emails_enabled:
-                # send emails with the name of the other student
-                send_email(student2.get_name(), netid1)
-                send_email(student1.get_name(), netid2)
+        if emails_enabled:
+            # send emails with the name of the other student
+            send_email(student2.get_name(), netid1)
+            send_email(student1.get_name(), netid2)
 
-            html = render_template("index.html", name=name)
-            response = make_response(html)
-            return response
-        except Exception as e:
-            print("tigermealx.py error: " + str(e))
-            return render_template('error404.html', name = name)
+        html = render_template("index.html", name=name)
+        response = make_response(html)
+        return response
+    except Exception as e:
+        print("tigermealx.py error: " + str(e))
+        return render_template('error404.html', name = name)
+
+
 
     
 @app.route('/completeexchange', methods=['GET']) #Could be POST?

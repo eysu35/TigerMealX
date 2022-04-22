@@ -6,7 +6,7 @@ class Exchanges:
 
     # get location name from location id
     @classmethod
-    def get_exch_name(cls, loc_id):
+    def get_loc_name_from_id(cls, loc_id):
         stmt = f'''SELECT location_name FROM locations WHERE 
         location_id = \'{loc_id}\''''
         name = db_access.fetch_first_val(stmt)
@@ -44,12 +44,14 @@ class Exchanges:
             if row is None:
                 return None
 
+            print(row)
             puid1 = row[1]
             puid2 = row[2]
 
             stmt_std1_name = f'''SELECT student_name FROM 
             students WHERE puid=\'{puid1}\''''
             std1_name = db_access.fetch_first_val(stmt_std1_name)
+            print(std1_name)
 
             stmt_std2_name = f'''SELECT student_name FROM 
             students WHERE puid=\'{puid2}\''''
@@ -300,6 +302,14 @@ class Exchanges:
 
         return(netid1, netid2)
 
+    @classmethod
+    def get_loc_id_from_loc_name(cls, loc_name):
+        stmt = f'''SELECT location_id FROM locations WHERE LOWER(location_name)=LOWER(\'{loc_name}\')'''
+        loc_id = db_access.fetch_first_val(stmt)
+        print(loc_id)
+        return loc_id
+
+
 # getters and setters unfinished
 class Exchange:
 
@@ -320,8 +330,10 @@ class Exchange:
         self._status = status
         self._exch1_date = exch1_date
         self._exch1_loc_id = exch1_loc_id
+        self._exch1_location = Exchanges.get_loc_name_from_id(exch1_loc_id)
         self._exch2_date = exch2_date
         self._exch2_loc_id = exch2_loc_id
+        self._exch2_location = Exchanges.get_loc_name_from_id(exch2_loc_id)
         self._exp = exp
         self._init_date = None
 
@@ -398,9 +410,7 @@ class Exchange:
 
     # get name
     def get_exch1_loc_name(self):
-        loc_id = self.get_exch1_loc_id()
-        loc_name = Exchanges.get_exch_name(loc_id)
-        return loc_name
+        return self._exch1_location
 
     def get_exch2_loc_id(self):
         return self._exch2_loc_id
@@ -410,9 +420,7 @@ class Exchange:
 
     # get name
     def get_exch2_loc_name(self):
-        loc_id = self.get_exch2_loc_id()
-        loc_name = Exchanges.get_exch_name(loc_id)
-        return loc_name
+        return self._exch2_location
 
     def get_exch1_date(self):
         return self._exch1_date

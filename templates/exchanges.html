@@ -74,7 +74,7 @@
             {% if exchange.get_exch1_loc_id() == None %}
             <td>None</td>
             {% else %}
-            <td>{{exchange.get_exch1_loc_id()}}</td>
+            <td>{{exchange.get_exch1_loc_name()}}</td>
             {% endif %}
             <td> {{exchange.get_exp()}}</td>
           </tr>
@@ -107,9 +107,9 @@
               <tr>
                 <td>{{exchange.get_name2()}}</td>
                 <td> {{exchange.get_meal()}}</td>
-                <td> {{exchange.get_exch1_loc_id()}}</td>
+                <td> {{exchange.get_exch1_loc_name()}}</td>
                 <td> {{exchange.get_exch1_date()}}</td>
-                <td> {{exchange.get_exch2_loc_id()}}</td>
+                <td> {{exchange.get_exch2_loc_name()}}</td>
                 <td> {{exchange.get_exch2_date()}}</td>
               </tr>
              {% endfor %}

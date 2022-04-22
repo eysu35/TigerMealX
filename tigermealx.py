@@ -109,10 +109,16 @@ def post_new_exchange():
 def complete_exchange():
     netid1 = request.args.get('netid1')
     netid2 = request.args.get('netid2')
-    location = request.args.get('location')
+
+    puid1 = Students.get_puid_from_netid(netid1)
+    puid2 = Students.get_puid_from_netid(netid2)
+
+    location_name = request.args.get('location').strip()
     time = request.args.get('time')
 
-    success, msg = Exchanges.update_exchange(netid1, netid2, location, time)
+    location_id = Exchanges.get_loc_id_from_loc_name(location_name)
+
+    success, msg = Exchanges.update_exchange(puid1, puid2, location_id, time)
     print(msg)
     return msg
 

@@ -111,7 +111,7 @@ class Exchanges:
         stmt = f'''SELECT student_name FROM students WHERE 
             puid=\'{puid2}\''''
         student2_name = db_access.fetch_first_val(stmt)
-        exp_date = date.today + timedelta(days=30)
+        exp_date = date.today() + timedelta(days=30)
         exchange = Exchange(puid1, student1_name,
                             puid2, student2_name,
                             None, None, None, None, None,

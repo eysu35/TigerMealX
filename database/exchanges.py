@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from database import db_access
 import random
 
@@ -133,7 +133,7 @@ class Exchanges:
     # students and updates the first or second meal accordingly
     # returns (boolean success, error msg)
     @classmethod
-    def update_exchange(cls, puid1, puid2, location_id, time):
+    def update_exchange(cls, puid1, puid2, location_id, meal_time):
 
         stmt = f'''SELECT meal_exchange_id, meal, exchange1_date, 
         exchange1_location_id, exchange2_date, exchange2_location_id, 
@@ -173,12 +173,14 @@ class Exchanges:
             return False, "Invalid location for students to exchange meal."
 
         # determine which meal based on time
-        hour = int(str(time).split(':')[0])
-        if (7 < hour < 10):
+        hour = int(str(meal_time).split(':')[0])
+        min = int(str(meal_time).split(':')[1])
+        meal_time = time(hour, min,0)
+        if (time(6,30,0) <= meal_time <= time(11,10,0)):
             meal = 'breakfast'
-        elif (11 < hour < 14):
+        elif (time(11,15,0) <= meal_time <= time(15,0,0)):
             meal = 'lunch'
-        elif (17 < hour < 22):
+        elif (time(15,10,0) <= meal_time <= time(22,0,0)):
             meal = 'dinner'
         # error handling
         else:

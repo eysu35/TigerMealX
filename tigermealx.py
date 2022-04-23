@@ -20,6 +20,7 @@ def base():
 
     return render_template('index.html', name=name, netid=netid)
 
+
 @app.route('/exchanges/')
 def show_exchanges():
     netid = auth.authenticate()

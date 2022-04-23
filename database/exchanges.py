@@ -17,7 +17,6 @@ class Exchanges:
         stmt = f'''SELECT meal_plan_id FROM students WHERE puid=\'
                 {puid}\''''
         meal_plan_id = db_access.fetch_first_val(stmt)
-        print(meal_plan_id)
 
         stmt = f'''SELECT location_id FROM student_plans WHERE 
         meal_plan_id = \'{meal_plan_id}\''''
@@ -26,7 +25,6 @@ class Exchanges:
         stmt = f'''SELECT location_name FROM locations WHERE 
         location_id = \'{loc_id}\''''
         loc_name = db_access.fetch_first_val(stmt)
-        print(loc_name)
         return loc_name
 
     # returns current exchanges for studentid as a list of Exchange objects
@@ -75,7 +73,6 @@ class Exchanges:
         AND (status=\'Complete\' OR status=\'Expired\' OR status=\'Unused\') ORDER BY exchange2_date'''
 
         rows = db_access.fetchall(stmt)
-        # print('past exchanges: ', rows)
 
         for row in rows:
             if row is None:
@@ -304,7 +301,6 @@ class Exchanges:
     def get_loc_id_from_loc_name(cls, loc_name):
         stmt = f'''SELECT location_id FROM locations WHERE LOWER(location_name)=LOWER(\'{loc_name}\')'''
         loc_id = db_access.fetch_first_val(stmt)
-        print(loc_id)
         return loc_id
 
 
@@ -369,16 +365,12 @@ class Exchange:
 
     def get_plans_from_puid(self):
         puid1 = self.get_puid1()
-        print(puid1)
         puid2 = self.get_puid2()
-        print(puid2)
 
         plan1 = Exchanges.get_plan_from_puid(puid1)
-        print(plan1)
         plan2 = Exchanges.get_plan_from_puid(puid2)
-        print(plan2)
 
-        return (plan1, plan2)
+        return plan1, plan2
 
     def get_name1(self):
         return self._name1

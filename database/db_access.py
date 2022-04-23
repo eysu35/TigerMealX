@@ -1,6 +1,7 @@
 from config import config
 import psycopg2
 
+
 # opens and closes connection, returns list of rows retrieved by executing stmt
 def fetchall(stmt):
     try:
@@ -13,12 +14,11 @@ def fetchall(stmt):
         cur.execute(stmt)
         return cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print('db_access.py: fetchall: ', error)
     finally:
         if conn is not None:
             cur.close()
             conn.close()
-            # print("fetch all success")
 
 
 # opens and closes connection, returns first row retrieved by executing stmt
@@ -33,12 +33,11 @@ def fetchone(stmt):
         cur.execute(stmt)
         return cur.fetchone()
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print('db_access.py: fetchone: ', error)
     finally:
         if conn is not None:
             cur.close()
             conn.close()
-            # print("fetch one success")
 
 
 # opens and closes connection, returns first val in first row retrieved by executing stmt (ex. name)
@@ -53,12 +52,11 @@ def fetch_first_val(stmt):
         cur.execute(stmt)
         return cur.fetchone()[0]
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print('db_access.py: fetch_first_val: ', error)
     finally:
         if conn is not None:
             cur.close()
             conn.close()
-            # print("fetch first val success")
 
 
 # inserts data list into db using statement
@@ -73,7 +71,7 @@ def insert_data(stmt, data):
         cur.execute(stmt, data)
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print('db_access.py: insert_data: ', error)
     finally:
         if conn is not None:
             conn.close()
@@ -92,8 +90,7 @@ def execute_stmt(stmt):
         cur.execute(stmt)
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        print('db_access.py: execute_stmt: ', error)
     finally:
         if conn is not None:
             conn.close()
-            # print("execute stmtm success")

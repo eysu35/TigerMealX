@@ -37,7 +37,8 @@ class Exchanges:
         # access the database here and assemble a list of Exchange objects
         stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges 
-        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') AND status=\'Incomplete\''''
+        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'
+{studentid}\') AND status=\'Incomplete\' ORDER BY expiration_date'''
 
         rows = db_access.fetchall(stmt)
         for row in rows:

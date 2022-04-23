@@ -45,14 +45,12 @@ class Exchanges:
             if row is None:
                 return None
 
-            print(row)
             puid1 = row[1]
             puid2 = row[2]
 
             stmt_std1_name = f'''SELECT student_name FROM 
             students WHERE puid=\'{puid1}\''''
             std1_name = db_access.fetch_first_val(stmt_std1_name)
-            print(std1_name)
 
             stmt_std2_name = f'''SELECT student_name FROM 
             students WHERE puid=\'{puid2}\''''
@@ -98,7 +96,6 @@ class Exchanges:
                                 std2_name, row[3], row[4], row[5], row[6],
                                 row[7], row[8], row[9], mealx_id=row[0])
             past_exchanges.append(exch_obj)
-            print(past_exchanges)
 
         return past_exchanges
 
@@ -331,10 +328,8 @@ class Exchange:
         self._status = status
         self._exch1_date = exch1_date
         self._exch1_loc_id = exch1_loc_id
-        self._exch1_location = Exchanges.get_loc_name_from_id(exch1_loc_id)
         self._exch2_date = exch2_date
         self._exch2_loc_id = exch2_loc_id
-        self._exch2_location = Exchanges.get_loc_name_from_id(exch2_loc_id)
         self._exp = exp
         self._init_date = None
 
@@ -411,7 +406,9 @@ class Exchange:
 
     # get name
     def get_exch1_loc_name(self):
-        return self._exch1_location
+        if self._exch1_loc_id is None:
+            return None
+        return Exchanges.get_loc_name_from_id(self._exch1_loc_id)
 
     def get_exch2_loc_id(self):
         return self._exch2_loc_id
@@ -421,7 +418,9 @@ class Exchange:
 
     # get name
     def get_exch2_loc_name(self):
-        return self._exch2_location
+        if self._exch2_loc_id is None:
+            return None
+        return Exchanges.get_loc_name_from_id(self._exch2_loc_id)
 
     def get_exch1_date(self):
         return self._exch1_date

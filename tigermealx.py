@@ -27,7 +27,6 @@ def show_exchanges():
         name = Students.get_first_name_from_netid(netid)
         studentid = Students.get_puid_from_netid(netid)
         curr_exchanges = Exchanges.get_current_exchanges(studentid)
-        print(curr_exchanges)
         past_exchanges = Exchanges.get_past_exchanges(studentid)
     except Exception as e:
         print("tigermealx.py error [30]: " + str(e))
@@ -129,15 +128,11 @@ def post_new_exchange():
     
 @app.route('/completeexchange', methods=['GET']) #Could be POST?
 def complete_exchange():
-    netid1 = request.args.get('netid1')
-    netid2 = request.args.get('netid2')
-    print('netid1: ', netid1)
-    print('netid2: ', netid2)
+    netid1 = request.args.get('netid1').strip().lower()
+    netid2 = request.args.get('netid2').strip().lower()
 
     puid1 = Students.get_puid_from_netid(netid1)
     puid2 = Students.get_puid_from_netid(netid2)
-    print('puid1: ', puid1)
-    print('puid2: ', puid2)
 
     location_name = request.args.get('location').strip()
     time = request.args.get('time')

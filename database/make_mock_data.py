@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-#-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
 # make_mock_data.py
 # Authors:
-#-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
 import psycopg2
 from config import config
 import csv
@@ -13,7 +13,9 @@ import random
 import time
 from psycopg2.extensions import register_adapter, AsIs
 import uuid
-#-----------------------------------------------------------------------
+
+
+# -----------------------------------------------------------------------
 
 def remove_all_data():
     commands = (
@@ -50,8 +52,8 @@ def remove_all_data():
             conn.close()
             # print("success")        
 
-def add_data(table, row_data):
 
+def add_data(table, row_data):
     if table == 'students':
         sql = '''INSERT INTO students(puid, netid, student_name, 
         meal_plan_id, is_valid_for_meal_exchange) VALUES (%s, %s, %s, %s, %s
@@ -94,7 +96,7 @@ def add_data(table, row_data):
         if conn is not None:
             conn.close()
             # print("success")
-    
+
 
 def str_time_prop(start, end, time_format, prop):
     """Get a time at a proportion of a range of two formatted times.
@@ -116,22 +118,29 @@ def str_time_prop(start, end, time_format, prop):
 def random_date(start, end, prop):
     return str_time_prop(start, end, '%m/%d/%Y %I:%M %p', prop)
 
+
 def getRandomDate():
     return random_date("1/1/2021 1:30 PM", "1/1/2022 4:50 AM", random.random())
     # return "hello"
 
+
 def getRandomMeal():
-    meals = ['breakfast','lunch','dinner']
+    meals = ['breakfast', 'lunch', 'dinner']
     return meals[np.random.randint(len(meals))]
+
 
 def addapt_numpy_float64(numpy_float64):
     return AsIs(numpy_float64)
+
+
 def addapt_numpy_int64(numpy_int64):
     return AsIs(numpy_int64)
+
 
 def get_club_from_id(df, puid):
     user = df.loc[df["PUID (number on your prox)"] == puid]
     return user['Meal Plan'].iloc[0]
+
 
 def location_id_from_location(loc):
     words = loc.lower().split()
@@ -143,30 +152,28 @@ def location_id_from_location(loc):
 
     return loc_id
 
-def main():
 
+def main():
     # Takes care of (can't adapt type 'numpy.int64') error
     register_adapter(np.float64, addapt_numpy_float64)
     register_adapter(np.int64, addapt_numpy_int64)
 
     # Delete data in all ables 
     remove_all_data()
-                    
-    
 
     # Locations Table Dictionary
     locations_dict = {'~dining_hall_location_id~': 'Dining Hall',
-                            '~terrace_location_id~': 'Terrace', 
-                             '~tower_location_id~': 'Tower',
-                             '~cannon_location_id~': 'Cannon',
-                             '~quad_location_id~': 'Quad',
-                             '~colonial_location_id~': 'Colonial',
-                             '~ivy_location_id~': 'Ivy',
-                             '~ti_location_id~': 'TI',
-                             '~cottage_location_id~': 'Cottage',
-                             '~cap_location_id~': 'Cap',
-                             '~cloister_location_id~': 'Cloister',
-                             '~charter_location_id~': 'Charter'}
+                      '~terrace_location_id~': 'Terrace',
+                      '~tower_location_id~': 'Tower',
+                      '~cannon_location_id~': 'Cannon',
+                      '~quad_location_id~': 'Quad',
+                      '~colonial_location_id~': 'Colonial',
+                      '~ivy_location_id~': 'Ivy',
+                      '~ti_location_id~': 'TI',
+                      '~cottage_location_id~': 'Cottage',
+                      '~cap_location_id~': 'Cap',
+                      '~cloister_location_id~': 'Cloister',
+                      '~charter_location_id~': 'Charter'}
 
     # Read csv file as dataframe
     filename = 'Meal Plan Info Form (Responses) - Form Responses 1.csv'
@@ -174,29 +181,27 @@ def main():
 
     # Add students/student_plans
     for index, row in df.iterrows():
-
         rand_id = str(uuid.uuid4())
 
         # Add student entry
-        add_data('students', [row['PUID (number on your prox)'], 
-                                row['NetID'], 
-                                row['Name'], 
-                                rand_id, 
-                                True])
+        add_data('students', [row['PUID (number on your prox)'],
+                              row['NetID'].strip(),
+                              row['Name'].strip(),
+                              rand_id,
+                              True])
 
         # Add student_plans entry
         add_data('student_plans', [rand_id, location_id_from_location(row['Meal Plan'])])
 
-    
-    # Add friends: 
+    # Add friends:
     # Note: Sometimes the same pair is randomly selected multiple times. 
     # However, there is only ever one copy in the table.
     num_friendships = 50
-    puids = df.loc[:,"PUID (number on your prox)"]
+    puids = df.loc[:, "PUID (number on your prox)"]
     for i in range(num_friendships):
         # Get random index
         n1 = np.random.randint(num_friendships)
-        
+
         # Get different random index
         n2 = n1
         while (n1 == n2):
@@ -208,7 +213,7 @@ def main():
     # Add locations
     for key in locations_dict:
         add_data('locations', [key, locations_dict[key]])
-        
+
     # Add exchanges
     num_exchanges = 50
 
@@ -220,14 +225,14 @@ def main():
     for i in range(num_exchanges):
         # Get random index
         n1 = np.random.randint(num_exchanges)
-        
+
         # Get different random index
         n2 = n1
         while (n1 == n2):
-            n2 = np.random.randint(num_exchanges)   
+            n2 = np.random.randint(num_exchanges)
 
-        exchange_params = [puids[n1], puids[n2], getRandomMeal(), getRandomDate(), 
-                            getClubFromID(puids[n1]), None, None, getRandomDate(), 'Incomplete']
+        exchange_params = [puids[n1], puids[n2], getRandomMeal(), getRandomDate(),
+                           getClubFromID(puids[n1]), None, None, getRandomDate(), 'Incomplete']
 
         add_data('exchanges', exchange_params)
 
@@ -264,9 +269,8 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
+    main()
     rand_id = str(uuid.uuid4())
-    #add_ellen_and_shayna_exchanges()
     add_data('students', ['920261411',
                           'bb5943',
                           'Brianna Butler',

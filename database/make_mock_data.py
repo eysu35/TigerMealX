@@ -188,7 +188,7 @@ def main():
 
         # Add student entry
         add_data('students', [row['PUID (number on your prox)'],
-                              row['NetID'].strip(),
+                              row['NetID'].strip().lower(),
                               row['Name'].strip(),
                               rand_id,
                               True])
@@ -233,6 +233,9 @@ def main():
         n2 = n1
         while n1 == n2:
             n2 = np.random.randint(num_exchanges)
+
+        if getClubFromID(puids[n1]).lower().strip() == 'shared' or getClubFromID(puids[n1]).lower().strip() == 'independent':
+            continue
 
         exchange_params = [puids[n1], puids[n2], getRandomMeal(), getRandomDate(),
                            inv_locations_dict[getClubFromID(puids[n1]).lower().strip()], None, None, getRandomDate(), 'Incomplete']

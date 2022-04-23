@@ -69,7 +69,7 @@
         <tbody>
          {% for exchange in curr_exchanges: %}
           <tr>
-            <td>{{exchange.get_name2()}}</td>
+            <td>{{exchange.get_display_name_from_puid(user_puid)}}</td>
             <td> {{exchange.get_meal()}}</td>
             {% if exchange.get_exch1_loc_id() == None %}
             <td>None</td>

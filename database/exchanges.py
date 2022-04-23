@@ -37,8 +37,8 @@ class Exchanges:
         # access the database here and assemble a list of Exchange objects
         stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
         exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges 
-        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'
-{studentid}\') AND status=\'Incomplete\' ORDER BY expiration_date'''
+        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') 
+        AND status=\'Incomplete\' ORDER BY expiration_date'''
 
         rows = db_access.fetchall(stmt)
         for row in rows:
@@ -72,10 +72,9 @@ class Exchanges:
         past_exchanges = []
         # access the database here and assemble a list of Exchange objects
         stmt = f'''SELECT meal_exchange_id, student1_puid, student2_puid, meal, exchange1_date, exchange1_location_id, 
-        exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges WHERE 
-        (student1_puid=\'{studentid}\' OR student2_puid=\'
-        {studentid}\') AND (status=\'Complete\' OR status=\'Expired\' OR 
-        status=\'Unused\') ORDER BY exchange2_date'''
+        exchange2_date, exchange2_location_id, expiration_date, status FROM exchanges 
+        WHERE (student1_puid=\'{studentid}\' OR student2_puid=\'{studentid}\') 
+        AND (status=\'Complete\' OR status=\'Expired\' OR status=\'Unused\') ORDER BY exchange2_date'''
 
         rows = db_access.fetchall(stmt)
         # print('past exchanges: ', rows)
@@ -447,6 +446,13 @@ class Exchange:
 
     def set_exp(self, exp):
         self._exp = exp
+
+    # get the name of the other person given the user's puid
+    def get_display_name_from_puid(self, puid):
+        if puid == self._puid1:
+            return self._name2
+        else:
+            return self._name1
 
     # def to_dict(self):
     #     return {'name': self._name, 'place': self._place,

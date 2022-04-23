@@ -105,7 +105,7 @@
             <tbody>
              {% for exchange in past_exchanges: %}
               <tr>
-                <td>{{exchange.get_name2()}}</td>
+                <td>{{exchange.get_display_name_from_puid(user_puid)}}</td>
                 <td> {{exchange.get_meal()}}</td>
                 <td> {{exchange.get_exch1_loc_name()}}</td>
                 <td> {{exchange.get_exch1_date()}}</td>

@@ -173,7 +173,10 @@ def main():
                       '~cottage_location_id~': 'Cottage',
                       '~cap_location_id~': 'Cap',
                       '~cloister_location_id~': 'Cloister',
-                      '~charter_location_id~': 'Charter'}
+                      '~charter_location_id~': 'Charter',
+                      '~independent_location_id~': 'Independent'}
+
+    inv_locations_dict = {value.lower(): key for key, value in locations_dict.items()}
 
     # Read csv file as dataframe
     filename = 'Meal Plan Info Form (Responses) - Form Responses 1.csv'
@@ -228,11 +231,11 @@ def main():
 
         # Get different random index
         n2 = n1
-        while (n1 == n2):
+        while n1 == n2:
             n2 = np.random.randint(num_exchanges)
 
         exchange_params = [puids[n1], puids[n2], getRandomMeal(), getRandomDate(),
-                           getClubFromID(puids[n1]), None, None, getRandomDate(), 'Incomplete']
+                           inv_locations_dict[getClubFromID(puids[n1]).lower().strip()], None, None, getRandomDate(), 'Incomplete']
 
         add_data('exchanges', exchange_params)
 

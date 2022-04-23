@@ -60,21 +60,39 @@ def help_page():
 @app.route('/exchangeportal')
 def initiate_exchange():
     netid = auth.authenticate()
+    puid1 = Students.get_puid_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
+    student1 = Students.get_student_by_puid(puid1)
+
+    # other person
     puid2 = request.args.get('puid')
+
     if puid2 is None or puid2 == '':
         return render_template('error404.html')
     try:
         student2 = Students.get_student_by_puid(puid2)
     except Exception as e:
-        print("tigermealx.py error [62]: " + str(e))
+        print("tigermealx.py error [75]: " + str(e))
         return render_template('error404.html')
     
     name2 = student2.get_name()
     location2 = Students.get_location_name_from_puid(puid2)
-    return render_template('exchange_init.html',name=name, puid2=puid2,
+
+    # students cannot exchange with themselves or with someone who eats at the same place
+    if puid1 == puid2:
+        return render_template('exchangeerror.html', msg="You cannot exchange a meal with yourself.")
+
+    loc1_id = student1.get_loc_id()
+    loc2_id = student2.get_loc_id()
+
+    if loc1_id == loc2_id:
+        return render_template('exchangeerror.html', msg="You cannot exchange a meal with someone who eats at the same location as you.")
+
+    # allowed exchange
+    return render_template('exchange_init.html', name=name, puid2=puid2,
                            name2=name2,
                            location2=location2)
+
 
 @app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
@@ -111,9 +129,13 @@ def post_new_exchange():
 def complete_exchange():
     netid1 = request.args.get('netid1')
     netid2 = request.args.get('netid2')
+    print('netid1: ', netid1)
+    print('netid2: ', netid2)
 
     puid1 = Students.get_puid_from_netid(netid1)
     puid2 = Students.get_puid_from_netid(netid2)
+    print('puid1: ', puid1)
+    print('puid2: ', puid2)
 
     location_name = request.args.get('location').strip()
     time = request.args.get('time')

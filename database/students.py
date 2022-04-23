@@ -139,8 +139,9 @@ class Student:
     def get_mealplanid(self):
         return self._mealplanid
 
-    def set_mealplanid(self, mealplanid):
-        self._club = mealplanid
+    def get_loc_id(self):
+        stmt = f'''SELECT location_id FROM student_plans WHERE meal_plan_id=\'{self._mealplanid}\''''
+        return db_access.fetch_first_val(stmt)
 
     def toJSON(self):
         info = {}

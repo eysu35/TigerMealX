@@ -17,7 +17,6 @@
    <style>
      body {
            min-height: 100vh;
-           background-image: url('../static/background.jpg');
            background-position: top center;
            background-repeat: no-repeat;
            background-size:cover;
@@ -83,7 +82,26 @@
      
    </style>
   {% include 'navbar.html' %}
-  
+  {% if loc_id=='Ivy' %}
+   
+   <style>
+      body{
+         background-image: url('../static/Ivy.jpg');
+      }
+   </style>
+   {% elif loc_id=='~dining_hall_location_id~'}
+   <style>
+      body{
+         background-image: url('../static/Dhall.jpg');
+      }
+   </style>
+   {% else %}
+   <style>
+      body{
+         background-image: url('../static/Background.jpg');
+      }
+   </style>
+   {% endif %}
    <!-- Developmental! -->
    <div id="container">
        <div class="box">

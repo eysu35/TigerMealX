@@ -14,11 +14,13 @@ emails_enabled = False
 @app.route('/index', methods=['GET'])
 def base():
     netid = auth.authenticate()
+    loc_id = Students.get_location_name_from_netid(netid)
+    print(loc_id)
     name = Students.get_first_name_from_netid(netid)
     
     # search_puid = Students.get_puid_from_name(search_name)
 
-    return render_template('index.html', name=name, netid=netid)
+    return render_template('index.html', name=name, netid=netid, loc_id=loc_id)
 
 
 @app.route('/exchanges/')
@@ -65,7 +67,7 @@ def initiate_exchange():
     puid1 = Students.get_puid_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
     student1 = Students.get_student_by_puid(puid1)
-
+    
     # other person
     puid2 = request.args.get('puid')
 
@@ -86,6 +88,7 @@ def initiate_exchange():
 
     loc1_id = student1.get_loc_id()
     loc2_id = student2.get_loc_id()
+    print(loc2_id)
 
     if loc1_id == loc2_id:
         return render_template('exchangeerror.html', msg="You cannot exchange a meal with someone who eats at the same location as you.")
@@ -93,7 +96,7 @@ def initiate_exchange():
     # allowed exchange
     return render_template('exchange_init.html', name=name, puid2=puid2,
                            name2=name2,
-                           location2=location2)
+                           location2=location2, loc_id=loc2_id)
 
 
 @app.route('/postnewexchange', methods=['GET', 'POST'])

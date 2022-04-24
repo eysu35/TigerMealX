@@ -17,7 +17,6 @@
     <style>
         body {
            min-height: 100vh;
-           background-image: url('../static/background.jpg');
            background-position: top center;
            background-repeat: no-repeat;
            background-size:cover;
@@ -26,19 +25,7 @@
         * {
           box-sizing: border-box;
         }
-        
-        .bg-img {
-          /* The image used */
-          background-image: url("img_nature.jpg");
-        
-          min-height: 380px;
-        
-          /* Center and scale the image nicely */
-          background-position: center;
-          background-repeat: no-repeat;
-          background-size: cover;
-          position: relative;
-        }
+
         .form-center {
         display:flex;
         justify-content: center;
@@ -101,6 +88,44 @@
         </head>
         <body>
           {% include 'navbar.html' %}
+          {% if loc_id=='Ivy' %}
+   
+   <style>
+      body{
+         background-image: url('../static/Ivy.jpg');
+      }
+   </style>
+   {% elif loc_id=='~dining_hall_location_id~' %}
+   <style>
+      body{
+         background-image: url('../static/Dhall.jpg');
+      }
+   </style>
+   {% elif loc_id=='~ti_location_id~' %}
+   <style>
+      body{
+         background-image: url('../static/TI.png');
+      }
+   </style>
+   {% elif loc_id=='~cap_location_id~' %}
+   <style>
+      body{
+         background-image: url('../static/CAP.jpg');
+      }
+   </style>
+   {% elif loc_id=='~quad_location_id~' %}
+   <style>
+      body{
+         background-image: url('../static/quad.jpg');
+      }
+   </style>
+   {% else %}
+   <style>
+      body{
+         background-image: url('../static/Background.jpg');
+      }
+   </style>
+   {% endif %}
             <div id="container">
               <div class="box">
                 <p>Inviting {{name2}} ({{location2}})</p>

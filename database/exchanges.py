@@ -332,7 +332,7 @@ class Exchange:
         self._exch2_date = exch2_date
         self._exch2_loc_id = exch2_loc_id
         self._exp = exp
-        self._init_date = None
+        # self._daysleft = 31
 
     # returns tuple of table info in order of table columns without mealxid
     def to_ordered_tuple_without_mealx_id(self):
@@ -349,6 +349,13 @@ class Exchange:
                self._exch1_loc_id, self._exch2_date, \
                self._exch2_loc_id, \
                self._exp, self._status
+    
+    def get_daysleft(self):
+        daysleft = abs((self._exp - date.today()).days)
+        return daysleft
+    
+    # def set_daysleft(self, daysleft):
+    #     self._daysleft = daysleft
 
     def get_mealx_id(self):
         return self._mealx_id

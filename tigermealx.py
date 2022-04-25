@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, request, make_response
+from flask import Flask, render_template, request, make_response
 from keys import APP_SECRET_KEY
 from database.exchanges import Exchanges
 from database.students import Students
@@ -33,7 +33,7 @@ def show_exchanges():
         curr_exchanges = Exchanges.get_current_exchanges(studentid)
         past_exchanges = Exchanges.get_past_exchanges(studentid)
     except Exception as e:
-        print("tigermealx.py error [30]: " + str(e))
+        print("tigermealx.py error [36]: " + str(e))
         return render_template('errordb.html')
     return render_template('exchanges.html',
                            curr_exchanges=curr_exchanges,
@@ -83,7 +83,7 @@ def initiate_exchange():
     try:
         student2 = Students.get_student_by_puid(puid2)
     except Exception as e:
-        print("tigermealx.py error [75]: " + str(e))
+        print("tigermealx.py error [86]: " + str(e))
         return render_template('error404.html')
     
     name2 = student2.get_name()
@@ -171,11 +171,10 @@ def search_results():
     netid = auth.authenticate().strip()
     Name = request.args.get('name')
     if len(Name) > 0:
-        print('HELLO LINE 160')
         try:
             students = Students.search_students_by_name(Name)
         except Exception as e:
-            print("tigermealx.py error [100]: " + str(e))
+            print("tigermealx.py error [177]: " + str(e))
             return render_template('errordb.html')
 
         html = '<div class="table-wrapper-scroll-y my-custom-scrollbar"><table class="table table-bordered table-hover"><tbody>'

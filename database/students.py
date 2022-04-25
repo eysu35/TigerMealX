@@ -154,7 +154,7 @@ class Student:
 
     def __str__(self):
         return f'{self._puid}, {self._netid}, {self._name},' \
-               f' {self._mealplanid}'
+               f' {self._mealplanid}, {self._isvalid}'
 
     def get_puid(self):
         return self._puid
@@ -180,6 +180,12 @@ class Student:
     def get_loc_id(self):
         stmt = f'''SELECT location_id FROM student_plans WHERE meal_plan_id=\'{self._mealplanid}\''''
         return db_access.fetch_first_val(stmt)
+
+    def get_isValid(self):
+        return self._isvalid
+
+    def set_isValid(self, isValid):
+        self._puid = isValid
 
     def toJSON(self):
         info = {}

@@ -87,10 +87,20 @@ def initiate_exchange():
     name2 = student2.get_name()
     location2 = Students.get_location_name_from_puid(puid2)
 
+    # students cannot meal exchange with someone who has an invalid
+    # plan
+
+    if not student2.get_isValid():
+        return render_template('exchangeerror.html',
+                               msg="The student you are trying to "\
+                        "swap with has a meal plan that is "\
+                    "incompatible with the meal exchange program.")
+
     # students cannot exchange with themselves or with someone who eats at the same place
     if puid1 == puid2:
         return render_template('exchangeerror.html', msg="You cannot exchange a meal with yourself.")
 
+    # students who belong to the same plan cannot meal exchange
     loc1_id = student1.get_loc_id()
     loc2_id = student2.get_loc_id()
 

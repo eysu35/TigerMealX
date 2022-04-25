@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta, time
+from datetime import date, timedelta, time
 from database import db_access
 import random
 
@@ -53,6 +53,11 @@ class Exchanges:
             stmt_std2_name = f'''SELECT student_name FROM 
             students WHERE puid=\'{puid2}\''''
             std2_name = db_access.fetch_first_val(stmt_std2_name)
+
+            # verify that the expiration date of the exchange is not
+            # past today's date
+            if row[8] < date.today():
+                continue
 
             exch_obj = Exchange(row[1], std1_name, row[2],
                                 std2_name, row[3], row[4], row[5], row[6],

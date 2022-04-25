@@ -105,7 +105,9 @@ def initiate_exchange():
     loc2_id = student2.get_loc_id()
 
     if loc1_id == loc2_id:
-        return render_template('exchangeerror.html', msg="You cannot exchange a meal with someone who eats at the same location as you.")
+        return render_template('exchangeerror.html', msg="You cannot "\
+                                    "exchange a meal with "\
+                "someone who has a meal plan at same location as you.")
 
     # allowed exchange
     return render_template('exchange_init.html', name=name, puid2=puid2,

@@ -16,11 +16,18 @@ emails_enabled = False
 @app.route('/index', methods=['GET'])
 def base():
     netid = auth.authenticate().strip()
+    puid = Students.get_puid_from_netid()
+    student = Students.get_student_by_puid(puid)
     loc_id = Students.get_location_id_from_netid(netid)
     print(loc_id)
     name = Students.get_first_name_from_netid(netid)
-
-    return render_template('index.html', name=name, netid=netid, loc_id=loc_id)
+    if not student.get_isValid():
+        return render_template('exchangerror.html', msg="You are not "
+            "on a meal plan that is valid for meal exchanges. Please "
+            "contact campus dining services if you think this is a "
+                                                        "mistake.")
+    return render_template('index.html', name=name, netid=netid,
+                           loc_id=loc_id)
 
 
 @app.route('/exchanges')

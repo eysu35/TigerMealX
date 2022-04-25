@@ -21,7 +21,21 @@
        text-align: center;
        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
      }
-     .exchanges-section {
+     .exchanges-section1 {
+            background-color: white;
+            margin-bottom: 15%;
+            border-radius: 13px;
+            width: 80%;
+            position: unset;
+            top:5%;
+            left: 0;
+            right: 0;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            margin: auto;
+            margin-top: 3vh;
+            padding: 1vh;
+      }
+      .exchanges-section2 {
             background-color: white;
             margin-bottom: 15%;
             border-radius: 13px;
@@ -32,7 +46,7 @@
             right: 0;
             font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
             margin: auto;
-            margin-top: 10vh;
+            margin-top: 3vh;
             padding: 1vh;
       }
       p {
@@ -51,7 +65,7 @@
   {% include 'navbar.html' %}
   
   {% include 'background.html' %}
-  <div class="exchanges-section">
+  <div class="exchanges-section1">
     <h2>Active Exchanges</h2>
     <!--- CURRENT EXCHANGE TABLE -->
     {% if curr_exchanges|length == 0 %}
@@ -86,8 +100,9 @@
       </table>
     </div>
     {% endif %}
+  </div>
       
-
+    <div class="exchanges-section2">
       <h2>Completed Exchanges</h2>
       {% if past_exchanges|length == 0 %}
       <p>You have no past exchanges</p>

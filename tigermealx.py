@@ -16,10 +16,10 @@ emails_enabled = False
 @app.route('/index', methods=['GET'])
 def base():
     netid = auth.authenticate().strip()
-    puid = Students.get_puid_from_netid()
+    puid = Students.get_puid_from_netid(netid)
     student = Students.get_student_by_puid(puid)
     loc_id = Students.get_location_id_from_netid(netid)
-    print(loc_id)
+
     name = Students.get_first_name_from_netid(netid)
     if not student.get_isValid():
         return render_template('exchangeerror.html', msg="You are not "

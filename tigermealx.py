@@ -12,7 +12,7 @@ emails_enabled = False
 
 
 @app.route('/')
-@app.route('/index', methods=['GET'])
+@app.route('/index/', methods=['GET'])
 def base():
     netid = auth.authenticate()
     loc_id = Students.get_location_id_from_netid(netid)
@@ -66,7 +66,7 @@ def help_page():
     return render_template('help.html', name=name, loc_id=loc_id)
 
 
-@app.route('/exchangeportal')
+@app.route('/exchangeportal/')
 def initiate_exchange():
     netid = auth.authenticate()
     puid1 = Students.get_puid_from_netid(netid)
@@ -103,7 +103,7 @@ def initiate_exchange():
                            location2=location2, loc_id=loc2_id)
 
 
-@app.route('/postnewexchange', methods=['GET', 'POST'])
+@app.route('/postnewexchange/', methods=['GET', 'POST'])
 def post_new_exchange():
     netid1 = auth.authenticate()
     # if request.method == 'GET':
@@ -133,7 +133,7 @@ def post_new_exchange():
         return render_template('error404.html', name = name, loc_id=loc_id)
 
 
-@app.route('/completeexchange', methods=['GET']) #Could be POST?
+@app.route('/completeexchange/', methods=['GET']) #Could be POST?
 def complete_exchange():
     netid1 = request.args.get('netid1').strip().lower()
     netid2 = request.args.get('netid2').strip().lower()
@@ -152,7 +152,7 @@ def complete_exchange():
     return msg
 
 
-@app.route('/searchresults', methods=['GET'])
+@app.route('/searchresults/', methods=['GET'])
 def search_results():
     Name = request.args.get('name')
     if len(Name) > 0:
@@ -176,7 +176,7 @@ def search_results():
 @app.errorhandler(Exception)
 def server_error(err):
     netid = auth.authenticate()
-    
+
     loc_id = Students.get_location_name_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
     app.logger.exception(err)

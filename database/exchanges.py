@@ -226,6 +226,9 @@ class Exchanges:
         if valid_exchange_id is None:
             return False, msg
 
+        if meal_today_already_exists:
+            return False, "Students have already exchanged for this meal today."
+
         Exchanges._update_meal2(valid_exchange_id, location_id)
         return True, "Exchange successfully updated!"
 

@@ -168,7 +168,6 @@ def complete_exchange():
     location_id = Exchanges.get_loc_id_from_loc_name(location_name)
 
     success, msg = Exchanges.update_exchange(puid1, puid2, location_id, time)
-    print(msg)
 
     return msg
 

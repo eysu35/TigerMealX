@@ -95,11 +95,11 @@
             <td>{{exchange.get_display_name_from_puid(user_puid)}}</td>
             <td> {{exchange.get_meal()}}</td>
             {% if exchange.get_exch1_loc_id() == None %}
-            <td>{{exchange.get_plans_from_puid()[0]}}, {{exchange.get_plans_from_puid()[1]}}</td>
-            {% elif exchange.get_exch1_loc_name() == exchange.get_plans_from_puid()[0] %}
-            <td>{{exchange.get_plans_from_puid()[1]}}</td>
-            {% elif exchange.get_exch1_loc_name() == exchange.get_plans_from_puid()[1] %}
-            <td>{{exchange.get_plans_from_puid()[0]}}</td>
+            <td>{{exchange.get_student1_loc()}}, {{exchange.get_student2_loc()}}</td>
+            {% elif exchange.get_exch1_loc_name() == exchange.get_student1_loc() %}
+            <td>{{exchange.get_student2_loc()}}</td>
+            {% elif exchange.get_exch1_loc_name() == exchange.get_student2_loc() %}
+            <td>{{exchange.get_student1_loc()}}</td>
             {% endif %}
             <td> {{exchange.get_exp()}}</td>
           </tr>

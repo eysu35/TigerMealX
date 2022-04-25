@@ -22,6 +22,7 @@ class Exchanges:
 
         stmt = f'''SELECT location_name FROM locations WHERE location_id = \'{loc_id}\''''
         loc_name = db_access.fetch_first_val(stmt)
+        print("Hello")
         return loc_name
 
     # returns current exchanges for studentid as a list of Exchange objects
@@ -43,6 +44,10 @@ class Exchanges:
             puid1 = row[1]
             puid2 = row[2]
 
+            student1_loc = Exchanges.get_plan_from_puid(puid1)
+            student2_loc = Exchanges.get_plan_from_puid(puid2)
+
+
             stmt_std1_name = f'''SELECT student_name FROM 
             students WHERE puid=\'{puid1}\''''
             std1_name = db_access.fetch_first_val(stmt_std1_name)
@@ -58,7 +63,9 @@ class Exchanges:
 
             exch_obj = Exchange(row[1], std1_name, row[2],
                                 std2_name, row[3], row[4], row[5], row[6],
-                                row[7], row[8], row[9], mealx_id=row[0])
+                                row[7], row[8], row[9],
+                                student1_loc, student2_loc,
+                                mealx_id=row[0])
             current_exchanges.append(exch_obj)
 
         return current_exchanges
@@ -83,6 +90,9 @@ class Exchanges:
             puid1 = row[1]
             puid2 = row[2]
 
+            student1_loc = Exchanges.get_plan_from_puid(puid1)
+            student2_loc = Exchanges.get_plan_from_puid(puid2)
+
             stmt_std1_name = f'''SELECT student_name FROM 
             students WHERE puid=\'{puid1}\''''
             std1_name = db_access.fetch_first_val(stmt_std1_name)
@@ -93,7 +103,9 @@ class Exchanges:
 
             exch_obj = Exchange(row[1], std1_name, row[2],
                                 std2_name, row[3], row[4], row[5], row[6],
-                                row[7], row[8], row[9], mealx_id=row[0])
+                                row[7], row[8], row[9],
+                                student1_loc, student2_loc,
+                                mealx_id=row[0])
             past_exchanges.append(exch_obj)
 
         return past_exchanges
@@ -108,10 +120,17 @@ class Exchanges:
             puid=\'{puid2}\''''
         student2_name = db_access.fetch_first_val(stmt)
         exp_date = date.today() + timedelta(days=30)
+
+        student1_loc = Exchanges.get_plan_from_puid(puid1)
+        print(student1_loc)
+
+        student2_loc = Exchanges.get_plan_from_puid(puid2)
+        print(student2_loc)
         exchange = Exchange(puid1, student1_name,
                             puid2, student2_name,
                             None, None, None, None, None,
-                            str(exp_date), 'Incomplete', mealx_id=None)
+                            str(exp_date), 'Incomplete',
+                            student1_loc, student2_loc, mealx_id=None)
 
         stmt = '''INSERT INTO exchanges(student1_puid, 
         student2_puid, meal, exchange1_date, exchange1_location_id, 
@@ -335,14 +354,18 @@ class Exchange:
                f'and {self._name2} ({self._puid2}) for {self._meal} ' \
                f'({self._status})'
 
-    def __init__(self, puid1, name1, puid2, name2, meal,
+    def __init__(self, puid1, name1, puid2, name2,
+                 meal,
                  exch1_date, exch1_loc_id, exch2_date, exch2_loc_id,
-                 exp, status, mealx_id=None):
+                 exp, status, student1_loc, student2_loc,
+                 mealx_id=None):
         self._mealx_id = mealx_id
         self._puid1 = puid1
         self._puid2 = puid2
         self._name1 = name1
         self._name2 = name2
+        self._student1_loc = student1_loc
+        self._student2_loc = student2_loc
         self._meal = meal
         self._status = status
         self._exch1_date = exch1_date
@@ -389,14 +412,26 @@ class Exchange:
     def set_puid2(self, puid2):
         self._puid2 = puid2
 
-    def get_plans_from_puid(self):
-        puid1 = self.get_puid1()
-        puid2 = self.get_puid2()
+    # def get_plans_from_puid(self):
+    #     puid1 = self.get_puid1()
+    #     puid2 = self.get_puid2()
+    #
+    #     plan1 = Exchanges.get_plan_from_puid(puid1)
+    #     plan2 = Exchanges.get_plan_from_puid(puid2)
+    #
+    #     return plan1, plan2
 
-        plan1 = Exchanges.get_plan_from_puid(puid1)
-        plan2 = Exchanges.get_plan_from_puid(puid2)
+    def get_student1_loc(self):
+        return self._student1_loc
 
-        return plan1, plan2
+    def set_student1_loc(self, student1_loc):
+        self._student1_loc = student1_loc
+
+    def get_student2_loc(self):
+        return self._student2_loc
+
+    def set_student2_loc(self, student2_loc):
+        self._student2_loc = student2_loc
 
     def get_name1(self):
         return self._name1

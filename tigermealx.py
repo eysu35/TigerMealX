@@ -19,8 +19,8 @@ def base():
     puid = Students.get_puid_from_netid(netid)
     student = Students.get_student_by_puid(puid)
     loc_id = Students.get_location_id_from_netid(netid)
-
     name = Students.get_first_name_from_netid(netid)
+
     if not student.get_isValid():
         return render_template('exchangeerror.html', msg="You are not "
             "on a meal plan that is valid for meal exchanges. Please "

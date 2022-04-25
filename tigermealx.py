@@ -15,7 +15,7 @@ emails_enabled = False
 @app.route('/')
 @app.route('/index', methods=['GET'])
 def base():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     loc_id = Students.get_location_id_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
 
@@ -24,7 +24,7 @@ def base():
 
 @app.route('/exchanges')
 def show_exchanges():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     loc_id = Students.get_location_id_from_netid(netid)
     try:
         name = Students.get_first_name_from_netid(netid)
@@ -42,7 +42,7 @@ def show_exchanges():
 
 @app.route('/about')
 def faq():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     
     loc_id = Students.get_location_id_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
@@ -52,7 +52,7 @@ def faq():
 
 @app.route('/admin')
 def admin_page():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     name = Students.get_first_name_from_netid(netid)
 
     return render_template('admin.html', name=name)
@@ -60,7 +60,7 @@ def admin_page():
 
 @app.route('/help')
 def help_page():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     loc_id = Students.get_location_id_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
 
@@ -69,7 +69,7 @@ def help_page():
 
 @app.route('/exchangeportal')
 def initiate_exchange():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     puid1 = Students.get_puid_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
     student1 = Students.get_student_by_puid(puid1)
@@ -88,15 +88,27 @@ def initiate_exchange():
     name2 = student2.get_name()
     location2 = Students.get_location_name_from_puid(puid2)
 
+    # students cannot meal exchange with someone who has an invalid
+    # plan
+
+    if not student2.get_isValid():
+        return render_template('exchangeerror.html',
+                               msg="The student you are trying to "\
+                        "swap with has a meal plan that is "\
+                    "incompatible with the meal exchange program.")
+
     # students cannot exchange with themselves or with someone who eats at the same place
     if puid1 == puid2:
         return render_template('exchangeerror.html', msg="You cannot exchange a meal with yourself.")
 
+    # students who belong to the same plan cannot meal exchange
     loc1_id = student1.get_loc_id()
     loc2_id = student2.get_loc_id()
 
     if loc1_id == loc2_id:
-        return render_template('exchangeerror.html', msg="You cannot exchange a meal with someone who eats at the same location as you.")
+        return render_template('exchangeerror.html', msg="You cannot "\
+                                    "exchange a meal with "\
+                "someone who has a meal plan at same location as you.")
 
     # allowed exchange
     return render_template('exchange_init.html', name=name, puid2=puid2,
@@ -106,7 +118,7 @@ def initiate_exchange():
 
 @app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
-    netid1 = auth.authenticate()
+    netid1 = auth.authenticate().strip()
     # if request.method == 'GET':
     try:
         name = Students.get_first_name_from_netid(netid1)

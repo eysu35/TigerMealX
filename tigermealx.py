@@ -14,7 +14,7 @@ emails_enabled = False
 @app.route('/')
 @app.route('/index/', methods=['GET'])
 def base():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     loc_id = Students.get_location_id_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
 
@@ -23,7 +23,7 @@ def base():
 
 @app.route('/exchanges/')
 def show_exchanges():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     loc_id = Students.get_location_id_from_netid(netid)
     try:
         name = Students.get_first_name_from_netid(netid)
@@ -41,7 +41,7 @@ def show_exchanges():
 
 @app.route('/about/')
 def faq():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     
     loc_id = Students.get_location_id_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
@@ -51,7 +51,7 @@ def faq():
 
 @app.route('/admin/')
 def admin_page():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     name = Students.get_first_name_from_netid(netid)
 
     return render_template('admin.html', name=name)
@@ -59,7 +59,7 @@ def admin_page():
 
 @app.route('/help/')
 def help_page():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     loc_id = Students.get_location_id_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
 
@@ -68,7 +68,7 @@ def help_page():
 
 @app.route('/exchangeportal/')
 def initiate_exchange():
-    netid = auth.authenticate()
+    netid = auth.authenticate().strip()
     puid1 = Students.get_puid_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
     student1 = Students.get_student_by_puid(puid1)
@@ -105,7 +105,7 @@ def initiate_exchange():
 
 @app.route('/postnewexchange/', methods=['GET', 'POST'])
 def post_new_exchange():
-    netid1 = auth.authenticate()
+    netid1 = auth.authenticate().strip()
     # if request.method == 'GET':
     try:
         name = Students.get_first_name_from_netid(netid1)

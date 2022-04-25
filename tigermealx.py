@@ -10,15 +10,13 @@ app.secret_key = APP_SECRET_KEY
 import auth
 emails_enabled = False
 
+
 @app.route('/')
 @app.route('/index', methods=['GET'])
 def base():
     netid = auth.authenticate()
     loc_id = Students.get_location_id_from_netid(netid)
-    print(loc_id)
     name = Students.get_first_name_from_netid(netid)
-    
-    # search_puid = Students.get_puid_from_name(search_name)
 
     return render_template('index.html', name=name, netid=netid, loc_id=loc_id)
 
@@ -50,12 +48,14 @@ def faq():
 
     return render_template('about.html', name=name, loc_id=loc_id)
 
+
 @app.route('/admin/')
 def admin_page():
     netid = auth.authenticate()
     name = Students.get_first_name_from_netid(netid)
 
     return render_template('admin.html', name=name)
+
 
 @app.route('/help/')
 def help_page():
@@ -64,6 +64,7 @@ def help_page():
     name = Students.get_first_name_from_netid(netid)
 
     return render_template('help.html', name=name, loc_id=loc_id)
+
 
 @app.route('/exchangeportal')
 def initiate_exchange():
@@ -132,13 +133,10 @@ def post_new_exchange():
         return render_template('error404.html', name = name, loc_id=loc_id)
 
 
-
-    
 @app.route('/completeexchange', methods=['GET']) #Could be POST?
 def complete_exchange():
     netid1 = request.args.get('netid1').strip().lower()
     netid2 = request.args.get('netid2').strip().lower()
-    
 
     puid1 = Students.get_puid_from_netid(netid1)
     puid2 = Students.get_puid_from_netid(netid2)
@@ -173,6 +171,7 @@ def search_results():
         html = ''
     response = make_response(html)
     return response
+
 
 @app.errorhandler(Exception)
 def server_error(err):

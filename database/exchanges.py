@@ -1,6 +1,6 @@
-from datetime import date, timedelta, time
+from datetime import datetime, date, timedelta, time
 from database import db_access
-import random
+
 
 class Exchanges:
 
@@ -14,16 +14,13 @@ class Exchanges:
 
     @classmethod
     def get_plan_from_puid(cls, puid):
-        stmt = f'''SELECT meal_plan_id FROM students WHERE puid=\'
-                {puid}\''''
+        stmt = f'''SELECT meal_plan_id FROM students WHERE puid=\'{puid}\''''
         meal_plan_id = db_access.fetch_first_val(stmt)
 
-        stmt = f'''SELECT location_id FROM student_plans WHERE 
-        meal_plan_id = \'{meal_plan_id}\''''
+        stmt = f'''SELECT location_id FROM student_plans WHERE meal_plan_id = \'{meal_plan_id}\''''
         loc_id = db_access.fetch_first_val(stmt)
 
-        stmt = f'''SELECT location_name FROM locations WHERE 
-        location_id = \'{loc_id}\''''
+        stmt = f'''SELECT location_name FROM locations WHERE location_id = \'{loc_id}\''''
         loc_name = db_access.fetch_first_val(stmt)
         return loc_name
 
@@ -176,40 +173,58 @@ class Exchanges:
         # determine which meal based on time
         hour = int(str(meal_time).split(':')[0])
         min = int(str(meal_time).split(':')[1])
-        meal_time = time(hour, min,0)
-        if (time(6,30,0) <= meal_time <= time(11,10,0)):
+        meal_time = time(hour, min, 0)
+        if time(6,30,0) <= meal_time <= time(11,10,0):
             meal = 'breakfast'
-        elif (time(11,15,0) <= meal_time <= time(15,0,0)):
+        elif time(11,15,0) <= meal_time <= time(15,0,0):
             meal = 'lunch'
-        elif (time(15,10,0) <= meal_time <= time(22,0,0)):
+        elif time(15,10,0) <= meal_time <= time(22,0,0):
             meal = 'dinner'
-        # error handling
         else:
             return False, 'Not a valid meal time.'
 
         # at this point, validated open exchange between student 1
         # and student 2. Determine if attempting to exchange for the
         # first or second time, send to relevant method
+        msg = "Exchange error"
 
         valid_exchange_id = None
+        set_first_meal = False
+        first_meal_exchange_id = None
+        meal_today_already_exists = False
         for exchange in exchanges:
             exchange_id = exchange[0]
             # if first exchange time is none, neither meal has been
             # completed, initiate first exchange
             if exchange[2] is None:
-                Exchanges._update_meal1(exchange_id, location_id, meal)
+                set_first_meal = True
+                first_meal_exchange_id = exchange_id
+
+            # for partially completed exchanges
+            if exchange[1] == meal:  # if correct meal
+
+                if date.today() == exchange[2]:
+                    meal_today_already_exists = True
+
+                if exchange[3] != location_id:
+                    valid_exchange_id = exchange_id
+                else:
+                    msg = "Students have already exchanged at this location for this swap."
+            else:  # wrong meal
+                if exchange[3] != location_id:  # but correct location
+                    msg = "No exchange open between these students for this meal time."
+                else:
+                    msg = 'No exchange open between these students for this meal time at this location.'
+
+        if set_first_meal and valid_exchange_id is None:
+            if not meal_today_already_exists:
+                Exchanges._update_meal1(first_meal_exchange_id, location_id, meal)
                 return True, "Exchange successfully updated!"
-
-            # if first exchange has been completed, check right meal and
-            # un-exchanged location
-            if (exchange[1] == meal) and (exchange[3] != location_id):
-                valid_exchange_id = exchange_id
-
-        # maybe change the above logic to specify that the location is incorrect
+            else:
+                return False, "Students have already exchanged for this meal today."
 
         if valid_exchange_id is None:
-            return False, "Students exchanging for wrong meal or " \
-                          "wrong location."
+            return False, msg
 
         Exchanges._update_meal2(valid_exchange_id, location_id)
         return True, "Exchange successfully updated!"

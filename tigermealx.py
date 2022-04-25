@@ -17,6 +17,7 @@ emails_enabled = False
 def base():
     netid = auth.authenticate().strip()
     loc_id = Students.get_location_id_from_netid(netid)
+    print(loc_id)
     name = Students.get_first_name_from_netid(netid)
 
     return render_template('index.html', name=name, netid=netid, loc_id=loc_id)

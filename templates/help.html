@@ -1,123 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>TigerMealX - Help</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>TigerMealX - Help</title>
 </head>
+
 <body>
-    <style>
-      body {
-           min-height: 100vh;
-           background-image: url('../static/background.jpg');
-           background-position: top center;
-           background-repeat: no-repeat;
-           background-size:cover;
-      }
-        .help-section {
-            background-color: white;
-            margin-bottom: 15%;
-            border-radius: 13px;
-            width: 70%;
-            position: unset;
-            top:15%;
-            left: 0;
-            right: 0;
-            
-            padding: 1vh;
-            
-            margin: auto;
-            margin-top: 10vh;
-            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-        }
-        h1 {
-            text-align: center;
-        }
-        h2 {
-            text-align: left;
-            margin-left: 5%;
-            margin-right: 5%;
-        }
-        p {
-            text-align: left;
-            margin-right: 5%;
-            font-size: medium;
-        }
-        .matheyimage {
-            margin: auto;
-            width: 50%;
-            padding: 10px;
-        }
-        
-    </style>
-    {% include 'navbar.html' %}
-    
+  <style>
+    body {
+      min-height: 100vh;
+      background-position: top center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .help-section {
+      background-color: white;
+      margin-bottom: 15%;
+      border-radius: 13px;
+      width: 70%;
+      position: unset;
+      top: 15%;
+      left: 0;
+      right: 0;
+
+      padding: 1vh;
+
+      margin: auto;
+      margin-top: 10vh;
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h2 {
+      text-align: left;
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+
+    p {
+      text-align: left;
+      margin-right: 5%;
+      font-size: medium;
+    }
+
+    .matheyimage {
+      margin: auto;
+      width: 50%;
+      padding: 10px;
+    }
+  </style>
+  {% include 'navbar.html' %}
+
   {% include 'background.html' %}
-        
-    <div class="help-section">
-        <div class="container" style="padding-top:1vh">
-    
-    <h1>Help</h1>
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse1">What is TigerMealX?</a>
-        </h4>
+
+  <div class="help-section">
+    <div class="container" style="padding-top:1vh">
+
+      <h1>Help</h1>
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse1">What is TigerMealX?</a>
+            </h4>
+          </div>
+          <div id="collapse1" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>TigerMealX is a new platform allowing Princeton University students to meal exchange more easily.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="collapse1" class="panel-collapse collapse">
-        <div class="panel-body">
-            <p>TigerMealX is a new platform allowing Princeton University students to meal exchange more easily.</p>
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse2">What is a meal exchange?</a>
+            </h4>
+          </div>
+          <div id="collapse2" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>The Meal Exchange Program makes it possible for students with meal plans to dine with their friends at
+                eating clubs, or between two different participating clubs, without spending additional funds.
+                Administered jointly by the Inter-Club Council and Campus Dining, the program includes club-to-dining
+                hall exchanges as well as club-to-club exchanges.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse3">How does TigerMealX work?</a>
+            </h4>
+          </div>
+          <div id="collapse3" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>TigerMealX is built in collaboration with Princeton Dining and interacts directly with the official
+                university system to facilitate meal exchanges.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse4">Who can I swap with?</a>
+            </h4>
+          </div>
+          <div id="collapse4" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>You can swap with any other student on a dining hall plan or eating club plan.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse2">What is a meal exchange?</a>
-        </h4>
-      </div>
-      <div id="collapse2" class="panel-collapse collapse">
-        <div class="panel-body">
-            <p>The Meal Exchange Program makes it possible for students with meal plans to dine with their friends at eating clubs, or between two different participating clubs, without spending additional funds. Administered jointly by the Inter-Club Council and Campus Dining, the program includes club-to-dining hall exchanges as well as club-to-club exchanges.</p>
-        </div>
-      </div>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    input[type=text],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      resize: vertical;
+    }
+
+    input[type=submit] {
+      background-color: #04AA6D;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
+
+    .container2 {
+      background-color: white;
+      margin-bottom: 15%;
+      border-radius: 13px;
+      width: 70%;
+      position: unset;
+      top: 15%;
+      left: 0;
+      right: 0;
+
+      padding: 1vh;
+
+      margin: auto;
+      margin-bottom: 4vh;
+      margin-top: 4vh;
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    }
+  </style>
+  </head>
+
+  <body>
+
+    <div class="container2">
+      <h1>Reach out to Campus dining</h1>
+      <form action="/action_page.php">
+
+        <label for="Subject">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="Subject">
+
+        <label for="Context">Context</label>
+        <textarea id="context" name="context" placeholder="Write something.." style="height:10vh"></textarea>
+
+        <input type="submit" value="Submit">
+      </form>
     </div>
-  </div> 
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse3">How does TigerMealX work?</a>
-        </h4>
-      </div>
-      <div id="collapse3" class="panel-collapse collapse">
-        <div class="panel-body">
-            <p>TigerMealX is built in collaboration with Princeton Dining and interacts directly with the official university system to facilitate meal exchanges.</p>
-        </div>
-      </div>
-    </div>
-  </div> 
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse4">Who can I swap with?</a>
-        </h4>
-      </div>
-      <div id="collapse4" class="panel-collapse collapse">
-        <div class="panel-body">
-            <p>You can swap with any other student on a dining hall plan or eating club plan.</p>
-        </div>
-      </div>
-    </div>
-  </div> 
-  </div>
-  </div>
-</body>
+  </body>
+
 </html>

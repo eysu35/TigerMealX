@@ -80,13 +80,19 @@
           <tr>
             <th scope="col">Name</th>
             <th scope="col">Meal</th>
-            <th scope="col">Next Location</th>
+            <th scope="col">Locations Eaten At</th>
             <th scope="col">Expiration Date</th>
           </tr>
         </thead>
         <tbody>
          {% for exchange in curr_exchanges: %}
-          <tr>
+         {% if exchange.get_daysleft() < 3 %}
+         <tr style="background-color:#f77777">
+          {% elif exchange.get_daysleft() < 7 %}
+          <tr style="background-color:#ffdd80">
+          {% else %} 
+          <tr style="background-color:#adc7a9">
+          {% endif %} 
             <td>{{exchange.get_display_name_from_puid(user_puid)}}</td>
             <td> {{exchange.get_meal()}}</td>
             {% if exchange.get_exch1_loc_id() == None %}

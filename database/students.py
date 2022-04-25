@@ -125,6 +125,22 @@ class Students:
         # print(location_name + "3")
 
         return location_name
+    @classmethod
+    def get_location_id_from_netid(cls, netid):
+        str_netid = str(netid).strip()
+        stmt = f"""SELECT meal_plan_id FROM students WHERE NETID
+        =\'{str_netid}\'"""
+
+        meal_plan_id = db_access.fetch_first_val(stmt)
+
+        stmt2 = f"""SELECT location_id FROM student_plans
+                    WHERE meal_plan_id=\'{meal_plan_id}\'"""
+
+        location_id = db_access.fetch_first_val(stmt2)
+        # print(location_id + "2")
+
+
+        return location_id
 
 
 class Student:

@@ -120,6 +120,7 @@ def initiate_exchange():
 @app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
     netid1 = auth.authenticate().strip()
+    loc_id = Students.get_location_id_from_netid(netid1)
     # if request.method == 'GET':
     try:
         name = Students.get_first_name_from_netid(netid1)
@@ -132,14 +133,13 @@ def post_new_exchange():
         student1 = Students.get_student_by_puid(puid1)
         student2 = Students.get_student_by_puid(puid2)
         netid2 = student2.get_netid()
-        loc_id = Students.get_location_id_from_netid(netid2)
 
         if emails_enabled:
             # send emails with the name of the other student
             send_email(student2.get_name(), netid1)
             send_email(student1.get_name(), netid2)
 
-        html = render_template("index.html", name=name)
+        html = render_template("index.html", name=name, loc_id=loc_id)
         response = make_response(html)
         return response
     except Exception as e:

@@ -82,32 +82,7 @@
      
    </style>
   {% include 'navbar.html' %}
-  {% if loc_id=='Ivy' %}
-   
-   <style>
-      body{
-         background-image: url('../static/Ivy.jpg');
-      }
-   </style>
-   {% elif loc_id=='~dining_hall_location_id~' %}
-   <style>
-      body{
-         background-image: url('../static/Dhall.jpg');
-      }
-   </style>
-   {% elif loc_id=='~ti_hall_location_id~' %}
-   <style>
-      body{
-         background-image: url('../static/TI.png');
-      }
-   </style>
-   {% else %}
-   <style>
-      body{
-         background-image: url('../static/Background.jpg');
-      }
-   </style>
-   {% endif %}
+  {% include 'background.html' %}
    <!-- Developmental! -->
    <div id="container">
        <div class="box">

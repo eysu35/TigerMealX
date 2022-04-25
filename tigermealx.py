@@ -26,6 +26,7 @@ def base():
 @app.route('/exchanges/')
 def show_exchanges():
     netid = auth.authenticate()
+    loc_id = Students.get_location_name_from_netid(netid)
     try:
         name = Students.get_first_name_from_netid(netid)
         studentid = Students.get_puid_from_netid(netid)
@@ -37,15 +38,17 @@ def show_exchanges():
     return render_template('exchanges.html',
                            curr_exchanges=curr_exchanges,
                            past_exchanges=past_exchanges, name=name,
-                           user_puid=studentid)
+                           user_puid=studentid, loc_id=loc_id)
 
 
 @app.route('/about/')
 def faq():
     netid = auth.authenticate()
+    
+    loc_id = Students.get_location_name_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
 
-    return render_template('about.html', name=name)
+    return render_template('about.html', name=name, loc_id=loc_id)
 
 @app.route('/admin/')
 def admin_page():
@@ -57,9 +60,10 @@ def admin_page():
 @app.route('/help/')
 def help_page():
     netid = auth.authenticate()
+    loc_id = Students.get_location_name_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
 
-    return render_template('help.html', name=name)
+    return render_template('help.html', name=name, loc_id=loc_id)
 
 @app.route('/exchangeportal')
 def initiate_exchange():
@@ -114,6 +118,7 @@ def post_new_exchange():
         student1 = Students.get_student_by_puid(puid1)
         student2 = Students.get_student_by_puid(puid2)
         netid2 = student2.get_netid()
+        loc_id = Students.get_location_name_from_netid(netid2)
 
         if emails_enabled:
             # send emails with the name of the other student
@@ -125,7 +130,7 @@ def post_new_exchange():
         return response
     except Exception as e:
         print("tigermealx.py error: " + str(e))
-        return render_template('error404.html', name = name)
+        return render_template('error404.html', name = name, loc_id=loc_id)
 
 
 
@@ -134,6 +139,7 @@ def post_new_exchange():
 def complete_exchange():
     netid1 = request.args.get('netid1').strip().lower()
     netid2 = request.args.get('netid2').strip().lower()
+    
 
     puid1 = Students.get_puid_from_netid(netid1)
     puid2 = Students.get_puid_from_netid(netid2)
@@ -172,9 +178,11 @@ def search_results():
 @app.errorhandler(Exception)
 def server_error(err):
     netid = auth.authenticate()
+    
+    loc_id = Students.get_location_name_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
     app.logger.exception(err)
-    return render_template('error404.html', name=name)
+    return render_template('error404.html', name=name, loc_id=loc_id)
 
 
 if __name__ == '__main__':

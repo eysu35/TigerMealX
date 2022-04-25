@@ -22,7 +22,7 @@ def base():
     print(loc_id)
     name = Students.get_first_name_from_netid(netid)
     if not student.get_isValid():
-        return render_template('exchangerror.html', msg="You are not "
+        return render_template('exchangeerror.html', msg="You are not "
             "on a meal plan that is valid for meal exchanges. Please "
             "contact campus dining services if you think this is a "
                                                         "mistake.")

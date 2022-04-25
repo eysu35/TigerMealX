@@ -48,7 +48,120 @@
             text-align: left;
             margin-right: 5%;
             font-size: medium;
-        }            
+        }
+        .swipe-animation{
+            position:relative;
+            width: 500px;
+            height: 200px;
+            margin: 60px auto;
+            overflow:hidden;
+        }
+
+        .credit-card {
+            width: 250px;
+            height: 140px;
+            background:#dadada;
+            border-radius:10px;
+            position:relative;
+            z-index: 2;
+            margin-left: -350px;
+        }
+        .credit-card-swipe {
+            width: 250px;
+            height: 140px;
+            background:#dadada;
+            border-radius:10px;
+            position:relative;
+            z-index: 2;
+            margin-left: -350px;
+            animation: swipe-card 1s ease-in-out;
+        }
+        
+        .scc-tripe {
+                position:absolute;
+                background:#434343;
+                width: 100%;
+                height: 25px;
+                bottom:30px;
+        }
+        .scc-tripe-swipe {
+                position:absolute;
+                background:#434343;
+                width: 100%;
+                height: 25px;
+                bottom:30px;
+        }
+        .swiper-top, .swiper-bottom{  
+        border-radius:8px 8px 0 0;
+        position:absolute;
+        background: #434343;  
+        }
+        .swiper-top{ 
+        height: 20px;
+        bottom:105px;
+        z-index: 0;
+        width: 400px;
+        left: calc(50% - 200px);
+        }
+        .swiper-bottom{
+            height: 100px;
+            bottom:0;
+            z-index: 3;
+            width: 420px;
+            left: calc(50% - 210px);
+        }
+        
+        .light-indicator{
+            position:absolute;
+            top:10px;
+            right:15px;
+            width: 10px;
+            height: 10px;
+            border-radius:50%;
+            background:#dadada; 
+            animation: reader-light 2s ease-in-out infinite;
+        }
+        .light-indicator-bad{
+            position:absolute;
+            top:10px;
+            right:15px;
+            width: 10px;
+            height: 10px;
+            border-radius:50%;
+            background:#dadada; 
+            animation: reader-light-bad 2s ease-in-out infinite;
+        }
+
+
+        @keyframes swipe-card{
+            0%{
+                margin-left: -150px;
+                transform:rotate(25deg);
+            }
+            50%{
+                transform:rotate(0deg);
+            }
+            100%{
+                margin-left: 500px;
+                transform:rotate(-25deg);
+            }
+        }
+        @keyframes reader-light{
+            0%{
+                background:#dadada; 
+            }
+            60%{
+                background:#51ff00; 
+            }
+        }   
+        @keyframes reader-light-bad{
+            0%{
+                background:#dadada; 
+            }
+            60%{
+                background:#ff0000; 
+            }
+        }          
     </style>
     {% include 'navbar.html' %}
     <div class="rules-section">
@@ -79,21 +192,45 @@
             </div>
             <input type="text" class="form-control" id="timeInput" aria-label="time" aria-describedby="basic-addon4">
         </div>
-        <input class="btn btn-primary btn-large btn-block" id="submitButton" type="submit" value="Submit">
+        <div class="swipe-animation">
+            <div class="credit-card">
+              <div class="scc-tripe"></div>
+            </div>
+            <div class="swiper-top"></div>
+            <div class="swiper-bottom">
+              <div class="light-indicator"></div>
+            </div>
+        </div>
+        <input class="btn btn-primary btn-large btn-block" id="submitButton" type="submit" value="Swipe Cards">
         <p id="update_msg" style="text-align:center"></p>
     </div>
 
     <script>
         'use strict';
-
+        let light = "green";
         function handleResponse(response){
             $("#update_msg").html(response);
+            console.log(response);
+            if (light="green" && response !== "Exchange successfully updated!") {
+                $('.light-indicator').toggleClass('light-indicator-bad');
+                light = "red";
+            }
+            else if (light="red" && response === "Exchange successfully updated!") {
+                console.log("good");
+                $('.light-indicator').toggleClass('light-indicator-bad');
+            }
         }
 
         let request = null;
 
         function getResults() 
         {
+           $('.credit-card').addClass('credit-card-swipe');
+           $('.scc-tripe').addClass('scc-tripe-swipe');  
+           setTimeout(function(){ 
+                $('.credit-card').removeClass('credit-card-swipe');
+                $('.scc-tripe').removeClass('scc-tripe-swipe'); 
+            }, 1000);       
            let netid1 = $('#netid1Input').val();
            let netid2 = $('#netid2Input').val();
            let location = $('#locationInput').val();

@@ -14,7 +14,7 @@ emails_enabled = False
 @app.route('/index', methods=['GET'])
 def base():
     netid = auth.authenticate()
-    loc_id = Students.get_location_name_from_netid(netid)
+    loc_id = Students.get_location_id_from_netid(netid)
     print(loc_id)
     name = Students.get_first_name_from_netid(netid)
     
@@ -26,7 +26,7 @@ def base():
 @app.route('/exchanges/')
 def show_exchanges():
     netid = auth.authenticate()
-    loc_id = Students.get_location_name_from_netid(netid)
+    loc_id = Students.get_location_id_from_netid(netid)
     try:
         name = Students.get_first_name_from_netid(netid)
         studentid = Students.get_puid_from_netid(netid)
@@ -45,7 +45,7 @@ def show_exchanges():
 def faq():
     netid = auth.authenticate()
     
-    loc_id = Students.get_location_name_from_netid(netid)
+    loc_id = Students.get_location_id_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
 
     return render_template('about.html', name=name, loc_id=loc_id)
@@ -60,7 +60,7 @@ def admin_page():
 @app.route('/help/')
 def help_page():
     netid = auth.authenticate()
-    loc_id = Students.get_location_name_from_netid(netid)
+    loc_id = Students.get_location_id_from_netid(netid)
     name = Students.get_first_name_from_netid(netid)
 
     return render_template('help.html', name=name, loc_id=loc_id)
@@ -92,7 +92,6 @@ def initiate_exchange():
 
     loc1_id = student1.get_loc_id()
     loc2_id = student2.get_loc_id()
-    print(loc2_id)
 
     if loc1_id == loc2_id:
         return render_template('exchangeerror.html', msg="You cannot exchange a meal with someone who eats at the same location as you.")
@@ -118,7 +117,7 @@ def post_new_exchange():
         student1 = Students.get_student_by_puid(puid1)
         student2 = Students.get_student_by_puid(puid2)
         netid2 = student2.get_netid()
-        loc_id = Students.get_location_name_from_netid(netid2)
+        loc_id = Students.get_location_id_from_netid(netid2)
 
         if emails_enabled:
             # send emails with the name of the other student

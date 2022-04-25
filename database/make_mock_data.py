@@ -199,7 +199,7 @@ def main():
     # Add friends:
     # Note: Sometimes the same pair is randomly selected multiple times. 
     # However, there is only ever one copy in the table.
-    num_friendships = 50
+    num_friendships = 0
     puids = df.loc[:, "PUID (number on your prox)"]
     for i in range(num_friendships):
         # Get random index
@@ -218,7 +218,7 @@ def main():
         add_data('locations', [key, locations_dict[key]])
 
     # Add exchanges
-    num_exchanges = 50
+    num_exchanges = 0
 
     # Returns club corresponding to puid
     def getClubFromID(puid):
@@ -276,9 +276,9 @@ def main():
 
 if __name__ == '__main__':
     main()
-    rand_id = str(uuid.uuid4())
-    add_data('students', ['920261411',
-                          'bb5943',
-                          'Brianna Butler',
-                          rand_id,
-                          True])
+    # rand_id = str(uuid.uuid4())
+    # add_data('students', ['920261411',
+    #                       'bb5943',
+    #                       'Brianna Butler',
+    #                       rand_id,
+    #                       True])

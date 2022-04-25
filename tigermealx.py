@@ -7,12 +7,13 @@ from send_email import send_email
 
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
+app.url_map.strict_slashes = False
 import auth
 emails_enabled = False
 
 
 @app.route('/')
-@app.route('/index/', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def base():
     netid = auth.authenticate()
     loc_id = Students.get_location_id_from_netid(netid)
@@ -21,7 +22,7 @@ def base():
     return render_template('index.html', name=name, netid=netid, loc_id=loc_id)
 
 
-@app.route('/exchanges/')
+@app.route('/exchanges')
 def show_exchanges():
     netid = auth.authenticate()
     loc_id = Students.get_location_id_from_netid(netid)
@@ -39,7 +40,7 @@ def show_exchanges():
                            user_puid=studentid, loc_id=loc_id)
 
 
-@app.route('/about/')
+@app.route('/about')
 def faq():
     netid = auth.authenticate()
     
@@ -49,7 +50,7 @@ def faq():
     return render_template('about.html', name=name, loc_id=loc_id)
 
 
-@app.route('/admin/')
+@app.route('/admin')
 def admin_page():
     netid = auth.authenticate()
     name = Students.get_first_name_from_netid(netid)
@@ -57,7 +58,7 @@ def admin_page():
     return render_template('admin.html', name=name)
 
 
-@app.route('/help/')
+@app.route('/help')
 def help_page():
     netid = auth.authenticate()
     loc_id = Students.get_location_id_from_netid(netid)
@@ -66,7 +67,7 @@ def help_page():
     return render_template('help.html', name=name, loc_id=loc_id)
 
 
-@app.route('/exchangeportal/')
+@app.route('/exchangeportal')
 def initiate_exchange():
     netid = auth.authenticate()
     puid1 = Students.get_puid_from_netid(netid)
@@ -103,7 +104,7 @@ def initiate_exchange():
                            location2=location2, loc_id=loc2_id)
 
 
-@app.route('/postnewexchange/', methods=['GET', 'POST'])
+@app.route('/postnewexchange', methods=['GET', 'POST'])
 def post_new_exchange():
     netid1 = auth.authenticate()
     # if request.method == 'GET':
@@ -133,7 +134,7 @@ def post_new_exchange():
         return render_template('error404.html', name = name, loc_id=loc_id)
 
 
-@app.route('/completeexchange/', methods=['GET']) #Could be POST?
+@app.route('/completeexchange', methods=['GET']) #Could be POST?
 def complete_exchange():
     netid1 = request.args.get('netid1').strip().lower()
     netid2 = request.args.get('netid2').strip().lower()
@@ -152,23 +153,25 @@ def complete_exchange():
     return msg
 
 
-@app.route('/searchresults/', methods=['GET'])
+@app.route('/searchresults', methods=['GET'])
 def search_results():
     netid = auth.authenticate().strip()
     Name = request.args.get('name')
     if len(Name) > 0:
+        print('HELLO LINE 160')
         try:
             students = Students.search_students_by_name(Name)
         except Exception as e:
             print("tigermealx.py error [100]: " + str(e))
             return render_template('errordb.html')
+
         html = '<div class="table-wrapper-scroll-y my-custom-scrollbar"><table class="table table-bordered table-hover"><tbody>'
         pattern = "<tr onclick=\"startexchange(%s)\"><td width='130px'>%s</td><td width='130px'>%s</td></tr>"
         for student in students:
             # should not see yourself in the search results
-            if (student.get_netid() == netid):
+            if student.get_netid() == netid:
                 continue
-            html += pattern%(student.get_puid(),student.get_name(),
+            html += pattern%(student.get_puid(), student.get_name(),
                           student.get_netid())
         html += '</tbody></div>'    
     # assume it's a name for now but need to also check for PUID

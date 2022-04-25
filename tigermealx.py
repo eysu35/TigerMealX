@@ -92,7 +92,6 @@ def initiate_exchange():
 
     loc1_id = student1.get_loc_id()
     loc2_id = student2.get_loc_id()
-    print(loc2_id)
 
     if loc1_id == loc2_id:
         return render_template('exchangeerror.html', msg="You cannot exchange a meal with someone who eats at the same location as you.")

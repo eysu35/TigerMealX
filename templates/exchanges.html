@@ -96,9 +96,11 @@
             <td>{{exchange.get_display_name_from_puid(user_puid)}}</td>
             <td> {{exchange.get_meal()}}</td>
             {% if exchange.get_exch1_loc_id() == None %}
-            <td>None</td>
-            {% else %}
-            <td>{{exchange.get_exch1_loc_name()}}</td>
+            <td>{{exchange.get_plans_from_puid()[0]}}, {{exchange.get_plans_from_puid()[1]}}</td>
+            {% elif exchange.get_exch1_loc_name() == exchange.get_plans_from_puid()[0] %}
+            <td>{{exchange.get_plans_from_puid()[1]}}</td>
+            {% elif exchange.get_exch1_loc_name() == exchange.get_plans_from_puid()[1] %}
+            <td>{{exchange.get_plans_from_puid()[0]}}</td>
             {% endif %}
             <td> {{exchange.get_exp()}}</td>
           </tr>

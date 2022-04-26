@@ -50,7 +50,7 @@ def remove_all_data():
     finally:
         if conn is not None:
             conn.close()
-            # print("success")        
+            # print("success")
 
 
 def add_data(table, row_data):
@@ -158,7 +158,7 @@ def main():
     register_adapter(np.float64, addapt_numpy_float64)
     register_adapter(np.int64, addapt_numpy_int64)
 
-    # Delete data in all ables 
+    # Delete data in all ables
     remove_all_data()
 
     # Locations Table Dictionary
@@ -197,7 +197,7 @@ def main():
         add_data('student_plans', [rand_id, location_id_from_location(row['Meal Plan'])])
 
     # Add friends:
-    # Note: Sometimes the same pair is randomly selected multiple times. 
+    # Note: Sometimes the same pair is randomly selected multiple times.
     # However, there is only ever one copy in the table.
     num_friendships = 0
     puids = df.loc[:, "PUID (number on your prox)"]
@@ -276,9 +276,14 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # rand_id = str(uuid.uuid4())
-    # add_data('students', ['920261411',
-    #                       'bb5943',
-    #                       'Brianna Butler',
-    #                       rand_id,
-    #                       True])
+    exchange_params = ['920227408', '920228016', 'lunch',
+                       '2022-04-01', '~ivy_location_id~', None, None,
+                       '2022-05-01',
+                       'Incomplete']
+    add_data('exchanges', exchange_params)
+
+    exchange_params = ['920227978', '920228016', 'breakfast',
+                       '2022-03-29',
+                       '~quad_location_id~', None, None, '2022-04-28',
+                       'Incomplete']
+    add_data('exchanges', exchange_params)

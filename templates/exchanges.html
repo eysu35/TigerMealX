@@ -89,8 +89,8 @@
          {% for exchange in curr_exchanges: %}
          {% if exchange.get_daysleft() <= 3 %}
          <tr style="background-color:#f77777">
-          {% elif exchange.get_daysleft() <= 7 %}
-          <tr style="background-color:#ffdd80">
+         {% elif exchange.get_daysleft() <= 7 %}
+         <tr style="background-color:#ffdd80">
           {% else %} 
           <tr style="background-color:#adc7a9">
           {% endif %} 

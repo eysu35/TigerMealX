@@ -391,6 +391,7 @@ class Exchange:
     
     def get_daysleft(self):
         daysleft = abs((self._exp - date.today()).days)
+        print(daysleft)
         return daysleft
 
     def get_mealx_id(self):
@@ -410,15 +411,6 @@ class Exchange:
 
     def set_puid2(self, puid2):
         self._puid2 = puid2
-
-    # def get_plans_from_puid(self):
-    #     puid1 = self.get_puid1()
-    #     puid2 = self.get_puid2()
-    #
-    #     plan1 = Exchanges.get_plan_from_puid(puid1)
-    #     plan2 = Exchanges.get_plan_from_puid(puid2)
-    #
-    #     return plan1, plan2
 
     def get_student1_loc(self):
         return self._student1_loc

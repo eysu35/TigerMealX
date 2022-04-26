@@ -22,7 +22,6 @@ class Exchanges:
 
         stmt = f'''SELECT location_name FROM locations WHERE location_id = \'{loc_id}\''''
         loc_name = db_access.fetch_first_val(stmt)
-        print("Hello")
         return loc_name
 
     # returns current exchanges for studentid as a list of Exchange objects

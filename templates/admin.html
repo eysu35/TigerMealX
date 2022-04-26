@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>TigerMealX - FAQs</title>
+    <title>TigerMealX - Admin</title>
 </head>
 <body>
     <style>
@@ -104,15 +104,15 @@
         height: 20px;
         bottom:105px;
         z-index: 0;
-        width: 300px;
-        left: calc(50% - 150px);
+        width: 250px;
+        left: calc(50% - 125px);
         }
         .swiper-bottom{
             height: 100px;
             bottom:0;
             z-index: 3;
-            width: 320px;
-            left: calc(50% - 160px);
+            width: 270px;
+            left: calc(50% - 135px);
         }
         
         .light-indicator{
@@ -170,7 +170,7 @@
     {% include 'navbar.html' %}
     <div class="rules-section">
         <div class="container" style="padding-top:1vh">
-            <h1>Admin Page</h1>
+            <h1>Prox Swipe Simulation</h1>
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -186,15 +186,29 @@
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon3">location</span>
-            </div>
-            <input aria-required="true" type="text" class="form-control" id="locationInput" aria-label="location" aria-describedby="basic-addon3">
+                <span class="input-group-text" id="basic-addon2">Location</span>
+              </div>
+            <select class="form-control search-slt" id="locationInput">
+                <option selected disabled>Select Location</option>
+                <option>Dining Hall</option>
+                <option>Cannon</option>
+                <option>Cap</option>
+                <option>Charter</option>
+                <option>Cloister</option>
+                <option>Colonial</option>
+                <option>Cottage</option>
+                <option>Ivy</option>
+                <option>Quad</option>
+                <option>Terrace</option>
+                <option>TI</option>
+                <option>Tower</option>
+            </select>
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon4">time</span>
+              <span class="input-group-text" id="basic-addon4">Time</span>
             </div>
-            <input aria-required="true" type="text" class="form-control" id="timeInput" aria-label="time" aria-describedby="basic-addon4">
+            <input type="text" placeholder="hh:mm" class="form-control" id="timeInput">
         </div>
         <div class="swipe-animation">
             <div class="credit-card">

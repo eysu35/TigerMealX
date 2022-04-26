@@ -174,13 +174,11 @@
       left: 0;
       right: 0;
 
-      padding: 2vh;
+      padding: 1vh;
 
       margin: auto;
       margin-bottom: 4vh;
       margin-top: 4vh;
-      padding: 2vh;
-      font-size: medium;
       font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     }
   </style>
@@ -189,18 +187,46 @@
   <body>
 
     <div class="container2">
-      <h1>Reach out to Campus dining</h1>
-      <form action="/action_page.php">
+      <h1>Contact Campus Dining</h1>
+      <form action="">
 
         <label for="Subject">Subject</label>
-        <input type="text" id="subject" name="subject" placeholder="Subject">
+        <input type="text" id="subjectInput" name="subject" placeholder="Subject">
 
         <label for="Context">Context</label>
-        <textarea id="context" name="context" placeholder="Write something.." style="height:10vh"></textarea>
+        <textarea id="msgInput" name="message" placeholder="Write message here.." style="height:10vh"></textarea>
 
-        <input type="submit" value="Submit">
+        <input type="submit" id="submitButton" value="Submit">
       </form>
     </div>
+
+    <script>
+      'use strict';
+      function handleResponse() {}
+      function getResults() {
+        let subject = $('#subjectInput').val();
+        let msg = $('#msgInput').val();
+
+        subject = encodeURIComponent(subject);
+        msg = encodeURIComponent(msg);
+
+        let url = '/emailcampusdining?subject=' + subject + '&msg=' + msg;
+        
+        request = $.ajax(
+          {
+            type: 'POST',
+            url: url,
+            success: handleResponse
+          }
+        );
+      }
+
+      function setup() {
+        $('#submitButton').click(getResults);
+      }
+      $('document').ready(setup);
+    </script>
+
   </body>
 
 </html>

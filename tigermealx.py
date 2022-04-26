@@ -2,14 +2,14 @@ from flask import Flask, render_template, request, make_response
 from keys import APP_SECRET_KEY
 from database.exchanges import Exchanges
 from database.students import Students
-from send_email import send_email
+from send_email import send_email, campus_dining_email
 
 
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
 app.url_map.strict_slashes = False
 import auth
-emails_enabled = False
+emails_enabled = True
 
 
 @app.route('/')
@@ -170,6 +170,33 @@ def complete_exchange():
     success, msg = Exchanges.update_exchange(puid1, puid2, location_id, time)
 
     return msg
+
+@app.route('/emailcampusdining', methods=['POST'])
+def email_campus_dining():
+
+    subject = request.args.get('subject').strip()
+    msg = request.args.get('msg').strip()
+
+    netid = auth.authenticate().strip()
+    loc_id = Students.get_location_id_from_netid(netid)
+    
+    try:
+        print('here1')
+        name = Students.get_first_name_from_netid(netid)
+        # puid = Students.get_puid_from_netid(netid)
+
+        if emails_enabled:
+            print('here2')
+            campus_dining_email(name, subject, msg)
+
+        html = render_template("help.html", name=name, loc_id=loc_id)
+    
+        response = make_response(html)
+        return
+    except Exception as e:
+        print("tigermealx.py error: " + str(e))
+        return render_template("error404.html", name=name, loc_id=loc_id)
+        return render_template('error404.html', name = name, loc_id=loc_id)
 
 
 @app.route('/searchresults', methods=['GET'])

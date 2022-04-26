@@ -1,40 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <link rel="icon" type="image/x-icon" href="/static/seal.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/static/seal.ico">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>TigerMealX - FAQs</title>
 </head>
-
 <body>
     <style>
         body {
-            min-height: 100vh;
-            background-image: url('../static/nassau.jpg');
-            background-position: top center;
-            background-repeat: no-repeat;
-            background-size: cover;
+           min-height: 100vh;
+           background-image: url('../static/nassau.jpg');
+           background-position: top center;
+           background-repeat: no-repeat;
+           background-size:cover;
         }
-
-        .vertical-scrollable>.row {
-            position: absolute;
-            top: 120px;
-            bottom: 100px;
-            left: 180px;
-            width: 50%;
-            overflow-y: scroll;
+        .vertical-scrollable> .row {
+          position: absolute;
+          top: 120px;
+          bottom: 100px;
+          left: 180px;
+          width: 50%;
+          overflow-y: scroll; 
         }
-
         .rules-section {
             background-color: white;
             border-radius: 13px;
             width: 70%;
             position: unset;
-            top: 15%;
+            top:15%;
             left: 0;
             right: 0;
             font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -42,149 +38,134 @@
             margin-top: 20vh;
             padding: 10px;
         }
-
         h1 {
             text-align: center;
         }
-
         h2 {
             text-align: left;
             margin-left: 5%;
             margin-right: 5%;
         }
-
         p {
             text-align: left;
             margin-right: 5%;
             font-size: medium;
         }
-
-        .swipe-animation {
-            position: relative;
-            width: 500px;
-            height: 200px;
+        .swipe-animation{
+            position:relative;
+            max-width: 600px;
+            max-height: 200px;
+            width: 60vw;
+            height: 20vh;
             margin: 60px auto;
-            overflow: hidden;
+            overflow:hidden;
         }
 
         .credit-card {
             width: 250px;
             height: 140px;
-            background: #dadada;
-            border-radius: 10px;
-            position: relative;
+            background:#dadada;
+            border-radius:10px;
+            position:relative;
             z-index: 2;
             margin-left: -350px;
         }
-
         .credit-card-swipe {
             width: 250px;
             height: 140px;
-            background: #dadada;
-            border-radius: 10px;
-            position: relative;
+            background:#dadada;
+            border-radius:10px;
+            position:relative;
             z-index: 2;
             margin-left: -350px;
             animation: swipe-card 1s ease-in-out;
         }
-
+        
         .scc-tripe {
-            position: absolute;
-            background: #434343;
-            width: 100%;
-            height: 25px;
-            bottom: 30px;
+                position:absolute;
+                background:#434343;
+                width: 100%;
+                height: 25px;
+                bottom:30px;
         }
-
         .scc-tripe-swipe {
-            position: absolute;
-            background: #434343;
-            width: 100%;
-            height: 25px;
-            bottom: 30px;
+                position:absolute;
+                background:#434343;
+                width: 100%;
+                height: 25px;
+                bottom:30px;
         }
-
-        .swiper-top,
-        .swiper-bottom {
-            border-radius: 8px 8px 0 0;
-            position: absolute;
-            background: #434343;
+        .swiper-top, .swiper-bottom{  
+        border-radius:8px 8px 0 0;
+        position:absolute;
+        background: #434343;  
         }
-
-        .swiper-top {
-            height: 20px;
-            bottom: 105px;
-            z-index: 0;
-            width: 400px;
-            left: calc(50% - 200px);
+        .swiper-top{ 
+        height: 20px;
+        bottom:105px;
+        z-index: 0;
+        width: 300px;
+        left: calc(50% - 150px);
         }
-
-        .swiper-bottom {
+        .swiper-bottom{
             height: 100px;
-            bottom: 0;
+            bottom:0;
             z-index: 3;
-            width: 420px;
-            left: calc(50% - 210px);
+            width: 320px;
+            left: calc(50% - 160px);
         }
-
-        .light-indicator {
-            position: absolute;
-            top: 10px;
-            right: 15px;
+        
+        .light-indicator{
+            position:absolute;
+            top:10px;
+            right:15px;
             width: 10px;
             height: 10px;
-            border-radius: 50%;
-            background: #dadada;
+            border-radius:50%;
+            background:#dadada; 
             animation: reader-light 2s ease-in-out infinite;
         }
-
-        .light-indicator-bad {
-            position: absolute;
-            top: 10px;
-            right: 15px;
+        .light-indicator-bad{
+            position:absolute;
+            top:10px;
+            right:15px;
             width: 10px;
             height: 10px;
-            border-radius: 50%;
-            background: #dadada;
+            border-radius:50%;
+            background:#dadada; 
             animation: reader-light-bad 2s ease-in-out infinite;
         }
 
 
-        @keyframes swipe-card {
-            0% {
+        @keyframes swipe-card{
+            0%{
                 margin-left: -150px;
-                transform: rotate(25deg);
+                transform:rotate(25deg);
             }
-
-            50% {
-                transform: rotate(0deg);
+            50%{
+                transform:rotate(0deg);
             }
-
-            100% {
+            100%{
                 margin-left: 500px;
-                transform: rotate(-25deg);
+                transform:rotate(-25deg);
             }
         }
-
-        @keyframes reader-light {
-            0% {
-                background: #dadada;
+        @keyframes reader-light{
+            0%{
+                background:#dadada; 
             }
-
-            60% {
-                background: #51ff00;
+            60%{
+                background:#51ff00; 
             }
-        }
-
-        @keyframes reader-light-bad {
-            0% {
-                background: #dadada;
+        }   
+        @keyframes reader-light-bad{
+            0%{
+                background:#dadada; 
             }
-
-            60% {
-                background: #ff0000;
+            60%{
+                background:#ff0000; 
             }
-        }
+        }          
     </style>
     {% include 'navbar.html' %}
     <div class="rules-section">
@@ -193,38 +174,35 @@
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">netid 1</span>
+              <span class="input-group-text" id="basic-addon1">netid 1</span>
             </div>
-            <input type="text" class="form-control" id="netid1Input" aria-label="netid 1"
-                aria-describedby="basic-addon1">
+            <input type="text" class="form-control" id="netid1Input" aria-label="netid 1" aria-describedby="basic-addon1">
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon2">netid 2</span>
+              <span class="input-group-text" id="basic-addon2">netid 2</span>
             </div>
-            <input type="text" class="form-control" id="netid2Input" aria-label="netid 2"
-                aria-describedby="basic-addon2">
+            <input type="text" class="form-control" id="netid2Input" aria-label="netid 2" aria-describedby="basic-addon2">
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">location</span>
+              <span class="input-group-text" id="basic-addon3">location</span>
             </div>
-            <input type="text" class="form-control" id="locationInput" aria-label="location"
-                aria-describedby="basic-addon3">
+            <input type="text" class="form-control" id="locationInput" aria-label="location" aria-describedby="basic-addon3">
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon4">time</span>
+              <span class="input-group-text" id="basic-addon4">time</span>
             </div>
             <input type="text" class="form-control" id="timeInput" aria-label="time" aria-describedby="basic-addon4">
         </div>
         <div class="swipe-animation">
             <div class="credit-card">
-                <div class="scc-tripe"></div>
+              <div class="scc-tripe"></div>
             </div>
             <div class="swiper-top"></div>
             <div class="swiper-bottom">
-                <div class="light-indicator"></div>
+              <div class="light-indicator"></div>
             </div>
         </div>
         <input class="btn btn-primary btn-large btn-block" id="submitButton" type="submit" value="Swipe Cards">
@@ -234,62 +212,65 @@
     <script>
         'use strict';
         let light = "green";
-        function handleResponse(response) {
+        function handleResponse(response){
             $("#update_msg").html(response);
             console.log(response);
-            if (light = "green" && response !== "Exchange successfully updated!") {
+            if (light==="green" && response !== "Exchange successfully updated!") {
+                console.log(light);
                 $('.light-indicator').toggleClass('light-indicator-bad');
                 light = "red";
             }
-            else if (light = "red" && response === "Exchange successfully updated!") {
+            else if (light==="red" && response === "Exchange successfully updated!") {
                 console.log("good");
                 $('.light-indicator').toggleClass('light-indicator-bad');
+                light = "green"
             }
         }
 
         let request = null;
 
-        function getResults() {
-            $('.credit-card').addClass('credit-card-swipe');
-            $('.scc-tripe').addClass('scc-tripe-swipe');
-            setTimeout(function () {
+        function getResults() 
+        {
+           $('.credit-card').addClass('credit-card-swipe');
+           $('.scc-tripe').addClass('scc-tripe-swipe');  
+           setTimeout(function(){ 
                 $('.credit-card').removeClass('credit-card-swipe');
-                $('.scc-tripe').removeClass('scc-tripe-swipe');
-            }, 1000);
-            let netid1 = $('#netid1Input').val();
-            let netid2 = $('#netid2Input').val();
-            let location = $('#locationInput').val();
-            let time = $('#timeInput').val();
+                $('.scc-tripe').removeClass('scc-tripe-swipe'); 
+            }, 1000);       
+           let netid1 = $('#netid1Input').val();
+           let netid2 = $('#netid2Input').val();
+           let location = $('#locationInput').val();
+           let time = $('#timeInput').val();
 
-            netid1 = encodeURIComponent(netid1)
-            netid2 = encodeURIComponent(netid2)
-            location = encodeURIComponent(location)
-            time = encodeURIComponent(time)
+           netid1 = encodeURIComponent(netid1)
+           netid2 = encodeURIComponent(netid2)
+           location = encodeURIComponent(location)
+           time = encodeURIComponent(time) 
 
-            let url = '/completeexchange?netid1=' + netid1 + '&netid2=' + netid2 + '&location=' + location + '&time=' + time
+           let url = '/completeexchange?netid1=' + netid1 + '&netid2=' + netid2 + '&location=' + location + '&time=' + time
 
-            if (request != null)
-                request.abort();
+           if (request != null)
+              request.abort();
 
-            request = $.ajax(
-                {
-                    type: 'GET',
-                    url: url,
-                    success: handleResponse
-                }
-            );
+           request = $.ajax(
+              {
+                 type: 'GET',
+                 url: url,
+                 success: handleResponse
+              }
+           );
         }
 
-        function setup() {
-            $('#submitButton').click(getResults);
+        function setup()
+        {
+           $('#submitButton').click(getResults);
         }
 
         $('document').ready(setup);
-    </script>
-
+     </script>
+    
     <!-- Complete first of meal exchange -->
-
+    
     <br><br>
 </body>
-
 </html>

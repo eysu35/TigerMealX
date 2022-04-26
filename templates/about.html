@@ -1,107 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>TigerMealX - FAQs</title>
+  <link rel="icon" type="image/x-icon" href="/static/seal.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>TigerMealX - FAQs</title>
 </head>
+
 <body>
-    <style>
-        body {
-           min-height: 100vh;
-           background-position: top center;
-           background-repeat: no-repeat;
-           background-size:cover;
-        }
-        .vertical-scrollable> .row {
-          position: absolute;
-          top: 120px;
-          bottom: 100px;
-          left: 180px;
-          width: 50%;
-          overflow-y: scroll; 
-        }
-        .rules-section {
-            background-color: white;
-            border-radius: 13px;
-            width: 70%;
-            position: unset;
-            top:15%;
-            left: 0;
-            right: 0;
-            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-            margin: auto;
-            margin-top: 20vh;
-        }
-        h1 {
-            text-align: center;
-        }
-        h2 {
-            text-align: left;
-            margin-left: 5%;
-            margin-right: 5%;
-        }
-        p {
-            text-align: left;
-            margin-right: 5%;
-            font-size: medium;
-        }            
-    </style>
-    {% include 'navbar.html' %}
-    
+  <style>
+    body {
+      min-height: 100vh;
+      background-position: top center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .vertical-scrollable>.row {
+      position: absolute;
+      top: 120px;
+      bottom: 100px;
+      left: 180px;
+      width: 50%;
+      overflow-y: scroll;
+    }
+
+    .rules-section {
+      background-color: white;
+      border-radius: 13px;
+      width: 70%;
+      position: unset;
+      top: 15%;
+      left: 0;
+      right: 0;
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      margin: auto;
+      margin-top: 20vh;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h2 {
+      text-align: left;
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+
+    p {
+      text-align: left;
+      margin-right: 5%;
+      font-size: medium;
+    }
+  </style>
+  {% include 'navbar.html' %}
+
   {% include 'background.html' %}
-    <div class="rules-section">
-        <div class="container" style="padding-top:1vh">
-                
+  <div class="rules-section">
+    <div class="container" style="padding-top:1vh">
 
 
-    <h1>Meal Exchange Rules</h1>
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse1">Club-to-Dining Hall Exchanges</a>
-        </h4>
+
+      <h1>Meal Exchange Rules</h1>
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse1">Club-to-Dining Hall Exchanges</a>
+            </h4>
+          </div>
+          <div id="collapse1" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p> Campus Dining facilities participating in this program are the Center for Jewish Life, Butler, First,
+                Forbes, Mathey, Rockefeller, and Whitman.</p>
+              <p>At a dining hall, students can host multiple students, as long as none of the participants have already
+                dined during that meal period at either a dining hall or a club.</p>
+              <p>All residential dining halls participate in the program. Participating clubs are identified prior to
+                the start of the program. The 2 Dickinson Street and Brown co-ops are excluded.</p>
+              <p>The following rules apply:</p>
+              <p>&bull; Meal exchanges are limited to Sunday dinner through Friday lunch. Other limitations may be
+                imposed by the individual dining facilities.</p>
+              <p>&bull; The program accommodates one-for-one exchanges. Both halves of the meal exchange must be
+                completed within 30 days. A reminder for incomplete exchanges will be sent to students 5 days prior to
+                the expiration of the 30 days. A charge is made to the host student if the exchange is not complete.</p>
+              <p>&bull; A dinner must be exchanged for a dinner, a lunch for a lunch, and a breakfast for a breakfast.
+              </p>
+              <p>&bull; The program can be used only for meals covered by the board contracts of both the guest student
+                and the host student.</p>
+              <p>&bull; Students wishing to participate must log into the mobile-friendly website and create an
+                invitation to exchange a meal with a club member. (Club members may invite Campus Dining contract
+                holders.)</p>
+              <p>&bull; Meal exchange cannot be used at the Frist Campus Center.</p>
+              <p>&bull; Misuse of the program results in a meal charge to the student's account for the corresponding
+                meal.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="collapse1" class="panel-collapse collapse">
-        <div class="panel-body">
-            <p> Campus Dining facilities participating in this program are the Center for Jewish Life, Butler, First, Forbes, Mathey, Rockefeller, and Whitman.</p>
-            <p>At a dining hall, students can host multiple students, as long as none of the participants have already dined during that meal period at either a dining hall or a club.</p>
-            <p>All residential dining halls participate in the program. Participating clubs are identified prior to the start of the program. The 2 Dickinson Street and Brown co-ops are excluded.</p>
-            <p>The following rules apply:</p>
-            <p>&bull; Meal exchanges are limited to Sunday dinner through Friday lunch. Other limitations may be imposed by the individual dining facilities.</p>
-            <p>&bull; The program accommodates one-for-one exchanges. Both halves of the meal exchange must be completed within 30 days. A reminder for incomplete exchanges will be sent to students 5 days prior to the expiration of the 30 days. A charge is made to the host student if the exchange is not complete.</p>
-            <p>&bull; A dinner must be exchanged for a dinner, a lunch for a lunch, and a breakfast for a breakfast.</p>
-            <p>&bull; The program can be used only for meals covered by the board contracts of both the guest student and the host student.</p>
-            <p>&bull; Students wishing to participate must log into the mobile-friendly website and create an invitation to exchange a meal with a club member. (Club members may invite Campus Dining contract holders.)</p>
-            <p>&bull; Meal exchange cannot be used at the Frist Campus Center.</p>
-            <p>&bull; Misuse of the program results in a meal charge to the student's account for the corresponding meal.</p>
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse2">Club-to-Club Exchanges</a>
+            </h4>
+          </div>
+          <div id="collapse2" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>This year the program was expanded to include exchanges between eating club members. To see if a club
+                participates and for rules, please contact a club manager.</p>
+              <p>Before they can participate, club members must be added to the app by the club managers.</p>
+              <p>All questions related to club-to-club exchanges should be directed to a club manager.</p>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse2">Club-to-Club Exchanges</a>
-        </h4>
-      </div>
-      <div id="collapse2" class="panel-collapse collapse">
-        <div class="panel-body">
-            <p>This year the program was expanded to include exchanges between eating club members. To see if a club participates and for rules, please contact a club manager.</p>
-            <p>Before they can participate, club members must be added to the app by the club managers.</p>
-            <p>All questions related to club-to-club exchanges should be directed to a club manager.</p>
 
-        </div>
-      </div>
-    </div>
-  </div> 
-  </div>
-  </div>
-    
-    <br><br>
+  <br><br>
 </body>
+
 </html>

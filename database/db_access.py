@@ -50,7 +50,10 @@ def fetch_first_val(stmt):
         cur = conn.cursor()
 
         cur.execute(stmt)
-        return cur.fetchone()[0]
+        result = cur.fetchone()
+        if result is None:
+            return None
+        return result[0]
     except (Exception, psycopg2.DatabaseError) as error:
         print('db_access.py: fetch_first_val: ', error)
     finally:

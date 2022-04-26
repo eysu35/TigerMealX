@@ -391,7 +391,6 @@ class Exchange:
     
     def get_daysleft(self):
         daysleft = abs((self._exp - date.today()).days)
-        print(daysleft)
         return daysleft
 
     def get_mealx_id(self):

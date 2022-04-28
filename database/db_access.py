@@ -3,15 +3,20 @@ import psycopg2
 
 
 # opens and closes connection, returns list of rows retrieved by executing stmt
-def fetchall(stmt):
+def fetchall(stmt,args=None):
     try:
         # connection establishment
         params = config()
         conn = psycopg2.connect(**params)
         conn.autocommit = True
         cur = conn.cursor()
-
-        cur.execute(stmt)
+        print(args)
+        # cur.execute('''
+        # SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
+        # LOWER(student_name) LIKE LOWER(CONCAT(\'%\',$1,\'%\'));''', args)
+        print(stmt % ('%' + args + '%'))
+        cur.execute(stmt % ('%' + args + '%'))
+        
         return cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:
         print('db_access.py: fetchall: ', error)

@@ -58,17 +58,18 @@ class Students:
     @classmethod
     def search_students_by_name(cls, name):
         str_name = str(name)
-        stmt = f'''SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
-        LOWER(student_name) LIKE LOWER(\'%{str_name}%\')'''
-
+        str_name = str_name.replace("'","\\'")
+        str_name = str_name.replace("%","\\%")
+        print(str_name)
+        
         stmt = f'''
-        PREPARE studentssearch (text) AS
-        SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
-            LOWER(student_name) LIKE LOWER(\'%$1%\');
-        EXECUTE studentssearch({str_name});'''
+        PREPARE statement as
+            SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
+            LOWER(student_name) LIKE LOWER($1);
+        EXECUTE statement(E\'%s\')
+        '''
         students = []
-        results = db_access.fetchall(stmt)
-        print(result)
+        results = db_access.fetchall(stmt, str_name)
         for result in results:
             student = Student(result[0], result[1], result[2], result[3], result[4])
             students.append(student)

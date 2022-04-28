@@ -33,6 +33,13 @@ class Students:
         str_netid = str(netid).strip()
         stmt = f'''SELECT student_name FROM students WHERE 
             netid=\'{str_netid}\''''
+
+        stmt = f'''
+        PREPARE src (text) AS
+            SELECT student_name FROM students WHERE 
+            netid=$1;
+        EXECUTE src({str_netid});
+        '''
         name = db_access.fetch_first_val(stmt)
 
         if name is None:
@@ -53,8 +60,15 @@ class Students:
         str_name = str(name)
         stmt = f'''SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
         LOWER(student_name) LIKE LOWER(\'%{str_name}%\')'''
+
+        stmt = f'''
+        PREPARE studentssearch (text) AS
+        SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
+            LOWER(student_name) LIKE LOWER(\'%$1%\');
+        EXECUTE studentssearch({str_name});'''
         students = []
         results = db_access.fetchall(stmt)
+        print(result)
         for result in results:
             student = Student(result[0], result[1], result[2], result[3], result[4])
             students.append(student)

@@ -10,8 +10,10 @@ def fetchall(stmt,args=None):
         conn = psycopg2.connect(**params)
         conn.autocommit = True
         cur = conn.cursor()
-        
-        cur.execute(stmt % ('%' + args + '%'))
+        if args is not None:
+            cur.execute(stmt % ('%' + args + '%'))
+        else:
+            cur.execute(stmt)
         
         return cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:

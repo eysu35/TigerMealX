@@ -30,7 +30,7 @@ def base():
             "contact campus dining services if you think this is a "
                                                         "mistake.")
     response = render_template('index.html', name=name, netid=netid,
-                           loc_id=loc_id) , response.headers.add('Access-Control-Allow-Origin', '*')
+                           loc_id=loc_id)
     return response
     
 
@@ -200,7 +200,8 @@ def search_results():
     # assume it's a name for now but need to also check for PUID
     else:
         html = ''
-    response = make_response(html), response.headers.add('Access-Control-Allow-Origin', '*')
+    response = make_response(html) 
+    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 

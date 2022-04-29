@@ -7,6 +7,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
 cors = CORS(app, resources={r"*": {"origins": "*"}})
 app.secret_key = APP_SECRET_KEY
 app.url_map.strict_slashes = False
@@ -28,8 +29,10 @@ def base():
             "on a meal plan that is valid for meal exchanges. Please "
             "contact campus dining services if you think this is a "
                                                         "mistake.")
-    return render_template('index.html', name=name, netid=netid,
-                           loc_id=loc_id)
+    response = render_template('index.html', name=name, netid=netid,
+                           loc_id=loc_id) , response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+    
 
 
 @app.route('/exchanges')
@@ -197,7 +200,7 @@ def search_results():
     # assume it's a name for now but need to also check for PUID
     else:
         html = ''
-    response = make_response(html)
+    response = make_response(html), response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 

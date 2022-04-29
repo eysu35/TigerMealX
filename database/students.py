@@ -60,7 +60,6 @@ class Students:
         str_name = str(name)
         str_name = str_name.replace("'","\\'")
         str_name = str_name.replace("%","\\%")
-        print(str_name)
         
         stmt = f'''
         PREPARE statement as

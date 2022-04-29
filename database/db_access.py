@@ -10,11 +10,7 @@ def fetchall(stmt,args=None):
         conn = psycopg2.connect(**params)
         conn.autocommit = True
         cur = conn.cursor()
-        print(args)
-        # cur.execute('''
-        # SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
-        # LOWER(student_name) LIKE LOWER(CONCAT(\'%\',$1,\'%\'));''', args)
-        print(stmt % ('%' + args + '%'))
+        
         cur.execute(stmt % ('%' + args + '%'))
         
         return cur.fetchall()

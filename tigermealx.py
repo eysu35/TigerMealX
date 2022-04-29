@@ -31,6 +31,8 @@ def base():
                                                         "mistake.")
     response = render_template('index.html', name=name, netid=netid,
                            loc_id=loc_id)
+    response = make_response(response)
+    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
     
 

@@ -64,7 +64,7 @@ class Students:
         stmt = f'''
         PREPARE statement as
             SELECT puid, netid, student_name, meal_plan_id, is_valid_for_meal_exchange FROM students WHERE 
-            LOWER(student_name) LIKE LOWER($1);
+            LOWER(student_name) LIKE LOWER($1) ORDER BY student_name;
         EXECUTE statement(E\'%s\')
         '''
         students = []

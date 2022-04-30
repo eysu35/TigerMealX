@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, make_response
 from keys import APP_SECRET_KEY
 from database.exchanges import Exchanges
 from database.students import Students
-from send_email import send_email
+from send_email import send_email, campus_dining_email
 # from flask_cors import CORS
 
 
@@ -159,6 +159,31 @@ def post_new_exchange():
     except Exception as e:
         print("tigermealx.py error: " + str(e))
         return render_template('error404.html', name = name, loc_id=loc_id)
+
+@app.route('/emailcampusdining', methods=['POST'])
+def email_campus_dining():
+
+     subject = request.args.get('subject').strip()
+     msg = request.args.get('msg').strip()
+
+     netid = auth.authenticate().strip()
+     loc_id = Students.get_location_id_from_netid(netid)
+
+     try:
+         name = Students.get_first_name_from_netid(netid)
+
+         if emails_enabled:
+             campus_dining_email(name, subject, msg)
+
+         html = render_template("help.html", name=name, loc_id=loc_id)
+
+         response = make_response(html)
+
+     except Exception as e:
+         print("tigermealx.py error: " + str(e))
+         response = make_response(render_template("error404.html", name=name, loc_id=loc_id))
+         
+     return response
 
 
 @app.route('/completeexchange', methods=['GET']) #Could be POST?

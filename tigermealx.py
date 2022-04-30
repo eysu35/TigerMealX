@@ -151,7 +151,8 @@ def post_new_exchange():
         if emails_enabled:
             # send emails with the name of the other student
             send_email(student2.get_name(), netid1)
-            send_email(student1.get_name(), netid2)
+            # UNCOMMENT WHEN WANT TO SEND EMAIL TO INVITED STUDENT
+            # send_email(student1.get_name(), netid2)
 
         html = render_template("index.html", name=name, loc_id=loc_id)
         response = make_response(html)

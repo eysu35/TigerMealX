@@ -3,12 +3,12 @@ from keys import APP_SECRET_KEY
 from database.exchanges import Exchanges
 from database.students import Students
 from send_email import send_email
-from flask_cors import CORS
+# from flask_cors import CORS
 
 
 app = Flask(__name__)
-CORS(app)
-cors = CORS(app, resources={r"*": {"origins": "*"}})
+# CORS(app)
+# cors = CORS(app, resources={r"*": {"origins": "*"}})
 app.secret_key = APP_SECRET_KEY
 app.url_map.strict_slashes = False
 import auth

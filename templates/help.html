@@ -59,78 +59,7 @@
       width: 50%;
       padding: 10px;
     }
-  </style>
-  {% include 'navbar.html' %}
 
-  {% include 'background.html' %}
-
-  <div class="help-section">
-    <div class="container" style="padding-top:1vh">
-
-      <h1>Help</h1>
-      <div class="panel-group">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" href="#collapse1">What is TigerMealX?</a>
-            </h4>
-          </div>
-          <div id="collapse1" class="panel-collapse collapse">
-            <div class="panel-body">
-              <p>TigerMealX is a new platform allowing Princeton University students to meal exchange more easily.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="panel-group">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" href="#collapse2">What is a meal exchange?</a>
-            </h4>
-          </div>
-          <div id="collapse2" class="panel-collapse collapse">
-            <div class="panel-body">
-              <p>The Meal Exchange Program makes it possible for students with meal plans to dine with their friends at
-                eating clubs, or between two different participating clubs, without spending additional funds.
-                Administered jointly by the Inter-Club Council and Campus Dining, the program includes club-to-dining
-                hall exchanges as well as club-to-club exchanges.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="panel-group">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" href="#collapse3">How does TigerMealX work?</a>
-            </h4>
-          </div>
-          <div id="collapse3" class="panel-collapse collapse">
-            <div class="panel-body">
-              <p>TigerMealX is built in collaboration with Princeton Dining and interacts directly with the official
-                university system to facilitate meal exchanges.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="panel-group">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" href="#collapse4">Who can I swap with?</a>
-            </h4>
-          </div>
-          <div id="collapse4" class="panel-collapse collapse">
-            <div class="panel-body">
-              <p>You can swap with any other student on a dining hall plan or eating club plan.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <style>
     body {
       font-family: Arial, Helvetica, sans-serif;
     }
@@ -186,7 +115,84 @@
   </head>
 
   <body>
+    {% include 'navbar.html' %}
+    {% include 'background.html' %}
 
+    <div class="help-section">
+      <div class="container" style="padding-top:1vh">
+
+        <h1>Help</h1>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse1">What is TigerMealX?</a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+              <div class="panel-body">
+                <p>TigerMealX is a new platform allowing Princeton University students to meal exchange more easily.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse2">What is a meal exchange?</a>
+              </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse">
+              <div class="panel-body">
+                <p>The Meal Exchange Program makes it possible for students with meal plans to dine with their friends
+                  at
+                  eating clubs, or between two different participating clubs, without spending additional funds.
+                  Administered jointly by the Inter-Club Council and Campus Dining, the program includes club-to-dining
+                  hall exchanges as well as club-to-club exchanges.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse3">How does TigerMealX work?</a>
+              </h4>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse">
+              <div class="panel-body">
+                <p>TigerMealX is built in collaboration with Princeton Campus Dining and interacts directly with the official
+                  university system to facilitate meal exchanges.</p>
+                  <p><b>Initiate Exchange:</b> Go to the home page and search the student you would like to meal exchange with.
+                    Click on that student's name and click 'Invite' on the following page.
+                  </p>
+                  <p><b>View Active Exchanges:</b> The Active Exchanges table displays current, incomplete exchanges in order of
+                    the date by which they must be completed. Exchanges colored <span style="color: #f77777">red</span>
+                    are within 3 days of expiring, exchanges colored <span style="color: #ffdd80">yellow</span> are within
+                    1 week of expiring, and all other exchanges are colored <span style="color: #adc7a9">green</span>. 
+                  </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse4">Who can I swap with?</a>
+              </h4>
+            </div>
+            <div id="collapse4" class="panel-collapse collapse">
+              <div class="panel-body">
+                <p>You can swap with any other student on a dining hall plan or eating club plan.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container2">
       <h1>Contact Campus Dining</h1>
       <form action="">
@@ -203,7 +209,7 @@
 
     <script>
       'use strict';
-      function handleResponse() {}
+      function handleResponse() { }
       function getResults() {
         let subject = $('#subjectInput').val();
         let msg = $('#msgInput').val();
@@ -212,7 +218,7 @@
         msg = encodeURIComponent(msg);
 
         let url = '/emailcampusdining?subject=' + subject + '&msg=' + msg;
-        
+
         request = $.ajax(
           {
             type: 'POST',

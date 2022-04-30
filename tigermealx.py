@@ -181,7 +181,7 @@ def complete_exchange():
 
 @app.route('/searchresults', methods=['GET'])
 def search_results():
-    netid = auth.authenticate().strip()
+    # netid = auth.authenticate().strip()
     Name = request.args.get('name')
     if len(Name) > 0:
         try:
@@ -194,8 +194,8 @@ def search_results():
         pattern = "<tr onclick=\"startexchange(%s)\"><td width='130px'>%s</td><td width='130px'>%s</td></tr>"
         for student in students:
             # should not see yourself in the search results
-            if student.get_netid() == netid:
-                continue
+            # if student.get_netid() == netid:
+            #     continue
             html += pattern%(student.get_puid(), student.get_name(),
                           student.get_netid())
         html += '</tbody></div>'    

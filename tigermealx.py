@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
 app.url_map.strict_slashes = False
 import auth
-emails_enabled = False
+emails_enabled = True
 
 
 @app.route('/')

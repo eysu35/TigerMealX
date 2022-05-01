@@ -1,5 +1,6 @@
 from datetime import datetime, date, timedelta, time
 from database import db_access
+import re
 
 
 class Exchanges:
@@ -150,6 +151,9 @@ class Exchanges:
     # returns (boolean success, error msg)
     @classmethod
     def update_exchange(cls, puid1, puid2, location_id, meal_time):
+        regex = re.compile(r'[0-2][0-9]:[0-5][0-9]')
+        if not regex.fullmatch(meal_time.strip()):
+            return False, 'Invalid time'
 
         stmt = f'''SELECT meal_exchange_id, meal, exchange1_date, 
         exchange1_location_id, exchange2_date, exchange2_location_id, 
@@ -190,7 +194,11 @@ class Exchanges:
 
         # determine which meal based on time
         hour = int(str(meal_time).split(':')[0])
+        if not (0 <= hour <= 23):
+            return False, 'Invalid time'
         min = int(str(meal_time).split(':')[1])
+        if not (0 <= min <= 59):
+            return False, 'Invalid time'
         meal_time = time(hour, min, 0)
         if time(6,30,0) <= meal_time <= time(11,10,0):
             meal = 'breakfast'

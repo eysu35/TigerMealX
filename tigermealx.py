@@ -14,7 +14,6 @@ app.url_map.strict_slashes = False
 import auth
 emails_enabled = True
 
-
 @app.route('/')
 @app.route('/index', methods=['GET'])
 def base():

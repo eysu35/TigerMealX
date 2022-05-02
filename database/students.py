@@ -112,13 +112,11 @@ class Students:
                     WHERE meal_plan_id=\'{meal_plan_id}\'"""
 
         location_id = db_access.fetch_first_val(stmt2)
-        # print(location_id + "2")
 
         stmt3 = f"""SELECT location_name FROM locations
                     WHERE location_id=\'{location_id}\'"""
 
         location_name = db_access.fetch_first_val(stmt3)
-        # print(location_name + "3")
 
         return location_name
 
@@ -134,15 +132,14 @@ class Students:
                     WHERE meal_plan_id=\'{meal_plan_id}\'"""
 
         location_id = db_access.fetch_first_val(stmt2)
-        # print(location_id + "2")
 
         stmt3 = f"""SELECT location_name FROM locations
                     WHERE location_id=\'{location_id}\'"""
 
         location_name = db_access.fetch_first_val(stmt3)
-        # print(location_name + "3")
 
         return location_name
+
     @classmethod
     def get_location_id_from_netid(cls, netid):
         str_netid = str(netid).strip()
@@ -155,9 +152,6 @@ class Students:
                     WHERE meal_plan_id=\'{meal_plan_id}\'"""
 
         location_id = db_access.fetch_first_val(stmt2)
-        # print(location_id + "2")
-
-
         return location_id
 
 

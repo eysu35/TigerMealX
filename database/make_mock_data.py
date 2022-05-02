@@ -276,14 +276,25 @@ def main():
 
 if __name__ == '__main__':
     main()
-    exchange_params = ['920227408', '920228016', 'lunch',
-                       '2022-04-01', '~ivy_location_id~', None, None,
-                       '2022-05-01',
-                       'Incomplete']
-    add_data('exchanges', exchange_params)
 
-    exchange_params = ['920227978', '920228016', 'breakfast',
-                       '2022-03-29',
-                       '~quad_location_id~', None, None, '2022-04-28',
-                       'Incomplete']
-    add_data('exchanges', exchange_params)
+    # Add a single student manually
+    # rand_id = str(uuid.uuid4())
+    # add_data('students', ['920226299',
+    #                       'jbennema'.strip().lower(),
+    #                       'Jelmer Bennema'.strip(),
+    #                       rand_id,
+    #                       True])
+    #
+    # add_data('student_plans', [rand_id, location_id_from_location('Cottage')])
+
+    # exchange_params = ['920227408', '920228016', 'lunch',
+    #                    '2022-04-01', '~ivy_location_id~', None, None,
+    #                    '2022-05-01',
+    #                    'Incomplete']
+    # add_data('exchanges', exchange_params)
+    #
+    # exchange_params = ['920227978', '920228016', 'breakfast',
+    #                    '2022-03-29',
+    #                    '~quad_location_id~', None, None, '2022-04-28',
+    #                    'Incomplete']
+    # add_data('exchanges', exchange_params)

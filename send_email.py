@@ -7,7 +7,6 @@ def send_email(name, netid):
     gmail_password = 'Tigermealx1!'
 
     sent_from = gmail_user
-    to = ['arinm@princeton.edu']
     email = netid.lower().strip() + "@princeton.edu"
     to = [email]
 
@@ -21,7 +20,6 @@ def send_email(name, netid):
         smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         smtp_server.ehlo()
         smtp_server.login(gmail_user, gmail_password)
-        # smtp_server.sendmail(sent_from, to, email_text)
         smtp_server.sendmail(sent_from, to, msg.as_string())
         smtp_server.close()
         print("Email sent successfully!")
@@ -36,8 +34,7 @@ def campus_dining_email(name, subject, msg):
     gmail_password = 'Tigermealx1!'
 
     sent_from = gmail_user
-    email = 'arinm@princeton.edu'
-    # email
+    email = 'tigermealx@gmail.com'
     to = [email]
 
     msg = MIMEText(msg + "\n- " + name)
@@ -49,7 +46,6 @@ def campus_dining_email(name, subject, msg):
         smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         smtp_server.ehlo()
         smtp_server.login(gmail_user, gmail_password)
-        # smtp_server.sendmail(sent_from, to, email_text)
         smtp_server.sendmail(sent_from, to, msg.as_string())
         smtp_server.close()
         print("Email sent successfully!")

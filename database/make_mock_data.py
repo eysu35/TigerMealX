@@ -275,70 +275,17 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
-    # Read csv file as dataframe
-    # filename = 'Meal Plan Info Form (Responses) - Form Responses 1.csv'
-    # df = pd.read_csv(filename)
+    main()
 
-    # Add students/student_plans
-    # for index, row in df.iterrows():
+    # Add a single student manually
     # rand_id = str(uuid.uuid4())
-    # # Add student entry
-    # add_data('students', ['920245213',
-    #                       'njt2'.strip().lower(),
-    #                       'Nicholas Taylor'.strip(),
+    # add_data('students', ['920226299',
+    #                       'jbennema'.strip().lower(),
+    #                       'Jelmer Bennema'.strip(),
     #                       rand_id,
     #                       True])
     #
     # add_data('student_plans', [rand_id, location_id_from_location('Cottage')])
-    #
-    #
-    # rand_id = str(uuid.uuid4())
-    # add_data('students', ['920227644',
-    #                       'gmeur'.strip().lower(),
-    #                       'Greg Le Meur'.strip(),
-    #                       rand_id,
-    #                       True])
-    #
-    # add_data('student_plans', [rand_id, location_id_from_location('Ivy')])
-
-
-    rand_id = str(uuid.uuid4())
-    add_data('students', ['920226299',
-                          'jbennema'.strip().lower(),
-                          'Jelmer Bennema'.strip(),
-                          rand_id,
-                          True])
-
-    add_data('student_plans', [rand_id, location_id_from_location('Cottage')])
-
-
-    # rand_id = str(uuid.uuid4())
-    # add_data('students', ['920227857',
-    #                       'espinka'.strip().lower(),
-    #                       'Erik Spinka'.strip(),
-    #                       rand_id,
-    #                       True])
-    # add_data('student_plans', [rand_id, location_id_from_location('Cloister')])
-    #
-    #
-    # rand_id = str(uuid.uuid4())
-    # add_data('students', ['920208546',
-    #                       'rapowell'.strip().lower(),
-    #                       'Robert Powell'.strip(),
-    #                       rand_id,
-    #                       True])
-    #
-    # add_data('student_plans', [rand_id, location_id_from_location('Cottage')])
-
-    # rand_id = str(uuid.uuid4())
-    # add_data('students', ['920227857',
-    #                       'espinka'.strip().lower(),
-    #                       'Erik Spinka'.strip(),
-    #                       rand_id,
-    #                       True])
-    #
-    # add_data('student_plans', [rand_id, location_id_from_location('Cloister')])
 
     # exchange_params = ['920227408', '920228016', 'lunch',
     #                    '2022-04-01', '~ivy_location_id~', None, None,

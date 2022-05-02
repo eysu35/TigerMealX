@@ -58,8 +58,12 @@ class Students:
     @classmethod
     def search_students_by_name(cls, name):
         str_name = str(name)
-        str_name = str_name.replace("'","\\'")
-        str_name = str_name.replace("%","\\%")
+        str_name = str_name.replace("\\", "")
+        str_name = str_name.replace(r"'",r"\'")
+        str_name = str_name.replace(r"%","")
+
+        if str_name == "":
+            return []
         
         stmt = f'''
         PREPARE statement as

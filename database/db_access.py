@@ -1,9 +1,11 @@
-from config import config
+from config1 import config
 import psycopg2
 
 
 # opens and closes connection, returns list of rows retrieved by executing stmt
 def fetchall(stmt,args=None):
+    assert isinstance(stmt, str), "Statement should be a string."
+    
     try:
         # connection establishment
         params = config()
@@ -26,6 +28,8 @@ def fetchall(stmt,args=None):
 
 # opens and closes connection, returns first row retrieved by executing stmt
 def fetchone(stmt):
+    assert isinstance(stmt, str), "Statement should be a string."
+
     try:
         # connection establishment
         params = config()
@@ -45,6 +49,8 @@ def fetchone(stmt):
 
 # opens and closes connection, returns first val in first row retrieved by executing stmt (ex. name)
 def fetch_first_val(stmt):
+    assert isinstance(stmt, str), "Statement should be a string."
+    
     try:
         # connection establishment
         params = config()

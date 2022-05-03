@@ -3,13 +3,15 @@ from email.mime.text import MIMEText
 
 
 def send_email(name, netid):
+    assert isinstance(name, str), "Student name should be a string."
+    assert isinstance(netid, str), "Student netid should be a string."
+
     gmail_user = 'tigermealx@gmail.com'
     gmail_password = 'Tigermealx1!'
 
     sent_from = gmail_user
     email = netid.lower().strip() + "@princeton.edu"
     to = [email]
-
 
     msg = MIMEText('You have successfully initiated your meal exchange with ' + name + '. Please complete both meals within 30 days!')
     msg['Subject'] = 'Meal Exchange Notification'
@@ -30,6 +32,10 @@ def send_email(name, netid):
 
 
 def campus_dining_email(name, subject, msg):
+    assert isinstance(name, str), "Student name should be a string."
+    assert isinstance(subject, str), "Email subject should be a string."
+    assert isinstance(subject, str), "Email message should be a string."
+
     gmail_user = 'tigermealx@gmail.com'
     gmail_password = 'Tigermealx1!'
 
@@ -55,5 +61,5 @@ def campus_dining_email(name, subject, msg):
     return
 
 if __name__ == "__main__":
-    # send_email('auguste')
-    campus_dining_email('Arin Mukherjee', 'complaint', 'I have a complaint.')
+    send_email('Arin', 4)
+    # campus_dining_email('Arin Mukherjee', 'complaint', 'I have a complaint.')
